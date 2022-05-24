@@ -1,2 +1,2 @@
-# VirusRecom
-Detecting recombination of viral lineages or subtypes
+# VirusRecom: Detecting recombination of viral lineages or subtypes using 
+
