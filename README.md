@@ -1,4 +1,4 @@
-# VirusRecom: Detecting recombination
+# VirusRecom: Detecting viral recombination
 
 ## 1. Download and install
 VirusRecom and all the updated versions is freely available for non-commercial user at https://github.com/ZhijianZhou01/VirusRecom/releases. After obtaining the program,
