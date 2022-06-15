@@ -12,7 +12,7 @@ VirusRecom is a command line interface program, users can get help documentation
  ```
 usage: 
 VirusRecom [-h] [-a ALIGNMENT] [-q QUERY] [-l LINEAGE] [-g GAP] [-m METHOD] 
-[-w WINDOW] [-s STEP] [-mr MAX_REGION] [-p PERCENTAGE] [-b BREAKPOINT] 
+[-w WINDOW] [-s STEP] [-mr MAX_REGION] [-cp PERCENTAGE] [-b BREAKPOINT] 
 [-bw BREAKWIN] [-t THREAD] [-y Y_START]
  ```
 
