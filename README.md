@@ -1,4 +1,4 @@
-# VirusRecom: Detecting viral recombination
+# VirusRecom: Detecting recombination of viral lineages usinginformation theory
 
 ## 1. Download and install
 VirusRecom and all the updated versions is freely available for non-commercial user at https://github.com/ZhijianZhou01/VirusRecom/releases. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
