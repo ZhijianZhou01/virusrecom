@@ -34,4 +34,5 @@ if [ "$MAFFT_BINARIES" ]; then
 	prefix="$MAFFT_BINARIES"
 else        
 	prefix= /home/VirusRecom_V1.0_linux/external_program/mafft/linux/libexec/mafft
+fi
 ```
