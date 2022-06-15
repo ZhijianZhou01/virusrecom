@@ -1,10 +1,9 @@
 # VirusRecom: Detecting viral recombination
 
 ## 1. Download and install
-VirusRecom and all the updated versions is freely available for non-commercial user at https://github.com/ZhijianZhou01/VirusRecom/releases. After obtaining the program,
-users could directly run the program in Windows, MacOS or Linux systerms without installation.
+VirusRecom and all the updated versions is freely available for non-commercial user at https://github.com/ZhijianZhou01/VirusRecom/releases. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
-In general, the executable file of VirusRecom is located at the Main folder. Then, running the VirusRecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on linux system or MacOS system, you could change permissions by ```chmod -R 777 Directory```. 
+In general, the executable file of VirusRecom is located at the Main folder. Then, running the VirusRecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on Linux system or MacOS system, you could change permissions by ```chmod -R 777 Directory```. 
 
 
 ## 2. Getting help
