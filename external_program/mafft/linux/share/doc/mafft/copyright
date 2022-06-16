@@ -1,0 +1,24 @@
+This package was debianized by the alien program by converting
+a binary .rpm package on Sat, 30 Oct 2021 13:18:27 +0900
+
+Copyright: free
+
+Information from the binary package:
+Name        : mafft
+Version     : 7.490
+Release     : gcc_fc6
+Architecture: x86_64
+Install Date: (not installed)
+Group       : Applications/Scientific
+Size        : 37462433
+License     : free
+Signature   : (none)
+Source RPM  : mafft-7.490-gcc_fc6.src.rpm
+Build Date  : Sat 30 Oct 2021 04:09:54 AM JST
+Build Host  : sysimm01-centos5
+Relocations : (not relocatable)
+Packager    : Katoh
+Summary     : Multiple sequence alignment program
+Description :
+MAFFT aligns amino acid or nucleic acid sequences.
+
