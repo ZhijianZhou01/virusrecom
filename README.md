@@ -7,7 +7,7 @@ Take the releases as an example, in general, the executable file of VirusRecom i
 
 
 ## 2. Getting help
-virusRecom is a command line interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
+virusrecom is a command line interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
 
  ```
 usage: virusrecom [-h] [-a ALIGNMENT] [-q QUERY] [-l LINEAGE] [-g GAP]
