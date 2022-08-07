@@ -10,10 +10,10 @@ Take the releases as an example, in general, the executable file of VirusRecom i
 VirusRecom is a command line interface program, users can get help documentation of the software by entering  ```VirusRecom -h ``` or  ```VirusRecom --help ```. 
 
  ```
-usage: 
-VirusRecom [-h] [-a ALIGNMENT] [-q QUERY] [-l LINEAGE] [-g GAP] [-m METHOD] 
-[-w WINDOW] [-s STEP] [-mr MAX_REGION] [-cp PERCENTAGE] [-b BREAKPOINT] 
-[-bw BREAKWIN] [-t THREAD] [-y Y_START]
+usage: virusrecom [-h] [-a ALIGNMENT] [-q QUERY] [-l LINEAGE] [-g GAP]
+                  [-m METHOD] [-w WINDOW] [-s STEP] [-mr MAX_REGION]
+                  [-cp PERCENTAGE] [-b BREAKPOINT] [-bw BREAKWIN] [-o OUTDIR]
+                  [-t THREAD] [-y Y_START]
 
 optional arguments:
   -h, --help      show this help message and exit
@@ -25,7 +25,9 @@ optional arguments:
   -q QUERY        FilePath of query lineage (potential recombinant, *.fasta
                   format). Note, if the '-a alignment' has been used, please
                   enter the mark (a unique string) of queried recombinant
-                  here, such as '-q XE_', not a FilePath.
+                  here, such as '-q XE_'(not a FilePath), besides, using '-q
+                  auto' and all sequences will be scanned as potential
+                  recombinants in turn.
   -l LINEAGE      DirPath of reference lineages. One sequence file (*.fasta
                   format) per lineage, and each lineage could contain multiple
                   sequences. Note, if the '-a alignment' has been used, please
@@ -56,6 +58,7 @@ optional arguments:
                   breakpoint scan. The step size is fixed at 1. Note: this
                   option only takes effect when '-m p -b y' has been
                   specified!
+  -o OUTDIR       The outdir of results.
   -t THREAD       Number of threads used for the multiple sequence alignments
                   (MSA), default is 1.
   -y Y_START      Specify the starting value of the Y axis in the picture, the
@@ -64,10 +67,10 @@ optional arguments:
 -----------------------------------------------------
 ☆ Example of use ☆
   (1) If the input-sequence data was not aligned:
-      VirusRecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2
+      virusrecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2
 
   (2) If the input-sequence has been aligned:
-      VirusRecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20
+      virusrecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20
  ```
 
 ## 3. Attention
