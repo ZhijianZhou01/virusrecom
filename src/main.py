@@ -560,6 +560,26 @@ def virus_infor_calculate(seq_matrix,
 
     major_parent_ic = sum(list(sites_probability_data[major_parent]))
     mean_major_parent = major_parent_ic / sites_count
+    
+    accumulation_ic_list = []
+
+    for lineage in lineage_name_list:
+        accumulation_ic_list.append([lineage, sum(list(sites_probability_data[lineage]))/sites_count])
+
+    hit_list_sort = sorted(accumulation_ic_list,
+                           key=lambda x: x[1])
+
+
+    max_ic_lineage = hit_list_sort[-1][0]
+
+    max_ic_lineage_mean = hit_list_sort[-1][1]
+
+
+    if max_ic_lineage != major_parent:
+        major_parent = max_ic_lineage
+
+    major_parent_ic = sum(list(sites_probability_data[major_parent]))
+    mean_major_parent = major_parent_ic / sites_count
 
 
     other_parental_markers = False
