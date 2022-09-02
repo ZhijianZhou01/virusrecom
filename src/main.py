@@ -47,14 +47,15 @@ example_use = r'''
 -----------------------------------------------------
 ☆ Example of use ☆
   (1) If the input-sequence data was not aligned: 
-      virusrecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2
+      virusrecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2 -o outdir
 
   (2) If the input-sequence has been aligned:
-      virusrecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20           
+      virusrecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20 -o outdir
 
 -----------------------------------------------------
 
 '''
+
 
 def virus_infor_calculate(seq_matrix,
                           query_seq_prefix,
@@ -64,6 +65,7 @@ def virus_infor_calculate(seq_matrix,
                           step_size,
                           max_recom_fragment,
                           recom_percentage,
+                          calibrate_majorparent,
                           breakpoints,
                           breakwins,
                           calEnt_use,
@@ -98,7 +100,6 @@ def virus_infor_calculate(seq_matrix,
                      + run_id + ".pdf")
 
 
-
     sites_probability_data = pd.DataFrame()
 
     query_seq = seq_matrix[
@@ -112,17 +113,17 @@ def virus_infor_calculate(seq_matrix,
 
         site_list = []
 
-
         lineage_seq_df = seq_matrix[
             seq_matrix.index.str.contains(each_lineage) == True]
-
         # print(lineage_seq_df)
 
+        # colnames = list(seq_pd_clean.columns)
         # print(colnames)
 
         ent_probability = []
 
         p_ent = 0
+
 
         for (columnName, columnData) in lineage_seq_df.iteritems():
             # print(columnName)
@@ -217,7 +218,10 @@ def virus_infor_calculate(seq_matrix,
          y1_label]
 
 
+
     plt.xlabel("Site in alignment", family="Arial")
+
+    # plt.show()
 
     plt.savefig(site_ic_fig)
     plt.clf()
@@ -230,6 +234,9 @@ def virus_infor_calculate(seq_matrix,
         0]
 
     step_probability_data = pd.DataFrame()
+
+    # print(sites_probability_data.loc[0, "Site"])
+
 
     slid_number = int(sites_count / step_size)
 
@@ -265,6 +272,7 @@ def virus_infor_calculate(seq_matrix,
 
             each_lineage_setp_pro.append(mean_ic_per_win)
 
+
             label_site = int((start_row + end_row) / 2)
 
             original_site = sites_probability_data.loc[
@@ -285,7 +293,7 @@ def virus_infor_calculate(seq_matrix,
         index=False,
         encoding="utf-8")
 
-    #  画图
+
     fig, ax = plt.subplots()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -319,6 +327,7 @@ def virus_infor_calculate(seq_matrix,
     plt.ylabel("Mean of weighted information content", family="Arial")
     plt.title("Query seq: " + query_seq_prefix, family="Arial")
 
+
     x1_label = ax.get_xticklabels()
     [x1_label_temp.set_fontname("Arial") for x1_label_temp in
      x1_label]
@@ -326,6 +335,7 @@ def virus_infor_calculate(seq_matrix,
     [y1_label_temp.set_fontname("Arial") for y1_label_temp in
      y1_label]
 
+    # plt.show()
     plt.savefig(window_ic_fig)
 
     plt.clf()
@@ -333,10 +343,7 @@ def virus_infor_calculate(seq_matrix,
 
     recombination_frag = {}
 
-
     for each_lineage in lineage_name_list:
-
-        # if each_lineage != major_parent:
 
         if not recombination_frag.__contains__(each_lineage):
             recombination_frag[each_lineage] = []
@@ -359,13 +366,13 @@ def virus_infor_calculate(seq_matrix,
                     and linegae_data_list[
                         n] / max_mic >= recom_percentage):
 
+
                 windows_center = int((start_row + end_row) / 2)
 
                 potential_frag_list.append(windows_center)
 
         recombination_frag[each_lineage] = potential_frag_list
 
-    # print(recombination_frag)
 
     recom_region_dic = {}
 
@@ -395,8 +402,6 @@ def virus_infor_calculate(seq_matrix,
                     region_right = min(sites_count, int(
                         lineage_frag_list[i] + step_size / 2))
 
-                    # print(region_left,region_right)
-
                     region_sites_count = region_right - region_left + 1
 
                     lineage_Ri_wic = sum(list(
@@ -413,8 +418,6 @@ def virus_infor_calculate(seq_matrix,
                             if lineage_ic >= max_lineage_ic:
                                 max_lineage_ic = lineage_ic
 
-                                # print(max_lineage_ic)
-
 
                     if (lineage_Ri_wic > max_lineage_ic
                             and lineage_Ri_wic / (
@@ -424,10 +427,6 @@ def virus_infor_calculate(seq_matrix,
                                                     "True"])
 
                         flage_label = True
-                    #     print([each_lineage,i+1,region_left,region_right,"True"])
-                    #
-                    # else:
-                    #     print([each_lineage,i+1,region_left,region_right,"Flase"])
 
                 if cursor_site == frag_count:
                     break
@@ -450,8 +449,7 @@ def virus_infor_calculate(seq_matrix,
 
                     else:
 
-                        max_Ri = breakpoint_judgment[
-                            -1]
+                        max_Ri = breakpoint_judgment[-1]
                         max_Ri_sites = max_Ri[2] - max_Ri[1] + 1
 
                         if max_Ri_sites <= max_recom_fragment:
@@ -463,17 +461,14 @@ def virus_infor_calculate(seq_matrix,
 
                             for n in range(len(breakpoint_judgment)):
                                 each_region = breakpoint_judgment[n]
-                                ri = each_region[2] - each_region[
-                                    1] + 1
+                                ri = each_region[2] - each_region[1] + 1
 
                                 if ri > max_recom_fragment:
                                     local_max_Ri = breakpoint_judgment[n - 1]
                                     detected_area.append([local_max_Ri[1],
                                                           local_max_Ri[2]])
 
-                                    last_breakpoint = \
-                                    breakpoint_judgment[n - 1][
-                                        0]
+                                    last_breakpoint = breakpoint_judgment[n - 1][0]
 
                                     if last_breakpoint == cursor_site:
                                         cursor_site = cursor_site + 1
@@ -489,10 +484,10 @@ def virus_infor_calculate(seq_matrix,
 
             recom_region_dic[each_lineage] = detected_area
 
+
     for i in list(recom_region_dic.keys()):
         if recom_region_dic[i] == []:
             del recom_region_dic[i]
-
 
 
     parents_region = {}
@@ -505,14 +500,10 @@ def virus_infor_calculate(seq_matrix,
 
         range_list = []
 
-        # Locate the position of the original sequence
         for each_region in region_list:
             region_range = (sites_probability_data.loc[each_region[1], "Site"]
                             - sites_probability_data.loc[each_region[0], "Site"])
 
-            # print(each_lineage,
-            #       sites_probability_data.loc[each_region[0], "Site"],
-            #       sites_probability_data.loc[each_region[1], "Site"])
 
             range_list.append(region_range)
 
@@ -559,31 +550,33 @@ def virus_infor_calculate(seq_matrix,
 
 
     major_parent_ic = sum(list(sites_probability_data[major_parent]))
+
     mean_major_parent = major_parent_ic / sites_count
-    
-    accumulation_ic_list = []
-
-    for lineage in lineage_name_list:
-        accumulation_ic_list.append([lineage, sum(list(sites_probability_data[lineage]))/sites_count])
-
-    hit_list_sort = sorted(accumulation_ic_list,
-                           key=lambda x: x[1])
 
 
-    max_ic_lineage = hit_list_sort[-1][0]
+    if calibrate_majorparent.upper() != "N":
 
-    max_ic_lineage_mean = hit_list_sort[-1][1]
+        accumulation_ic_list = []
+
+        for lineage in lineage_name_list:
+            accumulation_ic_list.append([lineage, sum(list(sites_probability_data[lineage]))/sites_count])
+
+        hit_list_sort = sorted(accumulation_ic_list,
+                               key=lambda x: x[1])
 
 
-    if max_ic_lineage != major_parent:
-        major_parent = max_ic_lineage
+        max_ic_lineage = hit_list_sort[-1][0]
 
-    major_parent_ic = sum(list(sites_probability_data[major_parent]))
-    mean_major_parent = major_parent_ic / sites_count
+
+        if max_ic_lineage != major_parent:
+            major_parent = max_ic_lineage
+
+        major_parent_ic = sum(list(sites_probability_data[major_parent]))
+        mean_major_parent = major_parent_ic / sites_count
+
 
 
     other_parental_markers = False
-
 
     recombination_dic = {}
     significant_recombination = {}
@@ -612,8 +605,9 @@ def virus_infor_calculate(seq_matrix,
                 region_mwic = sum(this_lineage_ic_count) / (
                             each_region_end - each_region_start + 1)
 
+
                 left_start_site_original = sites_probability_data.loc[
-                    each_region_start, "Site"]  # 左闭
+                    each_region_start, "Site"]
 
                 right_end_site_original = sites_probability_data.loc[
                     min(each_region_end, sites_count - 1), "Site"]
@@ -671,7 +665,7 @@ def virus_infor_calculate(seq_matrix,
         print("No significant recombination events were found in "
               + query_seq_prefix + "\n")
 
-    # print(recombination_dic)
+
 
     recom_report_path = (sub_outdir + "/" + run_id + "_"
                          + "Possible recombination event in "
@@ -702,6 +696,7 @@ def virus_infor_calculate(seq_matrix,
                                     + "\n" * 2
                                     + "Possible other parents and recombination regions:"
                                     + "\n")
+
 
         for key in recombination_dic:
             event_list = recombination_dic[key]
@@ -774,6 +769,7 @@ def virus_infor_calculate(seq_matrix,
 
         breakpoint_data = pd.DataFrame()
 
+
         run_number = sites_count - breakwins + 1
 
         central_pos_list = []
@@ -793,7 +789,6 @@ def virus_infor_calculate(seq_matrix,
                 right_region = list(
                     sites_probability_data[lineage][central_pos + 1: end_site])
 
-                #  Locate the position of the original sequence
                 original_site = sites_probability_data.loc[
                     central_pos, "Site"]
                 central_pos_list.append(original_site)
@@ -824,11 +819,9 @@ def virus_infor_calculate(seq_matrix,
             encoding="utf-8")
 
 
-        # draw
         fig_high2 = int(max(central_pos_list) * 3 / 10000) * 2
 
-        figs, axs = plt.subplots(lineage_count, 1, figsize=(lineage_count,
-                                                            fig_high2))
+        figs, axs = plt.subplots(lineage_count, 1, figsize=(lineage_count,fig_high2))
 
         figs.suptitle("Query seq: " + query_seq_prefix, family="Arial")
         figs.tight_layout()
@@ -947,7 +940,6 @@ if __name__ == "__main__":
                             type=int,
                             default=20)
 
-        # max_recom_fragment
         parser.add_argument("-mr", dest="max_region",
                             help="The maximum allowed recombination region. Note: if the '-m p' method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
                             type=int,
@@ -958,6 +950,10 @@ if __name__ == "__main__":
                             type=float,
                             default=0.9)
 
+        parser.add_argument("-cm", dest="calibrate",
+                            help="Whether to use cumulative WIC of sites to identified major parent. The default value is 'n' and means 'no'.",
+                            type=str,
+                            default="n")
 
         parser.add_argument("-b", dest="breakpoint",
                             help="Whether to run the breakpoint scan of recombination. ‘-b y’: yes, ‘-b n’: no. Note: this option only takes effect when '-m p' has been specified!",
@@ -1005,9 +1001,8 @@ if __name__ == "__main__":
     start_memory = calculate_memory()
 
 
-
     #  parameter
-    seq_aligned_path = myargs.alignment       # path of the alignment
+    seq_aligned_path = myargs.alignment      # path of the alignment
 
     query_seq_path = myargs.query
 
@@ -1024,6 +1019,8 @@ if __name__ == "__main__":
     max_recom_fragment = myargs.max_region    #  maximum recombination region
 
     recom_percentage = myargs.percentage      #  the specific cutoff threshold of proportion
+
+    calibrate_majorparent = myargs.calibrate  #  Whether to use cumulative WIC of sites to identified major parent
 
     breakpoints = myargs.breakpoint           #  whether to search for recombination breakpoints
 
@@ -1047,9 +1044,7 @@ if __name__ == "__main__":
     print(myargs)
 
 
-
     aligned_out_path = ""
-
 
     query_seq_prefix = ""
 
@@ -1058,16 +1053,11 @@ if __name__ == "__main__":
     lineage_name_list = []
 
 
-
-    # If the sequences were not aligned beforehand
     if seq_aligned_path == "":
-        # Run the MAS
 
         query_seq_path = query_seq_path.replace("\\", "/")
 
         query_seq_dir, query_seq_prefix = resolve_file_path(query_seq_path)
-
-        # out_dir = query_seq_dir + "/" + "result_" + run_id + "(w=" + str(windows_size) + ", " + "s=" + str(step_size) + ")"
 
         run_record = out_dir + "/" + "run_record"
 
@@ -1088,35 +1078,24 @@ if __name__ == "__main__":
         lineage_name_list = seq_align_task.run()
 
 
-
-    # If the input sequence is already aligned
     else:
 
         aligned_out_path = seq_aligned_path.replace("\\", "/")
 
-        # input_dir, input_prefix = resolve_file_path(aligned_out_path)
-
-        # out_dir = input_dir + "/" + "result_" + run_id + "(w=" + str(windows_size) + ", " + "s=" + str(step_size) + ")"
 
         run_record = out_dir + "/" + "run_record"
 
         make_dir(out_dir)
         make_dir(run_record)
 
-        # (1) query  lineage
         query_seq_prefix = query_seq_path
 
-        # (2) other linegaes
         with open(lineage_file_dir) as lineage_file:
             for line in lineage_file:
                 line = line.strip()
                 if line != "":
                     lineage_name_list.append(line)
 
-
-
-
-    # read input_data
 
     print("VirusRecom starts calculating weighted information content from each lineage..."
           + "\n")
@@ -1137,7 +1116,6 @@ if __name__ == "__main__":
         calEnt_use = calEnt
         max_mic = 2
 
-        # gap column in aligned seq
 
         record_gap_path = (run_record + "/"
                            + "Record of deleted gap sites_"
@@ -1159,12 +1137,11 @@ if __name__ == "__main__":
 
         seq_pd_clean_site_old = list(seq_pd_clean)
 
-        seq_pd_clean = seq_pd_clean.loc[:, (seq_pd_clean != seq_pd_clean.iloc[0]).any()]
+        seq_pd_clean = seq_pd_clean.loc[:, (seq_pd_clean != seq_pd_clean.iloc[0]).any()]    # 去除没有突变的位点
 
         # print(seq_pd_clean)
 
         # print(seq_pd_clean["SeqName"].str.contains("Delta"))
-
 
         seq_pd_clean_site_new = list(seq_pd_clean)
 
@@ -1205,6 +1182,7 @@ if __name__ == "__main__":
                                   step_size,
                                   max_recom_fragment,
                                   recom_percentage,
+                                  calibrate_majorparent,
                                   breakpoints,
                                   breakwins,
                                   calEnt_use,
@@ -1221,6 +1199,7 @@ if __name__ == "__main__":
                               step_size,
                               max_recom_fragment,
                               recom_percentage,
+                              calibrate_majorparent,
                               breakpoints,
                               breakwins,
                               calEnt_use,
