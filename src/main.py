@@ -951,7 +951,7 @@ if __name__ == "__main__":
                             default=0.9)
 
         parser.add_argument("-cm", dest="calibrate",
-                            help="Whether to use cumulative WIC of sites to identified major parent. The default value is 'n' and means 'no'.",
+                            help="Whether to use the max cumulative WIC of sites to identified major parent. The default value is 'n' and means 'no'.",
                             type=str,
                             default="n")
 
