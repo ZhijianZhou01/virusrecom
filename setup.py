@@ -5,7 +5,6 @@ with open("README.md", "r",encoding="utf-8") as fh:
 
 setuptools.setup(
   name="virusrecom",
-  packages=["virusrecom"],
   install_requires=["matplotlib","pandas","numpy", "scipy", "argparse", "psutil","platform"],
   version="1.0",
   author="Zhi-Jian Zhou",
