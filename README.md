@@ -49,7 +49,6 @@ Of note, (i) if the current directory is not switched to ```unaligned_input_sequ
 In addition to unaligned input-sequences, users can also provide an independent aligned sequences file which was performed from any other alignment program, including all the sequences from the query lineage and other reference lineages. In the directory ```aligned_input_sequences```, we provided an aligned sequence file named ```lineages_data_alignment.fas``` used for test. In the file ```lineages_data_alignment.fas```, each sequence name contained the mark of the lineage name, such as “query_recombinant”, “reference_lineage_1”, “reference_lineage_2” and “reference_lineage_3”. Of note this mark can appear anywhere in the sequence name. 
 
 In addition to the aligned input-sequences, a text file containing the names of these reference lineage is required, and an example as shown in the file ```reference_lineages_name.txt``` in the directory ```aligned_input_sequences```:
-
 ```
 reference_lineage_1
 reference_lineage_2
@@ -79,7 +78,7 @@ In fact, we recommend that users use already aligned input-data like the file ``
 ### 3.3. Output result
 Take the parameter configuration in the section ```4.1. Unaligned input-sequences``` above as an example, and the output directory is ```out_dir```. There are three subdirectories and two aggregated reports in the directory ```out_dir```. Now, we first introduce three subdirectories, including the directory ```run_record```, the directory ```WICs of sites``` and the directory ```WICs of slide_window```.
 
-    (I) In the directory ```run_record```, the alignment file created by MAFFT is reserved. If ```-g n``` is specified, and the file ```Record of deleted gap sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record of same sites in aligned sequence_*.txt``` containing all the same sites will be created.
+   (I) In the directory ```run_record```, the alignment file created by MAFFT is reserved. If ```-g n``` is specified, and the file ```Record of deleted gap sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record of same sites in aligned sequence_*.txt``` containing all the same sites will be created.
 
    (II) In the directory ```WICs of sites```, the file ```*_WIC contribution from lineage in sites.pdf``` and the file ```*_WIC contribution from lineage in sites.xlsx``` are used to record the WIC value for each site. 
 
