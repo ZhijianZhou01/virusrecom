@@ -79,10 +79,9 @@ In fact, we recommend that users use already aligned input-data like the file ``
 ### 3.3. Output result
 Take the parameter configuration in the section ```4.1. Unaligned input-sequences``` above as an example, and the output directory is ```out_dir```. There are three subdirectories and two aggregated reports in the directory ```out_dir```. Now, we first introduce three subdirectories, including the directory ```run_record```, the directory ```WICs of sites``` and the directory ```WICs of slide_window```.
 
+    (I) In the directory ```run_record```, the alignment file created by MAFFT is reserved. If ```-g n``` is specified, and the file ```Record of deleted gap sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record of same sites in aligned sequence_*.txt``` containing all the same sites will be created.
 
-    (I)	In the directory ```run_record```, the alignment file created by MAFFT is reserved. If ```-g n``` is specified, and the file ```Record of deleted gap sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record of same sites in aligned sequence_*.txt``` containing all the same sites will be created.
-
-   (II)	In the directory ```WICs of sites```, the file ```*_WIC contribution from lineage in sites.pdf``` and the file ```*_WIC contribution from lineage in sites.xlsx``` are used to record the WIC value for each site. 
+   (II) In the directory ```WICs of sites```, the file ```*_WIC contribution from lineage in sites.pdf``` and the file ```*_WIC contribution from lineage in sites.xlsx``` are used to record the WIC value for each site. 
 
    (III) In the directory ```WICs of slide_window```, the file ```*_WIC contribution from lineage in sliding window.pdf``` and the file ```*_WIC contribution from lineage in sliding window.xlsx``` are used to record the mean WIC of each sliding window. The user can fine-tune the window size and step size according to the density of points in the generated graph. In general, very dense points means that the noise is too high and the window size can be increased appropriately in next scan. 
    
