@@ -10,70 +10,45 @@ Take the releases as an example, in general, the executable file of VirusRecom i
 virusrecom is a command line interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
 
  ```
-usage: virusrecom [-h] [-a ALIGNMENT] [-q QUERY] [-l LINEAGE] [-g GAP]
-                  [-m METHOD] [-w WINDOW] [-s STEP] [-mr MAX_REGION]
-                  [-cp PERCENTAGE] [-b BREAKPOINT] [-bw BREAKWIN] [-o OUTDIR]
-                  [-t THREAD] [-y Y_START]
+-h, --help	Show this help message and exit.
+-a	FilePath of an aligned sequence set (*.fasta format) containing all sequences used for analysis, then the sequence alignment will be skipped. Default value is null. If “-a” parameter was used, the name of each sequence in aligned sequence set requires containing the mark (a unique string) of the lineage.
+-q	FilePath of query lineage (usually potential recombinant, *.fasta format). Note, if the ‘-a’ parameter has been used, please enter the mark (a unique string) of query lineage here, such as ‘-q xxxx’, not a FilePath. Using ‘-q auto’ and all lineages will be scanned as potential recombinants in turn.
+-l	DirPath of reference lineages. One sequence file (*.fasta format) per lineage, and each lineage could contain multiple sequences. Note, if the ‘-a’ parameter has been used, please enter a file path of a text file containing the mark (a unique string) of lineage here, not a DirPath.
+-g	Gaps (-) in the alignment were used in analysis? ‘-g y’ means to reserve gaps, and ‘-g n’ means to delete gaps.
+-m	Scanning method of recombination analysis. ‘-m p’ means use polymorphic sites only, ‘-m a’ means all the monomorphic sites and polymorphic sites.
+-w	Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.
+-s	Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.
+-mr	The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.
+-cp	The cutoff threshold of proportion (cp, default value was 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.
+-cm	Whether to simply use the max cumulative WIC of all sites to identified the major parent. The default value is ‘n’ and means ‘no’. If required, please specify ‘-cm y’.
+-b	Whether to run the breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.
+-bw	The window size (polymorphic sites, default value is 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when ‘-m p -b y’ has been specified.
+-t	Number of threads used for the multiple sequence alignments (MSA), default is 1.
+-y	Specify the starting value of the Y-axis scale in the picture, the default is 0.
 
-optional arguments:
-  -h, --help      show this help message and exit
-  -a ALIGNMENT    FilePath of an aligned sequence set(*.fasta format)
-                  containing all sequences used for analysis, then the
-                  alignment will be skipped. Default is null. If using, name
-                  of each sequence in aligned sequence set requires containing
-                  the mark(a unique string) of the lineage.
-  -q QUERY        FilePath of query lineage (potential recombinant, *.fasta
-                  format). Note, if the '-a alignment' has been used, please
-                  enter the mark (a unique string) of queried recombinant
-                  here, such as '-q XE_'(not a FilePath), besides, using '-q
-                  auto' and all sequences will be scanned as potential
-                  recombinants in turn.
-  -l LINEAGE      DirPath of reference lineages. One sequence file (*.fasta
-                  format) per lineage, and each lineage could contain multiple
-                  sequences. Note, if the '-a alignment' has been used, please
-                  enter a text file containing the marks (a unique string) of
-                  lineages here, not a DirPath.
-  -g GAP          Gaps (-) in the alignment were used in analysis? '-g y':
-                  reserve gaps, '-g n': delete gaps.
-  -m METHOD       Scanning method of recombination analysis. '-m p': using
-                  polymorphic sites only, '-m a': using all the monomorphic
-                  sites and polymorphic sites.
-  -w WINDOW       Number of nt sites per sliding window. Note: if the '-m p'
-                  method has been used, -w refers to the number of polymorphic
-                  sites per windows.
-  -s STEP         Step size for scanning these sites. Note: if the '-m p'
-                  method has been used, -w refers to the number of polymorphic
-                  sites per jump.
-  -mr MAX_REGION  The maximum allowed recombination region. Note: if the '-m
-                  p' method has been used, it refers the maximum number of
-                  polymorphic sites contained in a recombinant region.
-  -cp PERCENTAGE  The cutoff threshold of proportion (cp, default was 0.9) for
-                  searching recombination regions when mWIC/EIC >= cp, the
-                  maximum value of cp is 1. For detection in genus level,
-                  about 0.5 is recommended.
-  -b BREAKPOINT   Whether to run the breakpoint scan of recombination. ‘-b y’:
-                  yes, ‘-b n’: no. Note: this option only takes effect when
-                  '-m p' has been specified!
-  -bw BREAKWIN    The window size (polymorphic sites, default is 200) used for
-                  breakpoint scan. The step size is fixed at 1. Note: this
-                  option only takes effect when '-m p -b y' has been
-                  specified!
-  -o OUTDIR       The outdir of results.
-  -t THREAD       Number of threads used for the multiple sequence alignments
-                  (MSA), default is 1.
-  -y Y_START      Specify the starting value of the Y axis in the picture, the
-                  default is 0.
+```
 
------------------------------------------------------
-☆ Example of use ☆
-  (1) If the input-sequence data was not aligned:
-      virusrecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2
+## 3. Example of usage
+The sequences data for test in the manual was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. Take the ```recombination_test_data.zip``` provided in the directory ``example`` as a demonstration.
 
-  (2) If the input-sequence has been aligned:
-      virusrecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20
- ```
+### 3.1. Unaligned input-sequences
+VirusRecom owns a pipeline built in to handle unaligned sequences. In this case, multiple sequence alignment is performed by MAFFT (Katoh & Standley, 2013) with alignment strategy of “auto” parameter. In the directory of unaligned_input_sequences in the compressed file of recombination_test_data.zip, and the query lineage (simulated recombinant) including multiple sequences was in the file query_recombinant.fasta, and these reference lineages were placed in a separate directory named lineages_dir. For the reference lineages, sequences for each lineage need to be placed in a separate file, such as reference_lineage_1.fasta, reference_lineage_2.fasta and reference_lineage_3.fasta in the lineages_dir directory. Of note, the name of each file is an important label to distinguish different lineages. In fact, the query lineage in the test data was known recombinant because it was from the synthetic data, the major parent was reference_lineage_1, the minor parent was reference_lineage_2 and the recombination region was from site 7333 to 11473 in the genome. However, here we treat the query lineage as a potential recombinant.
 
-## 3. Attention
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 4. Attention
 If you need to call MAFFT for multiple sequence alignmentIn in linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
