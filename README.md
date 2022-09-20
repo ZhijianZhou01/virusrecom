@@ -37,8 +37,43 @@ VirusRecom owns a pipeline built in to handle unaligned sequences. In this case,
 Before running the command of VirusRecom, let's think about the search strategy for recombination events. Firstly, we use only polymorphic sites considering that sequences from these lineages are highly similar, which means that the parameter ```-m p``` needs to be specified. Secondly, we do not consider gap-containing sites in this test and use the parameter ```-g n```. Instead, if you consider these gap sites, you need to use the parameter ```-g y```. Next, in the first run, let's try first with a window size of 100 and a step size of 20. Of note the value of “size” at this time represents the number of polymorphic sites because the ```-m p``` parameter has been specified. For the two parameters ```-cp``` and ```-mr```, we use the default value of 0.9 and 1000 in this test. Besides, we also need to specify the number of threads to use for the mafft program. For example, ```-t 2``` means two threads will be used in the mafft program. Finally, we specify a folder to save the results by parameter ```-o```. 
 
 Then, we execute the following command to detect the recombination events in query lineage:
-```virusrecom -q query_recombinant.fasta -l lineages_dir -g n -m p -w 100 -s 20 -t 2 -o out_dir```
+
+```
+virusrecom -q query_recombinant.fasta -l lineages_dir -g n -m p -w 100 -s 20 -t 2 -o out_dir
+```
+
 Of note, (i) if the current directory is not switched to ```unaligned_input_sequences```, the paths of the file ```query_recombinant.fasta```, the directory ```lineage_dir``` and the directory ```out_dir``` need to use absolute paths instead of relative paths; (ii) the string after each parameter cannot contain spaces.
+
+### 3.2. Aligned input-sequences
+In addition to unaligned input-sequences, users can also provide an independent aligned sequences file which was performed from any other alignment program, including all the sequences from the query lineage and other reference lineages. In the directory ```aligned_input_sequences```, we provided an aligned sequence file named ```lineages_data_alignment.fas``` used for test. In the file ```lineages_data_alignment.fas```, each sequence name contained the mark of the lineage name, such as “query_recombinant”, “reference_lineage_1”, “reference_lineage_2” and “reference_lineage_3”. Of note this mark can appear anywhere in the sequence name. 
+
+In addition to the aligned input-sequences, a text file containing the names of these reference lineage is required, and an example as shown in the file ```reference_lineages_name.txt``` in the directory ```aligned_input_sequences```:
+
+```
+reference_lineage_1
+reference_lineage_2
+reference_lineage_3
+reference_lineage_4
+reference_lineage_5
+reference_lineage_6
+reference_lineage_7
+reference_lineage_8
+reference_lineage_9
+
+```
+
+Of note the mark names should be unique for each lineage.
+
+Then, execute the command to detect recombination events in query lineage, for example:
+
+```
+virusrecom -a lineages_data_alignment.fas -q query_recombinant -g n -m p -w 100 -s 20 -o out_dir
+```
+
+Of note (i) if the current directory is not switched to ```aligned_input_sequences```, the paths of the file ```lineages_data_alignment.fas``` and the directory ```out_dir``` need to use absolute paths instead of relative paths; (ii) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```lineages_data_alignment.fas```.
+
+
+In fact, we recommend that users use already aligned input-data like the file ```lineages_data_alignment.fas``` in VirusRecom. A simple reason is that the step of multiple sequence alignment can be omitted when adjusting the parameters in VirusRecom. However, how to add the lineage name into each sequence name when the number of sequences is huge? A common approach is using your own script. However, we recommend completing the addition of mark using VirusRecom for regular users. Firstly, you can prepare the data (unaligned input-sequences) as described in section ```4.1. Unaligned input-sequences```, and then submit them to VirusRecom to run and the parameters can be arbitrarily configured first. Then, an intermediate file named ```*__merge.fasta``` can be found in the directory ```run_record``` when the log output from the MAFFT software appears. Of note the file ```*__merge.fasta``` is not aligned. You can use the generated file of aligned ```*__merge_mafft.fasta``` after MAFFT finishes running, or use other software to align the file ```*__merge.fasta```.
 
 
 
