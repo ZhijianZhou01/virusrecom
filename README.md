@@ -10,7 +10,7 @@ Take the releases as an example, in general, the executable file of VirusRecom i
 ## 2. Getting help
 virusrecom is a command line interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
 
-| Syntax | Description |
+| Parameter | Description |
 | --- | --- |
 |-h, --help | Show this help message and exit. |
 |-a | FilePath of an aligned sequence set (*.fasta format) containing all sequences used for analysis, then the sequence alignment will be skipped. Default value is null. If “-a” parameter was used, the name of each sequence in aligned sequence set requires containing the mark (a unique string) of the lineage. |
