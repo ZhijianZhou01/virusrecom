@@ -115,7 +115,7 @@ J:\virusrecom_v1.0_windows\main\virusrecom.exe -a J:\recombination_test_data\ali
 ```
 
 (ii) Then, virusrecom begins calculating the recombination contribution of each reference lineage to the query lineage.
-![recombination_step1.jpg](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/recombination_run_1.jpg)
+![recombination_step1.png](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/recombination_run_1.png)
 
 (iii) After the finish of running, a concise report is printed reporting recombination events with p-values less than 0.05.
 
