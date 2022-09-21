@@ -47,10 +47,12 @@ example_use = r'''
 -----------------------------------------------------
 ☆ Example of use ☆
   (1) If the input-sequence data was not aligned: 
-      virusrecom -q XE.fasta -l Lineage_Dir -g n -m p -w 100 -s 20 -t 2 -o outdir
+      virusrecom -q query.fasta -l lineage_dir -g n -m p -w 100 -s 20 -t 2 -o outdir
 
   (2) If the input-sequence has been aligned:
-      virusrecom -a alignment.fasta -q XE_ -l lineage_name_list.txt -g n -m p -w 100 -s 20 -o outdir
+      virusrecom -a alignment.fasta -q query_name -l lineage_name_list.txt -g n -m p -w 100 -s 20 -o outdir
+
+  Note: sequence file or folder need to enter their absolute path, the above is just a conceptual example. For detailed usage, please check the website https://github.com/ZhijianZhou01/VirusRecom.
 
 -----------------------------------------------------
 
@@ -115,15 +117,10 @@ def virus_infor_calculate(seq_matrix,
 
         lineage_seq_df = seq_matrix[
             seq_matrix.index.str.contains(each_lineage) == True]
-        # print(lineage_seq_df)
-
-        # colnames = list(seq_pd_clean.columns)
-        # print(colnames)
 
         ent_probability = []
 
         p_ent = 0
-
 
         for (columnName, columnData) in lineage_seq_df.iteritems():
             # print(columnName)
@@ -133,16 +130,13 @@ def virus_infor_calculate(seq_matrix,
 
             lineage_site = list(columnData)
 
-
             IC = calEnt_use(columnData)
 
             if query_seq_count == 1:
                 query_nt = query_seq[columnName][0]
                 query_nt_ratio = 1
 
-                query_nt_lineage_ratio = lineage_site.count(query_nt) / \
-                                         columnData.shape[
-                                             0]
+                query_nt_lineage_ratio = lineage_site.count(query_nt) / columnData.shape[0]
 
                 p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
 
@@ -162,8 +156,7 @@ def virus_infor_calculate(seq_matrix,
                     maxpro_nt) / query_seq_site_count
 
 
-                query_nt_lineage_ratio = lineage_site.count(maxpro_nt) / \
-                                         columnData.shape[0]
+                query_nt_lineage_ratio = lineage_site.count(maxpro_nt) / columnData.shape[0]
 
                 p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
 
@@ -178,7 +171,6 @@ def virus_infor_calculate(seq_matrix,
     sites_probability_data.to_excel(excel_writer=site_ic_table,
                                     index=False,
                                     encoding="utf-8")
-
 
 
     lineage_count = len(lineage_name_list)
@@ -209,7 +201,6 @@ def virus_infor_calculate(seq_matrix,
 
         ax_n.legend(loc="best")
 
-
         x1_label = ax_n.get_xticklabels()
         [x1_label_temp.set_fontname("Arial") for x1_label_temp in
          x1_label]
@@ -217,11 +208,8 @@ def virus_infor_calculate(seq_matrix,
         [y1_label_temp.set_fontname("Arial") for y1_label_temp in
          y1_label]
 
-
-
     plt.xlabel("Site in alignment", family="Arial")
 
-    # plt.show()
 
     plt.savefig(site_ic_fig)
     plt.clf()
@@ -230,8 +218,7 @@ def virus_infor_calculate(seq_matrix,
     print("VirusRecom starts scanning using sliding window ..." + "\n")
 
 
-    sites_count = sites_probability_data.shape[
-        0]
+    sites_count = sites_probability_data.shape[0]
 
     step_probability_data = pd.DataFrame()
 
@@ -242,8 +229,6 @@ def virus_infor_calculate(seq_matrix,
 
     original_site_list = []
 
-
-    original_site_in_win = {}
 
     for each_lineage in lineage_name_list:
 
@@ -266,12 +251,12 @@ def virus_infor_calculate(seq_matrix,
 
             # print(step_df)
 
+
             mean_ic_per_win = np.mean(step_df)
 
             # print(mean_ic_per_win)
 
             each_lineage_setp_pro.append(mean_ic_per_win)
-
 
             label_site = int((start_row + end_row) / 2)
 
@@ -327,7 +312,6 @@ def virus_infor_calculate(seq_matrix,
     plt.ylabel("Mean of weighted information content", family="Arial")
     plt.title("Query seq: " + query_seq_prefix, family="Arial")
 
-
     x1_label = ax.get_xticklabels()
     [x1_label_temp.set_fontname("Arial") for x1_label_temp in
      x1_label]
@@ -340,18 +324,19 @@ def virus_infor_calculate(seq_matrix,
 
     plt.clf()
 
-
     recombination_frag = {}
 
+
     for each_lineage in lineage_name_list:
+
+        # if each_lineage != major_parent:
 
         if not recombination_frag.__contains__(each_lineage):
             recombination_frag[each_lineage] = []
 
         potential_frag_list = []
 
-        linegae_data_list = list(step_probability_data[
-                                     each_lineage])
+        linegae_data_list = list(step_probability_data[each_lineage])
 
         for n in range(len(linegae_data_list)):
 
@@ -359,8 +344,7 @@ def virus_infor_calculate(seq_matrix,
 
             end_row = min(start_row + windows_size, sites_count)
 
-            line_ic_all = list(step_probability_data.iloc[n,
-                               1:])
+            line_ic_all = list(step_probability_data.iloc[n,1:])
 
             if (linegae_data_list[n] == max(line_ic_all)
                     and linegae_data_list[
@@ -373,7 +357,6 @@ def virus_infor_calculate(seq_matrix,
 
         recombination_frag[each_lineage] = potential_frag_list
 
-
     recom_region_dic = {}
 
     for each_lineage in recombination_frag:
@@ -382,7 +365,6 @@ def virus_infor_calculate(seq_matrix,
         if lineage_frag_list != []:
 
             frag_count = len(lineage_frag_list)
-            # print(frag_count)
 
             cursor_site = 1
             cursor_center = lineage_frag_list[cursor_site - 1]
@@ -394,6 +376,7 @@ def virus_infor_calculate(seq_matrix,
                 flage_label = False
 
                 breakpoint_judgment = []
+
 
                 for i in range(cursor_site - 1, frag_count):
 
@@ -408,6 +391,7 @@ def virus_infor_calculate(seq_matrix,
                         sites_probability_data[each_lineage][
                         region_left:region_right]))
 
+
                     max_lineage_ic = 0
 
                     for lineage in lineage_name_list:
@@ -418,6 +402,7 @@ def virus_infor_calculate(seq_matrix,
                             if lineage_ic >= max_lineage_ic:
                                 max_lineage_ic = lineage_ic
 
+                                # print(max_lineage_ic)
 
                     if (lineage_Ri_wic > max_lineage_ic
                             and lineage_Ri_wic / (
@@ -428,6 +413,7 @@ def virus_infor_calculate(seq_matrix,
 
                         flage_label = True
 
+
                 if cursor_site == frag_count:
                     break
 
@@ -435,7 +421,6 @@ def virus_infor_calculate(seq_matrix,
 
                     cursor_site = cursor_site + 1
 
-                    # print(cursor_site)
                     cursor_center = lineage_frag_list[cursor_site - 1]
 
                 else:
@@ -484,14 +469,11 @@ def virus_infor_calculate(seq_matrix,
 
             recom_region_dic[each_lineage] = detected_area
 
-
     for i in list(recom_region_dic.keys()):
         if recom_region_dic[i] == []:
             del recom_region_dic[i]
 
-
     parents_region = {}
-
 
     for each_lineage in recom_region_dic:
         region_list = recom_region_dic[each_lineage]
@@ -550,8 +532,8 @@ def virus_infor_calculate(seq_matrix,
 
 
     major_parent_ic = sum(list(sites_probability_data[major_parent]))
-
     mean_major_parent = major_parent_ic / sites_count
+
 
 
     if calibrate_majorparent.upper() != "N":
@@ -571,12 +553,14 @@ def virus_infor_calculate(seq_matrix,
         if max_ic_lineage != major_parent:
             major_parent = max_ic_lineage
 
+
         major_parent_ic = sum(list(sites_probability_data[major_parent]))
         mean_major_parent = major_parent_ic / sites_count
 
 
-
     other_parental_markers = False
+
+
 
     recombination_dic = {}
     significant_recombination = {}
@@ -644,7 +628,6 @@ def virus_infor_calculate(seq_matrix,
                 finally:
                     pass
 
-
     for i in list(significant_recombination.keys()):
         if significant_recombination[i] == []:
             del significant_recombination[i]
@@ -664,7 +647,6 @@ def virus_infor_calculate(seq_matrix,
     else:
         print("No significant recombination events were found in "
               + query_seq_prefix + "\n")
-
 
 
     recom_report_path = (sub_outdir + "/" + run_id + "_"
@@ -757,6 +739,7 @@ def virus_infor_calculate(seq_matrix,
         print("\n" + "VirusRecom is running the algorithm of search for "
                      "recombination breakpoint..."
               + "\n")
+
 
 
         break_p_map = (site_dir + "/" + run_id + "_"
@@ -858,6 +841,7 @@ def virus_infor_calculate(seq_matrix,
             [y1_label_temp.set_fontname("Arial") for y1_label_temp in
              y1_label]
 
+
         plt.xlabel("Site in alignment", family="Arial")
 
         plt.savefig(break_p_map)
@@ -902,93 +886,96 @@ if __name__ == "__main__":
 
         parser.add_argument(
             "-a", dest="alignment",
-            help="FilePath of an aligned sequence set(*.fasta format) containing all sequences used for analysis, then the alignment will be skipped. Default is null. If using, name of each sequence in aligned sequence set requires containing the mark(a unique string) of the lineage.",
+            help="FilePath of an aligned sequence set (*.fasta format) containing all sequences used for analysis, then the sequence alignment will be skipped. Default value is null. If “-a” parameter was used, the name of each sequence in aligned sequence set requires containing the mark (a unique string) of the lineage.",
             default="")
 
 
         parser.add_argument(
             "-q", dest = "query",
-            help="FilePath of query lineage (potential recombinant, *.fasta format). Note, if the '-a alignment' has been used, please enter the mark (a unique string) of queried recombinant here, such as '-q XE_'(not a FilePath), besides, using '-q auto' and all sequences will be scanned as potential recombinants in turn.",
+            help="FilePath of query lineage (usually potential recombinant, *.fasta format). Note, if the ‘-a’ parameter has been used, please enter the mark (a unique string) of query lineage here, such as ‘-q xxxx’, not a FilePath. Using ‘-q auto’ and all lineages will be scanned as potential recombinants in turn.",
             default="")
 
 
         parser.add_argument(
             "-l", dest="lineage",
-            help="DirPath of reference lineages. One sequence file (*.fasta format) per lineage, and each lineage could contain multiple sequences. Note, if the '-a alignment' has been used, please enter a text file containing the marks (a unique string) of lineages here, not a DirPath.",
+            help="DirPath of reference lineages. One sequence file (*.fasta format) per lineage, and each lineage could contain multiple sequences. Note, if the ‘-a’ parameter has been used, please enter a file path of a text file containing the mark (a unique string) of lineage here, not a DirPath.",
             default="/home")
 
 
         parser.add_argument("-g", dest="gap",
-                            help="Gaps (-) in the alignment were used in analysis? '-g y': reserve gaps, '-g n': delete gaps.",
+                            help="Gaps (-) in the alignment were used in analysis? ‘-g y’ means to reserve gaps, and ‘-g n’ means to delete gaps.",
                             type=str,
                             default="n")
 
 
         parser.add_argument("-m", dest="method",
-                            help="Scanning method of recombination analysis. '-m p': using polymorphic sites only, '-m a': using all the monomorphic sites and polymorphic sites.",
+                            help="Scanning method of recombination analysis. ‘-m p’ means use polymorphic sites only, ‘-m a’ means all the monomorphic sites and polymorphic sites.",
                             type=str,
                             default="p")
 
 
         parser.add_argument("-w", dest="window",
-                            help="Number of nt sites per sliding window. Note: if the '-m p' method has been used, -w refers to the number of polymorphic sites per windows.",
+                            help="Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.",
                             type=int,
                             default=100)
 
         parser.add_argument("-s", dest="step",
-                            help="Step size for scanning these sites. Note: if the '-m p' method has been used, -w refers to the number of polymorphic sites per jump.",
+                            help="Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.",
                             type=int,
                             default=20)
 
+        # max_recom_fragment
         parser.add_argument("-mr", dest="max_region",
-                            help="The maximum allowed recombination region. Note: if the '-m p' method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
+                            help="The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
                             type=int,
                             default=1000)
 
         parser.add_argument("-cp", dest="percentage",
-                            help="The cutoff threshold of proportion (cp, default was 0.9) for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1. For  detection in genus level, about 0.5 is recommended.",
+                            help="The cutoff threshold of proportion (cp, default value was 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.",
                             type=float,
                             default=0.9)
 
         parser.add_argument("-cm", dest="calibrate",
-                            help="Whether to use the max cumulative WIC of sites to identified major parent. The default value is 'n' and means 'no'.",
+                            help="Whether to simply use the max cumulative WIC of all sites to identified the major parent. The default value is ‘n’ and means ‘no’. If required, please specify ‘-cm y’.",
                             type=str,
                             default="n")
 
+
         parser.add_argument("-b", dest="breakpoint",
-                            help="Whether to run the breakpoint scan of recombination. ‘-b y’: yes, ‘-b n’: no. Note: this option only takes effect when '-m p' has been specified!",
+                            help="Whe ther to run the breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.",
                             type=str,
                             default="n")
 
 
         parser.add_argument("-bw", dest="breakwin",
-                            help="The window size (polymorphic sites, default is 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when '-m p -b y' has been specified!",
+                            help="The window size (polymorphic sites, default value is 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when ‘-m p -b y’ has been specified.",
                             type=int,
                             default=200)
 
 
         parser.add_argument(
             "-o", dest="outdir",
-            help="The outdir of results.",
+            help="The path of the outdir of results.",
             type=str,
             default="/home")
 
         parser.add_argument(
             "-t", dest="thread",
-            help="Number of threads used for the multiple sequence alignments (MSA), default is 1.",
+            help="Number of threads used for the multiple sequence alignments (MSA), the default value is 1.",
             type=int,
             default=1)
 
 
         parser.add_argument(
             "-y", dest="y_start",
-            help="Specify the starting value of the Y axis in the picture, the default is 0.",
+            help="Specify the starting value of the Y-axis scale in the picture, the default value is 0.",
             type=float,
             default=0.0)
 
         myargs = parser.parse_args(sys.argv[1:])
 
         return myargs
+
 
     myargs = parameter()
 
@@ -1002,7 +989,7 @@ if __name__ == "__main__":
 
 
     #  parameter
-    seq_aligned_path = myargs.alignment      # path of the alignment
+    seq_aligned_path = myargs.alignment             # path of the alignment
 
     query_seq_path = myargs.query
 
@@ -1020,7 +1007,7 @@ if __name__ == "__main__":
 
     recom_percentage = myargs.percentage      #  the specific cutoff threshold of proportion
 
-    calibrate_majorparent = myargs.calibrate  #  Whether to use cumulative WIC of sites to identified major parent
+    calibrate_majorparent = myargs.calibrate
 
     breakpoints = myargs.breakpoint           #  whether to search for recombination breakpoints
 
@@ -1044,7 +1031,9 @@ if __name__ == "__main__":
     print(myargs)
 
 
+
     aligned_out_path = ""
+
 
     query_seq_prefix = ""
 
@@ -1053,6 +1042,8 @@ if __name__ == "__main__":
     lineage_name_list = []
 
 
+
+    # If the sequences were not aligned beforehand
     if seq_aligned_path == "":
 
         query_seq_path = query_seq_path.replace("\\", "/")
@@ -1078,10 +1069,11 @@ if __name__ == "__main__":
         lineage_name_list = seq_align_task.run()
 
 
+
+    # If the sequences were aligned beforehand
     else:
 
         aligned_out_path = seq_aligned_path.replace("\\", "/")
-
 
         run_record = out_dir + "/" + "run_record"
 
@@ -1095,6 +1087,8 @@ if __name__ == "__main__":
                 line = line.strip()
                 if line != "":
                     lineage_name_list.append(line)
+
+
 
 
     print("VirusRecom starts calculating weighted information content from each lineage..."
@@ -1116,7 +1110,6 @@ if __name__ == "__main__":
         calEnt_use = calEnt
         max_mic = 2
 
-
         record_gap_path = (run_record + "/"
                            + "Record of deleted gap sites_"
                            + run_id + ".txt")
@@ -1137,11 +1130,7 @@ if __name__ == "__main__":
 
         seq_pd_clean_site_old = list(seq_pd_clean)
 
-        seq_pd_clean = seq_pd_clean.loc[:, (seq_pd_clean != seq_pd_clean.iloc[0]).any()]    # 去除没有突变的位点
-
-        # print(seq_pd_clean)
-
-        # print(seq_pd_clean["SeqName"].str.contains("Delta"))
+        seq_pd_clean = seq_pd_clean.loc[:, (seq_pd_clean != seq_pd_clean.iloc[0]).any()]
 
         seq_pd_clean_site_new = list(seq_pd_clean)
 
