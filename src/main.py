@@ -52,7 +52,7 @@ example_use = r'''
   (2) If the input-sequence has been aligned:
       virusrecom -a alignment.fasta -q query_name -l lineage_name_list.txt -g n -m p -w 100 -s 20 -o outdir
 
-  Note: sequence file or folder need to enter their absolute path, the above is just a conceptual example. For detailed usage, please check the website https://github.com/ZhijianZhou01/VirusRecom.
+  Note: sequence file or folder need to enter their absolute path, the above is just a conceptual example. For detailed usage, please check the website https://github.com/ZhijianZhou01/virusrecom.
 
 -----------------------------------------------------
 
