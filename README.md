@@ -27,7 +27,7 @@ virusrecom is a command line interface program, users can get help documentation
 | -bw | The window size (polymorphic sites, default value is 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when ‘-m p -b y’ has been specified.|
 |-t | Number of threads used for the multiple sequence alignments (MSA), the default value is 1.|
 |-y | Specify the starting value of the Y-axis scale in the picture, the default value is 0.|
-
+|-o | The path of the outdir of results.|
 
 
 ## 3. Example of usage
