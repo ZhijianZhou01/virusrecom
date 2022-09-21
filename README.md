@@ -114,7 +114,8 @@ Then, we begin our analysis of potential recombination lineage. We take the wind
 J:\virusrecom_v1.0_windows\main\virusrecom.exe -a J:\recombination_test_data\aligned_input_sequences\lineages_data_alignment.fas -l J:\recombination_test_data\aligned_input_sequences\reference_lineages_name.txt -q query_recombinant -g n -m p -w 100 -s 20 -o J:\recombination_test_data\out_dir
 ```
 
-(ii) Then, virusrecom begins calculating the recombination contribution of each reference lineage to the query lineage. 
+(ii) Then, virusrecom begins calculating the recombination contribution of each reference lineage to the query lineage.
+![recombination_step1](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/recombination_run1.jpg)
 
 (iii) After the finish of running, a concise report is printed reporting recombination events with p-values less than 0.05.
 
