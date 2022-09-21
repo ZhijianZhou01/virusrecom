@@ -153,7 +153,7 @@ else
 fi
 ```
 
-Then you need to modify it to something like this (for example, directory of "VirusRecom_V1.0_linux" was directly placed in the ```/home```):
+Then you need to modify it to something like this (for example, directory of "virusrecom_V1.0_linux" was directly placed in the ```/home```):
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
