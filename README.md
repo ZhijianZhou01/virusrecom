@@ -68,10 +68,10 @@ Of note the mark names should be unique for each lineage.
 Then, execute the command to detect recombination events in query lineage, for example:
 
 ```
-virusrecom -a lineages_data_alignment.fas -q query_recombinant -g n -m p -w 100 -s 20 -o out_dir
+virusrecom -a lineages_data_alignment.fas -q query_recombinant -l reference_lineages_name.txt -g n -m p -w 100 -s 20 -o out_dir
 ```
 
-Of note (i) if the current directory is not switched to ```aligned_input_sequences```, the paths of the file ```lineages_data_alignment.fas``` and the directory ```out_dir``` need to use absolute paths instead of relative paths; (ii) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```lineages_data_alignment.fas```.
+Of note (i) if the current directory is not switched to ```aligned_input_sequences```, the paths of the file ```lineages_data_alignment.fas``` , the file ```reference_lineages_name.txt``` and the directory ```out_dir``` need to use absolute paths instead of relative paths; (ii) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```lineages_data_alignment.fas```.
 
 
 In fact, we recommend that users use already aligned input-data like the file ```lineages_data_alignment.fas``` in VirusRecom. A simple reason is that the step of multiple sequence alignment can be omitted when adjusting the parameters in VirusRecom. However, how to add the lineage name into each sequence name when the number of sequences is huge? A common approach is using your own script. However, we recommend completing the addition of mark using VirusRecom for regular users. Firstly, you can prepare the data (unaligned input-sequences) as described in section ```4.1. Unaligned input-sequences```, and then submit them to VirusRecom to run and the parameters can be arbitrarily configured first. Then, an intermediate file named ```*__merge.fasta``` can be found in the directory ```run_record``` when the log output from the MAFFT software appears. Of note the file ```*__merge.fasta``` is not aligned. You can use the generated file of aligned ```*__merge_mafft.fasta``` after MAFFT finishes running, or use other software to align the file ```*__merge.fasta```.
