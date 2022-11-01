@@ -23,7 +23,7 @@ virusrecom is a command line interface program, users can get help documentation
 |-mr | The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.|
 | -cp | The cutoff threshold of proportion (cp, default value was 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.|
 |-cm | Whether to simply use the max cumulative WIC of all sites to identified the major parent. The default value is ‘n’ and means ‘no’. If required, please specify ‘-cm y’.|
-|-b | Whe ther to run the breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.|
+|-b | Whether to run the breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.|
 | -bw | The window size (polymorphic sites, default value is 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when ‘-m p -b y’ has been specified.|
 |-t | Number of threads used for the multiple sequence alignments (MSA), the default value is 1.|
 |-y | Specify the starting value of the Y-axis scale in the picture, the default value is 0.|
