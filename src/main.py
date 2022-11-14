@@ -503,6 +503,8 @@ def virus_infor_calculate(seq_matrix,
     except:
         print("No significant recombination events were found in "
               + query_seq_prefix + "\n")
+        
+        print("Note: Probably a false negative caused by a high cp value！" + "\n")
 
         recom_report_path = (sub_outdir + "/" + run_id + "_"
                              + "Possible recombination event in "
@@ -513,7 +515,8 @@ def virus_infor_calculate(seq_matrix,
             recom_report_file.write(
                 "No significant recombination events were found in "
 
-                + query_seq_prefix)
+                + query_seq_prefix + "\n"
+                + "Note: Probably a false negative caused by a high cp value！" + "\n")
 
         recom_report_jc_path = (sub_outdir + "/" + run_id + "_"
                                 + "Possible recombination event in "
@@ -523,7 +526,8 @@ def virus_infor_calculate(seq_matrix,
 
             recom_report_jc.write(
                 "No significant recombination events were found in "
-                + query_seq_prefix)
+                + query_seq_prefix + "\n"
+                + "Note: Probably a false negative caused by a high cp value！" + "\n")
 
         exit()
 
