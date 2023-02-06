@@ -85,8 +85,8 @@ def read_seq(file_path):
             if len(seq_contain) >= max:
                 max = len(seq_contain)
 
-            for n in range(len(seq_contain)):
-                st.append(seq_contain[n: n + 1])
+            for k in range(len(seq_contain)):
+                st.append(seq_contain[k: k + 1])
 
             seq_tab.append(st)
 
