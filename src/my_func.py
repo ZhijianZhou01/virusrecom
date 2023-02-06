@@ -67,7 +67,7 @@ def read_seq(file_path):
     :return:
     """
     seq_tab = []
-    max = 0
+    max_length = 0
     with open(file_path, "r", encoding="utf-8") as gen_file_input:
 
         gen_file_list = gen_file_input.read().split(">")
@@ -82,8 +82,8 @@ def read_seq(file_path):
 
             st.append(seq_name)
 
-            if len(seq_contain) >= max:
-                max = len(seq_contain)
+            if len(seq_contain) >= max_length:
+                max_length = len(seq_contain)
 
             for k in range(len(seq_contain)):
                 st.append(seq_contain[k: k + 1])
@@ -94,7 +94,7 @@ def read_seq(file_path):
     seq_sites_list = []
     seq_sites_list.append("SeqName")
 
-    for x in range(max):
+    for x in range(max_length):
         seq_sites_list.append(str(x + 1))
 
     seq_pands = pd.DataFrame(seq_tab,columns=seq_sites_list).set_index("SeqName")
