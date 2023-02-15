@@ -78,7 +78,7 @@ In fact, we recommend that users use already aligned input-data like the file ``
 
 
 ### 3.3. Output result
-Take the parameter configuration in the section ```4.1. Unaligned input-sequences``` above as an example, and the output directory is ```out_dir```. There are three subdirectories and two aggregated reports in the directory ```out_dir```. Now, we first introduce three subdirectories, including the directory ```run_record```, the directory ```WICs of sites``` and the directory ```WICs of slide_window```.
+Take the parameter configuration in the section ```3.1. Unaligned input-sequences``` above as an example, and the output directory is ```out_dir```. There are three subdirectories and two aggregated reports in the directory ```out_dir```. Now, we first introduce three subdirectories, including the directory ```run_record```, the directory ```WICs of sites``` and the directory ```WICs of slide_window```.
 
    (I) In the directory ```run_record```, the alignment file created by MAFFT is reserved. If ```-g n``` is specified, and the file ```Record of deleted gap sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record of same sites in aligned sequence_*.txt``` containing all the same sites will be created.
 
