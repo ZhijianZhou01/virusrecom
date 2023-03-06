@@ -49,9 +49,9 @@ The sequences data for test in the manual was stored at https://github.com/Zhiji
 ### 3.1. Aligned input-sequences
 If the input sequence-data has been aligned, and it should be loaded via the ```-a``` parameter. Multiple sequence alignments (MSA) can be pre-completed by many programs, this is not introduced. Now, let's focus on the directory ```aligned_input_sequences``` in the file ```recombination_test_data_v1.1.zip```. 
 
-    (1) An aligned sequence-file named ```alignment_lineages_data.fasta```, which including multiple sequences from the query lineage and other reference lineages. 
+(1) An aligned sequence-file named ```alignment_lineages_data.fasta```, which including multiple sequences from the query lineage and other reference lineages. 
     
-    (2) A text-file named ```reference_lineages_name.txt```, which including the names (marks) of these reference lineages. 
+(2) A text-file named ```reference_lineages_name.txt```, which including the names (marks) of these reference lineages. 
     
 ```
      reference_lineage_1
