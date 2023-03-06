@@ -52,7 +52,8 @@ If the input sequence-data has been aligned, and it should be loaded via the ```
     (1) An aligned sequence-file named ```alignment_lineages_data.fasta```, which including multiple sequences from the query lineage and other reference lineages. 
     
     (2) A text-file named ```reference_lineages_name.txt```, which including the names (marks) of these reference lineages. 
-     ```
+    
+```
      reference_lineage_1
      reference_lineage_2
      reference_lineage_3
@@ -62,9 +63,9 @@ If the input sequence-data has been aligned, and it should be loaded via the ```
      reference_lineage_7
      reference_lineage_8
      reference_lineage_9
-     ```
+```
      
-    Note, these marks of reference lineages should also appear in sequence names of the file ```alignment_lineages_data.fasta```. <b>The mark of each reference lineage should be unique</b>, otherwise, there will be duplicate matches in subsequent analysis.
+Note, these marks of reference lineages should also appear in sequence names of the file ```alignment_lineages_data.fasta```. <b>The mark of each reference lineage should be unique</b>, otherwise, there will be duplicate matches in subsequent analysis.
 
 Before running the command of VirusRecom, let's think about the search strategy for recombination events. Firstly, we use only polymorphic sites considering that sequences from these lineages are highly similar, which means that the parameter ```-m p``` needs to be specified. Secondly, we do not consider gap-containing sites in this test and use the parameter ```-g n```. Instead, if you consider these gap sites, you need to use the parameter ```-g y```. Next, in the first run, let's try first with a window size of 100 and a step size of 20. Of note the value of “size” at this time represents the number of polymorphic sites because the ```-m p``` parameter has been specified. For the two parameters ```-cp``` and ```-mr```, we use the default value of 0.9 and 1000 in this test. Finally, we specify a folder to save the results by parameter ```-o```. 
 
