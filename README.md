@@ -80,7 +80,7 @@ Note: (i) if the current directory is not switched to ```aligned_input_sequences
 
 
 After the run is complete, in the directory ```outdir```, there are three subdirectories and two aggregated reports:
-[图片]
+![outdir.png](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/outdir.png)
 
 (I)	In the directory ```run_record```, if ```-g n``` is specified, and the file ```Record_of_deleted_gap_sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record_of_same_sites_in_aligned_sequence*.txt``` containing all the same sites will be created.
 
@@ -115,7 +115,7 @@ virusrecom -a alignment_lineages_data.fasta -q query_recombinant -l reference_li
 Tip: (i) -b y only takes effect when ```-m p``` has been specified. (ii) the step size of breakpoint search is fixed to 1. 
 
 The negative logarithm of p-value in each site is in the file ```*_-lg(p-value)_for_potential_breakpoint.pdf``` and the file ```*_-lg(p-value)_for_potential_breakpoint.xlsx```. 
-[图片]
+![breakpoint.jpg](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/breakpoint.jpg)
 
 The highest peak (the highest −lgP value) indicated the possible recombination breakpoint.
 
@@ -148,7 +148,7 @@ virusrecom -a alns.fasta -q HNU1-1 -l alns_seq_taxon.txt -g n -m a -w 800 -s 100
 ```
 
 The mWIC from reference lineages is as follows:
-[图片]
+![hnu1-1.jpg](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/hnu1-1.jpg)
 
 <b>Note,</b> because each “lineage” contains only one sequence and ```-g n``` is used in the example, the mWIC in the picture is actually twice the size of “sequence identity”. 
 
