@@ -81,7 +81,8 @@ Note: (1) if the current directory is not switched to ```aligned_input_sequences
 (2) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```alignment_lineages_data.fasta```.
 
 
-After the run is complete, in the directory ```outdir```, there are three subdirectories and two aggregated reports:
+<b>After the run is complete</b>, in the directory ```outdir```, there are three subdirectories and two aggregated reports:
+
 ![outdir.png](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/outdir.png)
 
 (1) In the directory ```run_record```, if ```-g n``` is specified, and the file ```Record_of_deleted_gap_sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record_of_same_sites_in_aligned_sequence*.txt``` containing all the same sites will be created.
