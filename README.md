@@ -226,3 +226,8 @@ fi
 ```
 
 (2) If you run the the release virusrecom v1.1 or run the source code directly (including virusrecom v1.0 or virusrecom v1.1), for the program used for multiple sequence alignment (if you use the unaligned input-sequences) , because VirusRecom call them from the system path, so they need to be installed on the machine beforehand.
+
+## 6. Citation
+Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
+
+https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420
