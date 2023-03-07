@@ -406,7 +406,7 @@ def virus_infor_calculate(parameter_dic,
                                     + "Possible other parents and recombination regions:"
                                     + "\n")
 
-        for key in recombination_dic:  # 每个次要亲本结果
+        for key in recombination_dic:
             event_list = recombination_dic[key]
 
             recom_report_file.write(key + "\t")
