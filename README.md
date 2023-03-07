@@ -21,7 +21,7 @@ virusrecom is a command line interface program, users can get help documentation
 
 <b>Tip: virusrecom v1.1 optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
-<b>The help documentation of virusrecom v1.1 is as follows.</b>
+<b>The simple help documentation of virusrecom v1.1 is as follows.</b>
 
 | Parameter | Description |
 | --- | --- |
