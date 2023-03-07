@@ -115,7 +115,7 @@ If ```-b y``` is specified, then VirusRecom will perform the search of recombina
 ```
 virusrecom -a alignment_lineages_data.fasta -q query_recombinant -l reference_lineages_name.txt -g n -m p -w 100 -s 20 -b y -bw 200 -o outdir
 ```
-<b>Tip:</b> (1) -b y only takes effect when ```-m p``` has been specified. 
+<b>Tip:</b> (1) ```-b y``` only takes effect when ```-m p``` has been specified. 
 (2) the step size of breakpoint search is fixed to 1. 
 
 The negative logarithm of p-value in each site is in the file ```*_-lg(p-value)_for_potential_breakpoint.pdf``` and the file ```*_-lg(p-value)_for_potential_breakpoint.xlsx```. 
