@@ -115,9 +115,11 @@ If ```-b y``` is specified, then VirusRecom will perform the search of recombina
 ```
 virusrecom -a alignment_lineages_data.fasta -q query_recombinant -l reference_lineages_name.txt -g n -m p -w 100 -s 20 -b y -bw 200 -o outdir
 ```
-Tip: (i) -b y only takes effect when ```-m p``` has been specified. (ii) the step size of breakpoint search is fixed to 1. 
+<b>Tip:</b> (1) -b y only takes effect when ```-m p``` has been specified. 
+(2) the step size of breakpoint search is fixed to 1. 
 
 The negative logarithm of p-value in each site is in the file ```*_-lg(p-value)_for_potential_breakpoint.pdf``` and the file ```*_-lg(p-value)_for_potential_breakpoint.xlsx```. 
+
 ![breakpoint.jpg](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/breakpoint.jpg)
 
 The highest peak (the highest −lgP value) indicated the possible recombination breakpoint.
@@ -129,8 +131,8 @@ For the example data in directory ```unaligned_input_sequences```, run the follo
 ```
 virusrecom -ua unalignment_lineages_data.fas -at mafft -q query_recombinant -l reference_lineages_name.txt -g n -m p -w 100 -s 20 -o outdir
 ```
-Note: (i) ```-at mafft``` means to call mafft in the system path, and the alignment strategy is auto. Besides, using ```-at muscle``` to call muscle and using ```-at clustalo``` to call clustal-omega.
-(ii) the string ```query_recombinant``` in command is the corresponding mark of query lineage in the file ```unalignment_lineages_data.fas```.
+<b>Note:</b> (1) ```-at mafft``` means to call mafft in the system path, and the alignment strategy is auto. Besides, using ```-at muscle``` to call muscle and using ```-at clustalo``` to call clustal-omega.
+(2) the string ```query_recombinant``` in command is the corresponding mark of query lineage in the file ```unalignment_lineages_data.fas```.
 
 The interpretation of the output result is consistent with section 3.1. 
 
@@ -151,6 +153,7 @@ virusrecom -a alns.fasta -q HNU1-1 -l alns_seq_taxon.txt -g n -m a -w 800 -s 100
 ```
 
 The mWIC from reference lineages is as follows:
+
 ![hnu1-1.jpg](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/hnu1-1.jpg)
 
 <b>Note,</b> because each “lineage” contains only one sequence and ```-g n``` is used in the example, the mWIC in the picture is actually twice the size of “sequence identity”. 
