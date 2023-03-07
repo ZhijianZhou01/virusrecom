@@ -138,7 +138,7 @@ The interpretation of the output result is consistent with section 3.1.
 
 
 ### 3.3. Non-lineage data
-In VirusRecom, the reference lineage is allowed to contain only one single sequence. Under this condition, mWIC value of the fragment is essentially a multiple of shared identity. If -g n is used in the calculation, the mWIC is twice as large as shared identity. If ```-g y``` is used in the calculation, the mWIC is log25 as large as shared identity. 
+In VirusRecom, the reference lineage is allowed to contain only one single sequence. Under this condition, mWIC value of the fragment is essentially a multiple of shared identity. If -g n is used in the calculation, the mWIC is twice as large as shared identity. If ```-g y``` is used in the calculation, the mWIC is $\log_2{5}$ as large as shared identity. 
 
 Of noted, for recombination analysis without lineage data, the additional feature is only recommended for non-highly similar sequences and the user can use it to draw an identity point map.
 
