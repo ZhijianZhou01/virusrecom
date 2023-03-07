@@ -77,18 +77,18 @@ Then, switch the current directory to ```aligned_input_sequences```, and run the
 virusrecom -a alignment_lineages_data.fasta -q query_recombinant -l reference_lineages_name.txt -g n -m p -w 100 -s 20 -o outdir
 ```
 
-Note: (i) if the current directory is not switched to ```aligned_input_sequences```, the file and directory path in command need the absolute paths instead of relative paths.
-(ii) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```alignment_lineages_data.fasta```.
+Note: (1) if the current directory is not switched to ```aligned_input_sequences```, the file and directory path in command need the absolute paths instead of relative paths.
+(2) the string “query_recombinant” in command is the corresponding mark of query lineage in the file ```alignment_lineages_data.fasta```.
 
 
 After the run is complete, in the directory ```outdir```, there are three subdirectories and two aggregated reports:
 ![outdir.png](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/outdir.png)
 
-(I)	In the directory ```run_record```, if ```-g n``` is specified, and the file ```Record_of_deleted_gap_sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record_of_same_sites_in_aligned_sequence*.txt``` containing all the same sites will be created.
+(1) In the directory ```run_record```, if ```-g n``` is specified, and the file ```Record_of_deleted_gap_sites_*.txt``` containing all the gap sites will be created. Besides, If ```-m p``` is specified, and the file ```Record_of_same_sites_in_aligned_sequence*.txt``` containing all the same sites will be created.
 
-(II)	In the directory ```WICs_of_sites```, the file ```*_site_WIC_from_lineages.pdf```, ```*_site_WIC_from_lineages.xlsx``` and the file ```*_site_WIC.csv``` are used to record the WIC value of each site. 
+(2) In the directory ```WICs_of_sites```, the file ```*_site_WIC_from_lineages.pdf```, ```*_site_WIC_from_lineages.xlsx``` and the file ```*_site_WIC.csv``` are used to record the WIC value of each site. 
 
-(III)	In the directory ```WICs_of_slide_window```, the file ```*_mWIC_from_lineages.xlsx``` and the file ```*_mWIC_from_lineages.pdf``` are used to record the mean WIC of each sliding window. 
+(3) In the directory ```WICs_of_slide_window```, the file ```*_mWIC_from_lineages.xlsx``` and the file ```*_mWIC_from_lineages.pdf``` are used to record the mean WIC of each sliding window. 
 
 ![recombination_step4.png](https://github.com/ZhijianZhou01/virusrecom/blob/main/figture/recombination_step4.png)
 
