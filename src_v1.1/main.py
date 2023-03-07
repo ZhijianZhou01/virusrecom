@@ -287,11 +287,6 @@ if __name__ == "__main__":
     parameter_dic["out_dir"] = myargs.outdir  # output directory
 
 
-
-    # 处理不正确的输入
-
-    # 检查是否指定了输出文件夹
-
     out_dir = parameter_dic["out_dir"].replace("\\", "/")
 
     if out_dir == "":
@@ -355,8 +350,6 @@ if __name__ == "__main__":
     seq_alignment_file = ""
 
 
-
-    ###  1.处理输入数据类型
 
     if parameter_dic["aligned_seq"] != "":
 
@@ -431,7 +424,6 @@ if __name__ == "__main__":
     query_prefix = parameter_dic["query_lineage_name"]
 
 
-    # 读取参考谱系名称
     with open(parameter_dic["lineage_file"]) as lineage_file:
         for line in lineage_file:
             line = line.strip()
