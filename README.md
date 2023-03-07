@@ -196,7 +196,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-If you use <b>virusrecom v1.0</b> and need to call MAFFT for multiple sequence alignmentIn in linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
+(1) If you use <b>the release virusrecom v1.0</b>, and need to call the plug-in MAFFT for multiple sequence alignment in in linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
@@ -215,3 +215,5 @@ else
 	prefix= /home/VirusRecom_V1.0_linux/external_program/mafft/linux/libexec/mafft
 fi
 ```
+
+(2) If you run the the release virusrecom v1.1 or run the source code directly (including virusrecom v1.0 or virusrecom v1.1), for the program used for multiple sequence alignment (if you use the unaligned input-sequences) , because VirusRecom call them from the system path, so they need to be installed on the machine beforehand.
