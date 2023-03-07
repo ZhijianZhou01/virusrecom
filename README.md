@@ -2,7 +2,7 @@
 
 ## 1. Download and install
 
-(1) Users can run the source code directly, but before running the source code, you should install the environment required by virusrecom:
+(1) Users can run the source code directly, but before running, you should install the environment required by virusrecom:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
