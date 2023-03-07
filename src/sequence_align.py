@@ -92,48 +92,14 @@ class SeqAlign(object):
         aligned_out_path = self.out_file 
 
         commd_list = [] 
+        commd_list.append("mafft")
 
-        current_path = ""
-
-        if platform.system().lower() == "windows":
-
-
-            current_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-            current_path = os.path.dirname(current_path)
-            current_path = current_path.replace("\\", "/")
-  
-
-            run_exe = current_path + r"/external_program/mafft/windows/mafft.bat"
-
-            commd_list.append(run_exe)
-
-        elif platform.system().lower() == "linux":
-            current_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-
-            current_path = os.path.dirname(current_path)
-
-            commd_list.append(current_path
-                              + r"/external_program/mafft/linux/bin/mafft")
-
-
-        elif platform.system().lower() == "darwin" or platform.system().lower() == "macos":
-            current_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-            current_path = os.path.dirname(current_path)
-
-            commd_list.append(current_path
-                              + r"/external_program/mafft/macos/mafft.bat")
-
-
-        commd_list.append(" --inputorder")
-        commd_list.append(" --auto")
-        commd_list.append(" --thread " + str(self.thread_num) + " ")
+        commd_list.append("--inputorder")
+        commd_list.append("--auto")
+        commd_list.append("--thread " + str(self.thread_num))
         commd_list.append(seq_for_mafft_path + " > " + aligned_out_path)
 
-        mafft_commd = ""
-
-
-        for x in commd_list:
-            mafft_commd += x
+        mafft_commd = " ".join(commd_list)
 
         print(mafft_commd)
 
