@@ -51,7 +51,7 @@ virusrecom is a command line interface program, users can get help documentation
 
 
 ## 3. Example of usage
-The sequences data for test in the manual was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
+The sequences data for test in the documentation was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
 
 <b>Note, the ```recombination_test_data.zip``` in directory example is against virusrecom v1.0, not virusrecom v1.1</b>.
 
