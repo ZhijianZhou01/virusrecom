@@ -77,7 +77,7 @@ if __name__ == "__main__":
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.1 (2023-02-28)")
+    print("  Version: 1.1 (2023-03-07)")
 
     print("  Author: Zhi-Jian Zhou")
 
