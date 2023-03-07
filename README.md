@@ -42,9 +42,9 @@ The help documentation of virusrecom v1.1 is as follows.
 
 
 ## 3. Example of usage
-The sequences data for test in the manual was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. Take the ```recombination_test_data_v1.1.zip``` provided in the directory ``example`` as a demonstration. 
-
+The sequences data for test in the manual was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
 <b>Note, the ```recombination_test_data.zip``` in directory example is against virusrecom v1.0, not virusrecom v1.1</b>.
+In this demonstration, the test data is from the the ```recombination_test_data_v1.1.zip``` provided in the directory ```example```. 
 
 ### 3.1. Aligned input-sequences
 If the input sequence-data has been aligned, and it should be loaded via the ```-a``` parameter. Multiple sequence alignments (MSA) can be pre-completed by many programs, this is not introduced. Now, let's focus on the directory ```aligned_input_sequences``` in the file ```recombination_test_data_v1.1.zip```. 
