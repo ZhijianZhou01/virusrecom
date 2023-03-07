@@ -43,7 +43,9 @@ The help documentation of virusrecom v1.1 is as follows.
 
 ## 3. Example of usage
 The sequences data for test in the manual was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
+
 <b>Note, the ```recombination_test_data.zip``` in directory example is against virusrecom v1.0, not virusrecom v1.1</b>.
+
 In this demonstration, the test data is from the the ```recombination_test_data_v1.1.zip``` provided in the directory ```example```. 
 
 ### 3.1. Aligned input-sequences
