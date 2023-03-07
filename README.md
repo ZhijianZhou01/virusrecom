@@ -17,7 +17,7 @@ Take the releases as an example, in general, the executable file of VirusRecom i
 ## 2. Getting help
 virusrecom is a command line interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
 
-<b>For detailed documentation, please refer to ![Manual of VirusRecom v1.1](https://github.com/ZhijianZhou01/virusrecom/blob/main/Manual%20of%20VirusRecom%20v1.1.pdf)
+<b>For detailed documentation, please refer to</b> ![Manual of VirusRecom v1.1](https://github.com/ZhijianZhou01/virusrecom/blob/main/Manual%20of%20VirusRecom%20v1.1.pdf)
 
 <b>Tip: virusrecom v1.1 optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
