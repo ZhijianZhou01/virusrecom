@@ -1,5 +1,12 @@
 # VirusRecom: Detecting recombination of viral lineages using information theory
 
+
+![](https://img.shields.io/github/downloads/ZhijianZhou01/virusrecom/1.0/total?)
+![](https://img.shields.io/github/downloads/ZhijianZhou01/virusrecom/1.1/total?)
+
+[![](https://img.shields.io/github/downloads/ZhijianZhou01/virusrecom/1.1/total?color=red&style=flat-square)](https://github.com/ZhijianZhou01/virusrecom/releases/tag/v1.1)
+
+
 ## 1. Download and install
 
 (1) Run the source code directly, but before running, you should install the environment required by virusrecom:
