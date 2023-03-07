@@ -4,6 +4,7 @@
 ![](https://img.shields.io/github/downloads/ZhijianZhou01/virusrecom/v1.0/total?)
 [![](https://img.shields.io/github/downloads/ZhijianZhou01/virusrecom/v1.1/total?color=red&style=flat-square)](https://github.com/ZhijianZhou01/virusrecom/releases/tag/v1.1)
 
+[![](https://img.shields.io/badge/System-windows & linux & macos-yellow.svg)]
 [![](https://img.shields.io/badge/Doi-10.1093/bib/bbac513-yellow.svg)](https://doi.org/10.1093/bib/bbac513) 
 
 
