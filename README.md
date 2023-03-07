@@ -160,7 +160,9 @@ The mWIC from reference lineages is as follows:
 
 The possible recombination event identified by VirusRecom is as follows:
 ```
-Possible major parent: HKU17-USA(global mWIC: 1.5914816042426252)  Other possible parents and significant recombination regions (p<0.05): HKU12	20720 to 25297(mWIC: 1.8039433490697028), p_value: 2.783880536189705e-204
+Possible major parent: HKU17-USA(global mWIC: 1.5914816042426252)  
+
+Other possible parents and significant recombination regions (p<0.05): HKU12	20720 to 25297(mWIC: 1.8039433490697028), p_value: 2.783880536189705e-204
 ```
 
 The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and the recombination region is about 20720-25297 nt in the alignment.
