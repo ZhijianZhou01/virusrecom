@@ -187,8 +187,8 @@ The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and 
 
 ## 4. Common questions
 ### 4.1. Default values of parameter 
-For the properties of a parameter, if not specified, the software uses the default value. 
-However, the default value is is not suitable for all data. In addition to window size (```-w```) and step size (```-s```) of sliding window, values of ```-cp``` and ```-mr``` also require users to adjust based on the data. 
+For the value of a parameter, if not specified, the software uses the default value. 
+However, the default value is not suitable for all data. In addition to window size (```-w```) and step size (```-s```) of sliding window, values of ```-cp``` and ```-mr``` also require users to adjust based on the data. 
 
 When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. 
 
@@ -197,7 +197,7 @@ Typically, this is part of the data preparation. In virusrecom v1.1, users can e
 ```
 virusrecom -e input_directory -o outdir
 ```
-<b>Tip:</b> The directory ```input_directory``` can contain multiple fasta files, and each fasta file can contain multiple sequences. Finally, each sequence name will contain its file-name. 
+<b>Tip:</b> The directory ```input_directory``` can contain multiple fasta files, and each fasta file can contain multiple sequences. After the running, finally, each sequence name will contain its file-name. 
 
 Therefore, if the file-name of fasta file is a lineage name, the lineage name can be written into the sequence name in batches.
 
