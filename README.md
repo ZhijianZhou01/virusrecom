@@ -220,7 +220,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-(1) If the software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/release , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
+(1) If the software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/releases , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
