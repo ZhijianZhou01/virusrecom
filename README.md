@@ -10,14 +10,26 @@
 
 ## 1. Download and install
 
-(1) Run the source code directly, but before running, you should install the environment required by virusrecom:
+(1) Install online (recommend)
+```
+pip install virusrecom
+virusrecom -h
+```
+
+(2) Or local installation
+```
+python setup.py install
+virusrecom -h
+```
+
+(3) Or run the source code directly, but before running, you should install the environment required by virusrecom:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 Then, you can view the help documentation by ```python main.py -h```.
 
-(2) Or use the releases we provided at https://github.com/ZhijianZhou01/virusrecom/releases. VirusRecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
+(4) Or use the binary files provided at https://github.com/ZhijianZhou01/virusrecom/releases. VirusRecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
 Take the releases as an example, in general, the executable file of VirusRecom is located at the  ```main``` folder. Then, running the VirusRecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
 
@@ -206,7 +218,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-(1) If you use <b>the release virusrecom v1.0</b>, and need to call the plug-in MAFFT for multiple sequence alignment in in linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
+(1) If the software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/release , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
@@ -226,7 +238,7 @@ else
 fi
 ```
 
-(2) If you run the the release virusrecom v1.1 or run the source code directly (including virusrecom v1.0 or virusrecom v1.1), for the program used for multiple sequence alignment (if you use the unaligned input-sequences) , because VirusRecom call them from the system path, so they need to be installed on the machine beforehand.
+(2) If the software was from the binary files of virusrecom >=v1.1 or some other form, when the unaligned input-sequences was used, the program used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path.
 
 ## 6. Citation
 Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
