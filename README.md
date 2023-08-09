@@ -17,6 +17,7 @@ virusrecom -h
 ```
 
 (2) Or local installation
+
 Firstly, download the repository, then, run
 ```
 python setup.py install
