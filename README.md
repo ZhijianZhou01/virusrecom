@@ -18,6 +18,7 @@ virusrecom -h
 
 (2) Or local installation
 ```
+git@github.com:ZhijianZhou01/virusrecom.git
 python setup.py install
 virusrecom -h
 ```
