@@ -237,7 +237,7 @@ else
 fi
 ```
 
-(2) If installed software was from the binary files of virusrecom >v1.0 or some other form (including ```pip install virusrecom``` and run the source code directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path directly.
+(2) If installed software was from the binary files of virusrecom >v1.0 or some other form (including ```pip install virusrecom```, or run the source code of virusrecom directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path directly.
 
 ## 6. Citation
 Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
