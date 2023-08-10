@@ -21,7 +21,7 @@ python setup.py install
 virusrecom -h
 ```
 
-(3) Or run the source code directly, but before running, you should install the environment required by virusrecom:
+(3) Or run the source code directly, but you should install the required environment first:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
