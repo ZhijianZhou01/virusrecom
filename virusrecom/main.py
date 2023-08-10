@@ -13,7 +13,7 @@ Time: 2022/4/17 17:29
 import sys
 import os
 
-app_dir = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
+app_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 app_dir = app_dir.replace("\\", "/")
 sys.path.append(app_dir)
 
