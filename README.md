@@ -217,7 +217,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-(1) If the software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/releases , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
+(1) If installed software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/releases , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
@@ -237,7 +237,7 @@ else
 fi
 ```
 
-(2) If the software was from the binary files of virusrecom >v1.0 or some other form (including ```pip install``` and run the source code directly), when the unaligned input-sequences was used, the program used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path.
+(2) If installed software was from the binary files of virusrecom >v1.0 or some other form (including ```pip install virusrecom``` and run the source code directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path directly.
 
 ## 6. Citation
 Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
