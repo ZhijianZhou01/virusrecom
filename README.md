@@ -7,7 +7,7 @@
 
 ## 1. Download and install
 
-VirusRecom is developed via Python3, and you can get and install VirusRecom in a variety of ways.
+VirusRecom is developed via ```Python3```, and you can get and install VirusRecom in a variety of ways.
 
 ### 1.1. pip method
 
