@@ -20,7 +20,7 @@ virusrecom -h
 
 ### 1.2 Or local installation
 
-In addition to the  ```pip``` method, you can also install it manually using setup.py file. 
+In addition to the  ```pip``` method, you can also install it manually using ```setup.py``` file. 
 
 Firstly, download this repository, then, run:
 ```
