@@ -11,7 +11,7 @@ You can get and install virusrecom in a variety of ways.
 
 ### 1.1 pip method
 
-virusrecom has been distributed to the standard library of PyPI, and can be easily installed by ```pip```.
+virusrecom has been distributed to the standard library of PyPI, and can be easily installed by ```pip``` tool.
 
 ```
 pip install virusrecom
