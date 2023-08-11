@@ -8,6 +8,8 @@
 ![](https://img.shields.io/pypi/wheel/virusrecom)
 ![](https://img.shields.io/pypi/dm/virusrecom)
 
+![](https://img.shields.io/github/issues/ZhijianZhou01/virusrecom)
+![](https://img.shields.io/github/issues-closed/ZhijianZhou01/virusrecom)
 
 **Note, the sentence "recombination events with p-values below 0.001 are less reliable" is misexpressed in the previously uploaded manuals, the correct one is "recombination events with p-values over 0.001 are less reliable". (calibration in 2023-08-11)**
 
