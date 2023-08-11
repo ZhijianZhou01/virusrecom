@@ -1,7 +1,9 @@
 # VirusRecom: Detecting recombination of viral lineages using information theory
+
 ![](https://img.shields.io/pypi/dm/virusrecom)
+![](https://img.shields.io/pypi/dw/virusrecom)
 
-
+![](https://img.shields.io/badge/Python-3.5|3.6|3.7|3.8|3.9-blue)
 ![](https://img.shields.io/badge/System-Windows/Linux/MacOS-green.svg)
 [![](https://img.shields.io/badge/Doi-10.1093/bib/bbac513-yellow.svg)](https://doi.org/10.1093/bib/bbac513) 
 
