@@ -2,11 +2,12 @@
 
 
 ![](https://img.shields.io/pypi/pyversions/virusrecom)
-![](https://img.shields.io/pypi/wheel/virusrecom)
 ![](https://img.shields.io/badge/System-Windows/Linux/MacOS-green.svg)
-
-![](https://img.shields.io/pypi/dm/virusrecom)
 [![](https://img.shields.io/badge/Doi-10.1093/bib/bbac513-yellow.svg)](https://doi.org/10.1093/bib/bbac513) 
+
+![](https://img.shields.io/pypi/wheel/virusrecom)
+![](https://img.shields.io/pypi/dm/virusrecom)
+
 
 **Note, the sentence "recombination events with p-values below 0.001 are less reliable" is misexpressed in the previously uploaded manuals, the correct one is "recombination events with p-values over 0.001 are less reliable". (calibration in 2023-08-11)**
 
