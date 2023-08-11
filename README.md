@@ -7,28 +7,40 @@
 
 ## 1. Download and install
 
-(1) Install online (recommend)
+You can get and install virusrecom in a variety of ways.
+
+### 1.1 pip method
+
+ervdetective has been distributed to the standard library of PyPI, and can be easily installed by ```pip```.
+
 ```
-pip install virusrecom
-virusrecom -h
+pip install ervdetective
+ervdetective -h
 ```
 
-(2) Or local installation
+### 1.2 Or local installation
 
-Firstly, download the repository, then, run
+In addition to the  ```pip``` method, you can also install it manually using setup.py file. 
+
+Firstly, download this repository, then, run:
 ```
 python setup.py install
-virusrecom -h
+ervdetective -h
 ```
 
-(3) Or run the source code directly, but you should install the required environment first:
+### 1.3 Or run the source code directly
+
+you can also directly run the source code of ervdetective without installation. First, you should install the required python environment of ervdetective:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+
 Then, you can view the help documentation by ```python main.py -h```.
 
-(4) Or use the binary files provided at https://github.com/ZhijianZhou01/virusrecom/releases. VirusRecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
+### 1.4 Or use the binary files
+
+you can also directly run the the binary files provided at https://github.com/ZhijianZhou01/virusrecom/releases. VirusRecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
 For the binary files of the releasese, in general, the executable file of VirusRecom is located at the  ```main``` folder. Then, running the VirusRecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
 
