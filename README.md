@@ -11,10 +11,10 @@ You can get and install virusrecom in a variety of ways.
 
 ### 1.1 pip method
 
-ervdetective has been distributed to the standard library of PyPI, and can be easily installed by ```pip```.
+virusrecom has been distributed to the standard library of PyPI, and can be easily installed by ```pip```.
 
 ```
-pip install ervdetective
+pip install virusrecom
 ervdetective -h
 ```
 
@@ -25,12 +25,12 @@ In addition to the  ```pip``` method, you can also install it manually using set
 Firstly, download this repository, then, run:
 ```
 python setup.py install
-ervdetective -h
+virusrecom -h
 ```
 
 ### 1.3 Or run the source code directly
 
-you can also directly run the source code of ervdetective without installation. First, you should install the required python environment of ervdetective:
+you can also directly run the source code of virusrecom without installation. First, you should install the required python environment of virusrecom:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -40,9 +40,9 @@ Then, you can view the help documentation by ```python main.py -h```.
 
 ### 1.4 Or use the binary files
 
-you can also directly run the the binary files provided at https://github.com/ZhijianZhou01/virusrecom/releases. VirusRecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
+you can also directly run the the binary files of virusrecom provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
-For the binary files of the releasese, in general, the executable file of VirusRecom is located at the  ```main``` folder. Then, running the VirusRecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
+For the binary files of the releasese, in general, the executable file of virusrecom is located at the  ```main``` folder. Then, running the virusrecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run VirusRecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
 
 
 ## 2. Getting help
@@ -208,6 +208,7 @@ HKU12	20720 to 25297(mWIC: 1.8039433490697028), p_value: 2.783880536189705e-204
 
 The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and the recombination region is about 20720-25297 nt in the alignment.
 
+
 ## 4. Common questions
 ### 4.1. Default values of parameter 
 For the value of a parameter, if not specified, the software uses the default value. 
@@ -250,6 +251,7 @@ fi
 ```
 
 (2) If installed software was from the binary files of virusrecom >v1.0 or some other form (including ```pip install virusrecom```, or run the source code of virusrecom directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed on the machine beforehand, because VirusRecom call them from the system path directly.
+
 
 ## 6. Citation
 Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
