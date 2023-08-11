@@ -9,7 +9,7 @@
 
 you can get and install VirusRecom in a variety of ways.
 
-### 1.1 pip method
+### 1.1. pip method
 
 virusrecom has been distributed to the standard library of PyPI, and can be easily installed by ```pip``` tool.
 
@@ -18,7 +18,7 @@ pip install virusrecom
 virusrecom -h
 ```
 
-### 1.2 Or local installation
+### 1.2. Or local installation
 
 In addition to the  ```pip``` method, you can also install it manually using ```setup.py``` file. 
 
@@ -28,7 +28,7 @@ python setup.py install
 virusrecom -h
 ```
 
-### 1.3 Or run the source code directly
+### 1.3. Or run the source code directly
 
 you can also directly run the source code of virusrecom without installation. First, you should install the required python environment of virusrecom:
 
@@ -38,7 +38,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Then, you can view the help documentation by ```python main.py -h```.
 
-### 1.4 Or use the binary files
+### 1.4. Or use the binary files
 
 you can also directly run the the binary files of virusrecom provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
