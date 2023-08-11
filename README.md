@@ -36,7 +36,7 @@ you can also directly run the source code of virusrecom without installation. Fi
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-Then, you can view the help documentation by ```python main.py -h```.
+Then, you can run the virusrecom by ```main.py```. Please view the help documentation by ```python main.py -h```.
 
 ### 1.4. Or use the binary files
 
