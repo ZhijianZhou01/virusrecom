@@ -6,7 +6,7 @@
 
 ![](https://img.shields.io/pypi/wheel/virusrecom)
 ![](https://img.shields.io/pypi/dm/virusrecom)
-![](https://img.shields.io/github/stars/ZhijianZhou01/BioAider)
+![](https://img.shields.io/github/stars/ZhijianZhou01/virusrecom)
 
 ![](https://img.shields.io/github/issues/ZhijianZhou01/virusrecom)
 ![](https://img.shields.io/github/issues-closed/ZhijianZhou01/virusrecom)
