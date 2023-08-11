@@ -149,7 +149,7 @@ In this output report, the major parent of query lineage was ```reference_lineag
 
 In fact, ```Possible_recombination_event_conciseness.txt``` is interpretations of the recombination information contained in ```*_mWIC_from_lineages.pdf```. Although VirusRecom shows a good balance between precision and recall in simulated data, false positive or false negatives sometimes occur. Therefore, for the identification results from VirusRecom, users can make own judgment. 
 
-Besides, the output file ```Possible_recombination_event_detailed.txt``` shows those results with p-values greater than 0.05. <b>Tip: recombination events with p-values below 0.001 are less reliable</b>. 
+Besides, the output file ```Possible_recombination_event_detailed.txt``` shows those results with p-values greater than 0.05. <b>Tip: recombination events with p-values over 0.001 are less reliable</b>. 
 
 If ```-b y``` is specified, then VirusRecom will perform the search of recombination breakpoint and plot. For example:
 ```
