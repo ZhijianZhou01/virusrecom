@@ -2,6 +2,7 @@
 
 
 ![](https://img.shields.io/pypi/pyversions/virusrecom)
+![](https://img.shields.io/pypi/wheel/virusrecom)
 ![](https://img.shields.io/badge/System-Windows/Linux/MacOS-green.svg)
 
 ![](https://img.shields.io/pypi/dm/virusrecom)
