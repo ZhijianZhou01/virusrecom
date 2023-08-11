@@ -15,7 +15,7 @@ virusrecom has been distributed to the standard library of PyPI, and can be easi
 
 ```
 pip install virusrecom
-ervdetective -h
+virusrecom -h
 ```
 
 ### 1.2 Or local installation
