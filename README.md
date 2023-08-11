@@ -4,6 +4,8 @@
 ![](https://img.shields.io/badge/System-Windows/Linux/MacOS-green.svg)
 [![](https://img.shields.io/badge/Doi-10.1093/bib/bbac513-yellow.svg)](https://doi.org/10.1093/bib/bbac513) 
 
+**Note, the sentence "In fact, recombination events with p-values below 0.001 are less reliable" is misexpressed in previous manual of VirusRecom, the correct one is "In fact, recombination events with p-values over 0.001 are less reliable". (2023-08-11 supplement)**
+
 
 ## 1. Download and install
 
