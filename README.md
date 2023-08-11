@@ -40,7 +40,7 @@ Then, you can view the help documentation by ```python main.py -h```.
 
 ### 1.4. Or use the binary files
 
-you can also directly run the the binary files of virusrecom provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
+you can also directly run the binary files of virusrecom without installation. The  binary files are provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
 For the binary files of the releasese, in general, the executable file of virusrecom is located at the  ```main``` folder. Then, running the virusrecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run virusrecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
 
