@@ -7,7 +7,7 @@
 
 ## 1. Download and install
 
-You can get and install virusrecom in a variety of ways.
+you can get and install virusrecom in a variety of ways.
 
 ### 1.1 pip method
 
