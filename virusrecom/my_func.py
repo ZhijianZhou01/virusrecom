@@ -268,7 +268,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
         ent_probability = []
 
 
-        for (columnName, columnData) in lineage_seq_df.iteritems():
+        for (columnName, columnData) in lineage_seq_df.items():
 
             lineage_site = list(columnData)
 
@@ -339,8 +339,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
             + query_seq_prefix + " has been completed!" + "\n")
 
     sites_wic_data.to_excel(excel_writer=site_ic_table,
-                                    index=False,
-                                    encoding="utf-8")
+                            index=False)
 
     sites_wic_data.to_csv(site_ic_csv, index=False, sep=",")
 
@@ -415,8 +414,7 @@ def mwic_calculation(sites_probability_data,lineage_name_list,
 
     step_probability_data.to_excel(
         excel_writer=output_path,
-        index=False,
-        encoding="utf-8")
+        index=False)
 
     return step_probability_data,slither_window_list
 
@@ -737,8 +735,7 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
 
     breakpoint_data.to_excel(
         excel_writer=break_p_data,
-        index=False,
-        encoding="utf-8")
+        index=False)
 
     fig_high2 = int(max(central_pos_list) * 3 / 10000) * 2
 
