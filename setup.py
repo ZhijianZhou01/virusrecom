@@ -5,7 +5,7 @@ with open("README.md", "r",encoding="utf-8") as fh:
 
 setuptools.setup(
   name="virusrecom",
-  version="1.1.2",
+  version="1.1.3",
   author="Zhi-Jian Zhou",
   author_email="zjzhou@hnu.edu.cn",
   description="An information-theory-based method for recombination detection of viral lineages.",
@@ -14,7 +14,13 @@ setuptools.setup(
   long_description_content_type="text/markdown",
   url="https://github.com/ZhijianZhou01/virusrecom",
   packages=setuptools.find_packages(),
-  install_requires=["matplotlib","pandas","numpy", "scipy"],
+  install_requires=["matplotlib>=2.2.5",
+                    "numpy>=1.19.3",
+                    "pandas>=1.1.5", 
+                    "scipy>=1.5.4",
+                    "psutil>=5.9.1",
+                    "openpyxl>=3.0.5"
+                     ],
 
   classifiers=[
         "Development Status :: 5 - Production/Stable",
