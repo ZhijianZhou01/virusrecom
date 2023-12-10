@@ -16,7 +16,7 @@ setuptools.setup(
   packages=setuptools.find_packages(),
   install_requires=["matplotlib>=2.2.5",
                     "numpy>=1.19.3",
-                    "pandas>=1.1.5", 
+                    "pandas>=1.1.5",
                     "scipy>=1.5.4",
                     "psutil>=5.9.1",
                     "openpyxl>=3.0.5"
