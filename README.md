@@ -2,7 +2,6 @@
 
 ![](https://img.shields.io/badge/System-Windows/Linux/MacOS-green.svg)
 ![](https://img.shields.io/pypi/pyversions/virusrecom)
-
 [![](https://img.shields.io/badge/Doi-10.1093/bib/bbac513-yellow.svg)](https://doi.org/10.1093/bib/bbac513) 
 
 ![](https://img.shields.io/pypi/wheel/virusrecom)
