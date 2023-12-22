@@ -86,7 +86,7 @@ virusrecom is a command line interface program, users can get help documentation
 |-o | Output directory to store all results.|
 
 
-For more information about the algorithm of virusrecom, please refer to [our publication](href=https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420)
+For more information about the algorithm of virusrecom, please refer to [our publication](https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420)
 
 ## 3. Example of usage
 The sequences data for test in the documentation was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
