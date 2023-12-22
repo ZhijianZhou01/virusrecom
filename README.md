@@ -191,7 +191,7 @@ Of noted, for recombination analysis without lineage data, the additional featur
 
 The test data is in directory ```non_lineage_data``` of the file ```recombination_test_data_v1.1.zip```. 
 
-The Delta-CoV HNU1-1 is a known recombinant from SpCoV HKU17-USA and ThCoV HKU12, and the break points were identified at genome positions nt 21017 and 25056, which is jointly identified and confirmed by RDP3 and Simplot (Wang et al., 2022). 
+The Delta-CoV HNU1-1 is a known recombinant from SpCoV HKU17-USA and ThCoV HKU12, and the break points were identified at genome positions nt 21017 and 25056, which is jointly identified and confirmed by RDP3 and Simplot by [Wang et al., 2022](https://onlinelibrary.wiley.com/doi/10.1111/tbed.14029). 
 
 Considering that they are not highly similar sequences, we use all sites (```-m a```) in the alignment. Then, we use a larger window value, and run following command:
 ```
