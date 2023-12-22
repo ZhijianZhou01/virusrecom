@@ -86,6 +86,8 @@ virusrecom is a command line interface program, users can get help documentation
 |-o | Output directory to store all results.|
 
 
+For more information about the algorithm of virusrecom, please refer to [our publication](href=https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420)
+
 ## 3. Example of usage
 The sequences data for test in the documentation was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
 
@@ -259,6 +261,4 @@ fi
 
 
 ## 6. Citation
-Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. Brief Bioinform. 2023 Jan 19;24(1):bbac513. doi: 10.1093/bib/bbac513. PMID: 36567622.
-
-https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420
+Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. <i>Brief Bioinform</i>. 2023 Jan 19;24(1):bbac513. [doi: 10.1093/bib/bbac513](https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420). PMID: 36567622.
