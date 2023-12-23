@@ -35,13 +35,13 @@ virusrecom -h
 
 ### 1.3. Or run the source code directly
 
-virusrecom can also be run using the source code without installation. First, you should install the required python environment of virusrecom:
+virusrecom can also be run using the source code without installation. First, download this repository, then, install the required python environment of virusrecom:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-Then, you can run virusrecom by the file ```main.py```. Please view the help documentation by ```python main.py -h```.
+finally, run virusrecom by the file ```main.py```. Please view the help documentation by ```python main.py -h```.
 
 ### 1.4. Or use the binary files
 
