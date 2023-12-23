@@ -237,7 +237,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-(1) If installed software was from <b>the binary files of virusrecom v1.0</b> provided at https://github.com/ZhijianZhou01/virusrecom/releases , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
+(1) If installed software was from <b>the binary files of virusrecom v1.0</b>(provided at https://github.com/ZhijianZhou01/virusrecom/releases/tag/v1.0) , and need to call the plug-in MAFFT for multiple sequence alignment in the linux systerms, MAFFT may not work properly，please modify the “prefix path” in mafft program (external_program/mafft/linux/bin/mafft),it might have been so before in file of mafft:
 
 ```
 if [ "$MAFFT_BINARIES" ]; then
@@ -257,7 +257,7 @@ else
 fi
 ```
 
-(2) If installed software was from the <b>binary files of virusrecom v1.1</b> or some other form (including ```pip install virusrecom```, or run the source code of virusrecom directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed and added to environment variables of system or user beforehand, because VirusRecom call them from the environment variables directly.
+(2) If installed software was from <b>the binary files of virusrecom v1.1</b>(provided at https://github.com/ZhijianZhou01/virusrecom/releases/tag/v1.1), or from some other form (including ```pip install virusrecom``` and run the source code of virusrecom directly), when the unaligned input-sequences was used in analysis, the external program (such as MATTF, MUSCLE) used for multiple sequence alignment need to be installed and added to environment variables of system or user beforehand, because VirusRecom call them from the environment variables directly.
 
 
 ## 6. Citation
