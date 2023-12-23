@@ -25,7 +25,7 @@ virusrecom -h
 
 ### 1.2. Or local installation
 
-In addition to the  ```pip``` method, you can also install it manually using the file ```setup.py```. 
+In addition to the  ```pip``` method, you can also install virusrecom manually using the file ```setup.py```. 
 
 Firstly, download this repository, then, run:
 ```
@@ -35,7 +35,7 @@ virusrecom -h
 
 ### 1.3. Or run the source code directly
 
-you can also directly run the source code of virusrecom without installation. First, you should install the required python environment of virusrecom:
+virusrecom can also be run using the source code without installation. First, you should install the required python environment of virusrecom:
 
 ```
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -45,9 +45,9 @@ Then, you can run virusrecom by the file ```main.py```. Please view the help doc
 
 ### 1.4. Or use the binary files
 
-you can also directly run the binary files of virusrecom without installation. The  binary files are provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
+For the two earlier release packages (versions v1.0 and v1.1), you can also directly run the binary files of virusrecom without installation. The  binary files are provided at https://github.com/ZhijianZhou01/virusrecom/releases. virusrecom and all the updated versions is freely available. After obtaining the program, users could directly run the program in Windows, MacOS or Linux systerms without installation.
 
-For the binary files of the releasese, in general, the executable file of virusrecom is located at the  ```main``` folder. Then, running the virusrecom.exe (windows system) or virusrecom (Linux or MacOS system) to start. If you could not get permission to run virusrecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
+In general, the executable file of virusrecom is located at the  ```main``` folder. Then, running the ```virusrecom.exe``` (windows system) or ```virusrecom``` (Linux or MacOS system) to start. If you could not get permission to run virusrecom on Linux system or MacOS system, you could change permissions by ```chmod -R 775 Directory``` or ```chmod -R 777 Directory```. 
 
 
 ## 2. Getting help
@@ -55,7 +55,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 
 <b>For detailed documentation, please refer to</b> [Manual of VirusRecom v1.1](https://github.com/ZhijianZhou01/virusrecom/blob/main/Manual%20of%20VirusRecom%20v1.1.pdf)
 
-<b>Tip: virusrecom v1.1 optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
+<b>Tip: since version 1.1, virusrecom optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
 <b>The simple help documentation of virusrecom v1.1 is as follows.</b>
 
