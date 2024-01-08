@@ -16,7 +16,7 @@ VirusRecom is developed based on ```Python 3```, and you can get and install Vir
 
 ### 1.1. pip method
 
-virusrecom has been distributed to the standard library of PyPI, and can be easily installed by the tool ```pip```.
+virusrecom has been distributed to the standard library of PyPI (https://pypi.org/project/virusrecom/), and can be easily installed by the tool ```pip```.
 
 ```
 pip install virusrecom
