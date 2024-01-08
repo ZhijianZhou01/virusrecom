@@ -13,7 +13,7 @@ Time: 2022/4/17 17:29
 import sys
 import os
 
-app_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+app_dir = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
 app_dir = app_dir.replace("\\", "/")
 sys.path.append(app_dir)
 
@@ -34,8 +34,6 @@ from my_func import (resolve_file_path,make_dir,
 from sequence_align import SeqAlign
 
 from corecp import virus_infor_calculate
-
-
 
 
 
@@ -69,6 +67,147 @@ def calculate_memory():
     return memory
 
 
+def parameter():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog="virusrecom",
+        description="",
+        epilog=example_use)
+
+    parser.add_argument(
+        "-a", dest="alignment",
+        help="Aligned sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
+        default="")
+
+    parser.add_argument(
+        "-ua", dest="unalignment",
+        help="Unaligned (non-alignment) sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
+        default="")
+
+    parser.add_argument(
+        "-at", dest="align_tool",
+        help="Program used for multiple sequence alignments (MSA). Supporting mafft, muscle and clustalo, such as ‘-at mafft’.",
+        default="")
+
+    parser.add_argument(
+        "-iwic", dest="input_wic",
+        help="Using the already obtained WIC values of reference lineages directly by a *.csv input-file.",
+        default="")
+
+    parser.add_argument(
+        "-q", dest="query",
+        help="Name of query lineage (usually potential recombinant), such as ‘-q xxxx’. Besides, ‘-q auto’ can scan all lineages as potential recombinant in turn.",
+        default="")
+
+    parser.add_argument(
+        "-l", dest="lineages",
+        help="Path of a text-file containing multiple lineage marks.",
+        default="")
+
+    parser.add_argument("-g", dest="gap",
+                        help="Reserve sites containing gap in subsequent analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.",
+                        type=str,
+                        default="")
+
+    parser.add_argument("-m", dest="method",
+                        help="Method for scanning. ‘-m p’ means use polymorphic sites only, ‘-m a’ means use all the sites.",
+                        type=str,
+                        default="p")
+
+    parser.add_argument("-w", dest="window",
+                        help="Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.",
+                        type=int,
+                        default=100)
+
+    parser.add_argument("-s", dest="step",
+                        help="Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.",
+                        type=int,
+                        default=20)
+
+    # max_recom_fragment
+    parser.add_argument("-mr", dest="max_region",
+                        help="The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
+                        type=int,
+                        default=1000)
+
+    parser.add_argument("-cp", dest="percentage",
+                        help="The cutoff threshold of proportion (cp, default: 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.",
+                        type=float,
+                        default=0.9)
+
+    parser.add_argument("-cu", dest="cumulative",
+                        help="Simply using the max cumulative WIC of all sites to identify the major parent. Off by default. If required, specify ‘-cu y’.",
+                        type=str,
+                        default="n")
+
+    parser.add_argument("-b", dest="breakpoint",
+                        help="Possible breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.",
+                        type=str,
+                        default="n")
+
+    parser.add_argument("-bw", dest="breakwin",
+                        help="The window size (default: 200) used for breakpoint scan, and step size is fixed at 1.",
+                        type=int,
+                        default=200)
+
+    parser.add_argument(
+        "-t", dest="thread",
+        help="Number of threads (default: 1) used for MAS.",
+        type=int,
+        default=1)
+
+    parser.add_argument(
+        "-y", dest="y_start",
+        help="Starting value (default: 0) of the Y-axis in plot diagram.",
+        type=float,
+        default=0.0)
+
+    parser.add_argument(
+        "-le", dest="legend",
+        help="The location of the legend, the default is adaptive. '-le r' indicates placed on the right.",
+        default="auto")
+
+    # upper right
+
+    parser.add_argument(
+        "-owic", dest="only_wic",
+        help="Only calculate site WIC value. Off by default. If required, please specify ‘-owic y’.",
+        type=str,
+        default="n")
+
+    parser.add_argument(
+        "-e", dest="engrave",
+        help="Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).",
+        default="")
+
+    parser.add_argument(
+        "-en", dest="export_name",
+        help="Export all sequence name of a *.fasta file.",
+        default="")
+
+    parser.add_argument(
+        "-o", dest="outdir",
+        help="Output directory to store all results.",
+        type=str,
+        default="")
+
+    parser.add_argument(
+        "--no_wic_fig",
+        dest="no_wic_figure",
+        action="store_true",
+        help="Do not draw the image of WICs.")
+
+    parser.add_argument(
+        "--no_mwic_fig",
+        dest="no_mwic_figure",
+        action="store_true",
+        help="Do not draw the image of mWICs.")
+
+    myargs = parser.parse_args(sys.argv[1:])
+
+    return myargs
+
+
 def starts():
 
     print("\n" + "-------------------------------------------------")
@@ -78,158 +217,13 @@ def starts():
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.1.2 (2023-12-09)")
+    print("  Version: 1.1.3 (2024-01-08)")
 
     print("  Author: Zhi-Jian Zhou")
 
     print("  Citation: Brief Bioinform. 2023 Jan 19;24(1)")
 
     print("-------------------------------------------------" + "\n")
-
-
-    def parameter():
-        parser = argparse.ArgumentParser(
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            prog="virusrecom",
-            description="",
-            epilog=example_use)
-
-
-        parser.add_argument(
-            "-a", dest="alignment",
-            help="Aligned sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
-            default="")
-
-        parser.add_argument(
-            "-ua", dest="unalignment",
-            help="Unaligned (non-alignment) sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
-            default = "")
-
-        parser.add_argument(
-            "-at",dest="align_tool",
-            help="Program used for multiple sequence alignments (MSA). Supporting mafft, muscle and clustalo, such as ‘-at mafft’.",
-            default="")
-
-        parser.add_argument(
-            "-iwic", dest="input_wic",
-            help="Using the already obtained WIC values of reference lineages directly by a *.csv input-file.",
-            default="")
-
-
-        parser.add_argument(
-            "-q", dest = "query",
-            help="Name of query lineage (usually potential recombinant), such as ‘-q xxxx’. Besides, ‘-q auto’ can scan all lineages as potential recombinant in turn.",
-            default="")
-
-
-        parser.add_argument(
-            "-l", dest="lineages",
-            help="Path of a text-file containing multiple lineage marks.",
-            default="")
-
-
-        parser.add_argument("-g", dest="gap",
-                            help="Reserve sites containing gap in subsequent analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.",
-                            type=str,
-                            default="")
-
-
-        parser.add_argument("-m", dest="method",
-                            help="Method for scanning. ‘-m p’ means use polymorphic sites only, ‘-m a’ means use all the sites.",
-                            type=str,
-                            default="p")
-
-
-        parser.add_argument("-w", dest="window",
-                            help="Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.",
-                            type=int,
-                            default=100)
-
-        parser.add_argument("-s", dest="step",
-                            help="Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.",
-                            type=int,
-                            default=20)
-
-        # max_recom_fragment
-        parser.add_argument("-mr", dest="max_region",
-                            help="The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
-                            type=int,
-                            default=1000)
-
-        parser.add_argument("-cp", dest="percentage",
-                            help="The cutoff threshold of proportion (cp, default: 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.",
-                            type=float,
-                            default=0.9)
-
-        parser.add_argument("-cu", dest="cumulative",
-                            help="Simply using the max cumulative WIC of all sites to identify the major parent. Off by default. If required, specify ‘-cu y’.",
-                            type=str,
-                            default="n")
-
-
-        parser.add_argument("-b", dest="breakpoint",
-                            help="Possible breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.",
-                            type=str,
-                            default="n")
-
-
-        parser.add_argument("-bw", dest="breakwin",
-                            help="The window size (default: 200) used for breakpoint scan, and step size is fixed at 1.",
-                            type=int,
-                            default=200)
-
-
-        parser.add_argument(
-            "-t", dest="thread",
-            help="Number of threads (default: 1) used for MAS.",
-            type=int,
-            default=1)
-
-
-        parser.add_argument(
-            "-y", dest="y_start",
-            help="Starting value (default: 0) of the Y-axis in plot diagram.",
-            type=float,
-            default=0.0)
-
-        parser.add_argument(
-            "-le", dest="legend",
-            help="The location of the legend, the default is adaptive. '-le r' indicates placed on the right.",
-            default="auto")
-
-
-        # upper right
-
-
-        parser.add_argument(
-            "-owic", dest="only_wic",
-            help="Only calculate site WIC value. Off by default. If required, please specify ‘-owic y’.",
-            type=str,
-            default="n")
-
-
-        parser.add_argument(
-            "-e",dest="engrave",
-            help="Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).",
-            default="")
-
-
-        parser.add_argument(
-            "-en", dest="export_name",
-            help="Export all sequence name of a *.fasta file.",
-            default="")
-
-
-        parser.add_argument(
-            "-o", dest="outdir",
-            help="Output directory to store all results.",
-            type=str,
-            default="")
-
-
-        myargs = parser.parse_args(sys.argv[1:])
-
-        return myargs
 
 
     myargs = parameter()
@@ -287,7 +281,10 @@ def starts():
 
     parameter_dic["out_dir"] = myargs.outdir  # output directory
 
+    parameter_dic["no_wic_figure"] = myargs.no_wic_figure
 
+    parameter_dic["no_mwic_figure"] = myargs.no_mwic_figure
+    
 
     out_dir = parameter_dic["out_dir"].replace("\\", "/")
 
@@ -317,9 +314,17 @@ def starts():
 
 
     print(myargs)
-
     print("\n")
+   
+    with open(parameter_dic["out_dir"] + "/input-parameter.txt",
+              "w", encoding="utf-8") as input_para:
 
+        input_para.write(
+            "the used parameter of virusrecom in command-line interface."
+            + "\n" * 2)
+
+        for key in list(parameter_dic.keys()):
+            input_para.write(key + "\t" + str(parameter_dic[key]) + "\n")
 
 
     if (parameter_dic["unaligned_seq"] == ""
