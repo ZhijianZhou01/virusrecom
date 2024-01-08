@@ -57,7 +57,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 
 <b>Tip: since version 1.1, virusrecom optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
-<b>The simple help documentation of virusrecom v1.1 is as follows.</b>
+<b>The simple help documentation of virusrecom v1.1.3 is as follows.</b>
 
 | Parameter | Description |
 | --- | --- |
@@ -84,6 +84,8 @@ virusrecom is a command-line-interface program, users can get help documentation
 |-e ENGRAVE | Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).|
 |-en EXPORT_NAME | Export all sequence name of a *.fasta file.|
 |-o | Output directory to store all results.|
+|--no_wic_fig | Do not draw the image of WICs.|
+|--no_mwic_fig | Do not draw the image of mWICs.|
 
 
 For more information about the algorithm of virusrecom, please refer to [the publication of virusrecom](https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420).
