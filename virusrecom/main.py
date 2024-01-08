@@ -573,7 +573,6 @@ def starts():
     sys.exit()
 
 
-    pass
 
 if __name__ == "__main__":
     starts()
