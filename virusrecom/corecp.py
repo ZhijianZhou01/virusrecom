@@ -119,9 +119,9 @@ def virus_infor_calculate(parameter_dic,
 
         site_map_dic[current_site_index] = original_site_index
 
-
-    wic_plot(lineage_name_list, original_site_list,
-             sites_probability_data, query_seq_prefix, site_ic_fig)
+    if parameter_dic["no_wic_figure"] != True:
+        wic_plot(lineage_name_list, original_site_list,
+                 sites_probability_data, query_seq_prefix, site_ic_fig)
 
 
     print("    " + "VirusRecom starts scanning using sliding window ..." + "\n")
@@ -138,10 +138,10 @@ def virus_infor_calculate(parameter_dic,
 
     window_center_original = step_probability_data["Central_position(original)"]
 
-
-    mwic_plot(is_use_gap,lineage_name_list, window_center_original,
-              step_probability_data, query_seq_prefix, window_ic_fig,
-              y_start, legend_location)
+    if parameter_dic["no_mwic_figure"] != True:
+        mwic_plot(is_use_gap,lineage_name_list, window_center_original,
+                  step_probability_data, query_seq_prefix, window_ic_fig,
+                  y_start, legend_location)
 
 
 
