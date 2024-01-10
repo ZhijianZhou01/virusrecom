@@ -43,7 +43,7 @@ virusrecom -h
 
 ### 1.3. Or local installation
 
-In addition to the  ```pip``` and  ```conda ``` methods, you can also install virusrecom manually using the file ```setup.py```. 
+In addition to the  ```pip``` and  ```conda``` methods, you can also install virusrecom manually using the file ```setup.py```. 
 
 Firstly, download this repository, then, run:
 ```
