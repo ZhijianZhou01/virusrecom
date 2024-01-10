@@ -37,6 +37,7 @@ conda config --add channels bioconda
 conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8
 conda activate virusrecom_env
 conda install virusrecom
+virusrecom -h
 ```
 
 
