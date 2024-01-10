@@ -25,7 +25,22 @@ pip install virusrecom
 virusrecom -h
 ```
 
-### 1.2. Or local installation
+### 1.2. Or conda method
+virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virusrecom), and can be installed using the tool ```conda```.
+
+```
+# add bioconda origin
+conda config --add channels conda-forge
+conda config --add channels bioconda
+
+# install virusrecom
+conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8
+conda activate virusrecom_env
+conda install virusrecom
+```
+
+
+### 1.3. Or local installation
 
 In addition to the  ```pip``` method, you can also install virusrecom manually using the file ```setup.py```. 
 
@@ -35,7 +50,7 @@ python setup.py install
 virusrecom -h
 ```
 
-### 1.3. Or run the source code directly
+### 1.4. Or run the source code directly
 
 virusrecom can also be run using the source code without installation. First, download this repository, then, install the required python environment of virusrecom:
 
@@ -45,7 +60,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 finally, run virusrecom by the file ```main.py```. Please view the help documentation by ```python main.py -h```.
 
-### 1.4. Or use the binary files
+### 1.5. Or use the binary files
 
 For the two earlier release packages (versions v1.0 and v1.1), you can also directly run the binary files of virusrecom without installation. The  binary files are provided at https://github.com/ZhijianZhou01/virusrecom/releases. 
 
