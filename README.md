@@ -244,7 +244,7 @@ However, the default value is not suitable for all data. In addition to window s
 When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. <b>What is more, users should try different values in multiple runs, which will effectively reduce false positives and false negatives.</b>
 
 ### 4.2. How to set the appropriate window size and step size?
-For the <b>recombination analysis using polymorphic sites</b> (```-m a``` in virusrecom), the following is recommended based on our experience,
+For the <b>recombination analysis using polymorphic sites</b> (```-m a``` in virusrecom), the following is recommended based on our limited experience,
 
 | Number of polymorphic sites in alignment | window size | step size |
 | --- | --- | --- |
