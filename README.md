@@ -71,8 +71,6 @@ In general, the executable file of virusrecom is located at the  ```main``` fold
 ## 2. Getting help
 virusrecom is a command-line-interface program, users can get help documentation of the software by entering  ```virusrecom -h ``` or  ```virusrecom --help ```. 
 
-<b>For detailed documentation, please refer to</b> [Manual of VirusRecom v1.1](https://github.com/ZhijianZhou01/virusrecom/blob/main/Manual%20of%20VirusRecom%20v1.1_2023.12.23.pdf)
-
 <b>Tip: since version 1.1, virusrecom optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
 <b>The simple help documentation of virusrecom v1.1.3 is as follows.</b>
@@ -105,6 +103,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 |--no_wic_fig | Do not draw the image of WICs.|
 |--no_mwic_fig | Do not draw the image of mWICs.|
 
+<b>For detailed documentation, please refer to</b> [Manual of VirusRecom v1.1.3](https://github.com/ZhijianZhou01/virusrecom/blob/main/Manual%20of%20VirusRecom%20v1.1.3.pdf)
 
 For more information about the algorithm of virusrecom, please refer to [the publication of virusrecom](https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420).
 
