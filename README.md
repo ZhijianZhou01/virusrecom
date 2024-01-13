@@ -251,7 +251,7 @@ For the <b>recombination analysis using polymorphic sites</b> (```-m p``` in vir
 |polymorphic sites <= 2000 | 4% ~ 6% of all polymorphic sites | 10% ~ 20% of the window size |
 |polymorphic sites > 2000 | >= 100 | 10% ~ 20% of the window size |
 
-<b>Note, too large window size can'n be used for the alignment with too few polymorphic sites.</b>
+<b>Note, too large window size can't be used for the alignment with too few polymorphic sites.</b>
 
 ### 4.3. How to mark lineage in sequence name?
 Typically, this is part of the data preparation. In virusrecom v1.1, users can easily get it done via ```-e``` parameter. The ```-e``` parameter can engrave file-name to sequence names in batches. The example is as follows:
