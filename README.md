@@ -241,7 +241,7 @@ The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and 
 For the value of a parameter, if not specified, the software uses the default value. 
 However, the default value is not suitable for all data. In addition to window size (```-w```) and step size (```-s```) of sliding window, values of ```-cp``` and ```-mr``` also require users to adjust based on the data. 
 
-When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. 
+When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. <b>What is more, users should try different values in multiple runs, which will effectively reduce false positives and false negatives.</b>
 
 ### 4.2. How to set the appropriate window size and step size?
 For the <b>recombination analysis using polymorphic sites</b> (```-m a``` in virusrecom), the following is recommended based on our experience,
