@@ -266,7 +266,7 @@ If you own programming skills, you can directly modify the order of the colors i
 
 
 ## 5. Attention
-When the unaligned input-sequences was used in analysis, the external program (such as MATTF) used for multiple sequence alignment need to be installed and added to environment variables of system or user beforehand, because VirusRecom call them from the environment variables directly.
+When the unaligned input-sequences was used in analysis, the program (such as MATTF) used for multiple sequence alignment need to be installed and added to environment variables of system or user beforehand, because VirusRecom call them from the environment variables directly.
 
 
 ## 6. Citation
