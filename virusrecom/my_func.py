@@ -339,7 +339,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
             + query_seq_prefix + " has been completed!" + "\n")
 
     sites_wic_data.to_excel(excel_writer=site_ic_table,
-                            index=False)
+                                    index=False)
 
     sites_wic_data.to_csv(site_ic_csv, index=False, sep=",")
 
@@ -631,19 +631,31 @@ def mwic_plot(gap_used, lineage_name_list,
         finally:
             pass
 
+    legend_font_size = 8
 
+    if len(lineage_name_list) >= 15:
+        legend_font_size = 6
+
+    elif len(lineage_name_list) >= 25:
+        legend_font_size = 4
+
+
+    legend_font = {"family": "Arial",
+             "weight": "normal",
+             "size": legend_font_size}
+    
     if legend_location.upper() == "R":
 
         num1 = 1.05
         num2 = 1
         num3 = 2
         num4 = 0
-        plt.legend(bbox_to_anchor=(num1, num2), loc=num3, borderaxespad=num4)
+        plt.legend(bbox_to_anchor=(num1, num2), loc=num3, borderaxespad=num4,prop=legend_font)
         plt.subplots_adjust(bottom=0.10, right=0.7)
 
 
     else:
-        plt.legend()
+        plt.legend(prop=legend_font)
 
         plt.subplots_adjust(bottom=0.10)
 
@@ -782,8 +794,4 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
     plt.savefig(break_p_map)
 
     plt.clf()
-
-
-
-
 
