@@ -556,7 +556,7 @@ def wic_plot(lineage_name,site_list,input_data,query_lineage_name,output_path):
 
     lineage_count = len(lineage_name)
 
-    fig_high = int(max(site_list) * 3 / 10000) * 2
+    fig_high = int(lineage_count * 2)
 
     fig, ax = plt.subplots(len(lineage_name), 1,
                            figsize=(
@@ -749,7 +749,7 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
         excel_writer=break_p_data,
         index=False)
 
-    fig_high2 = int(max(central_pos_list) * 3 / 10000) * 2
+    fig_high2 = int(lineage_count * 2)
 
     figs, axs = plt.subplots(lineage_count, 1, figsize=(lineage_count,
                                                         fig_high2))
