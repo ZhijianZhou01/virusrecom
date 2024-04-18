@@ -19,11 +19,9 @@ plt_corlor = [
 "#ccebc5",
 "#694d9f",
 "#80b1d3",
-"#bebada", # AY.45
-"#8dd3c7", # BA.2
-"#fb8072", # BA.1
-
-
+"#bebada",
+"#8dd3c7",
+"#fb8072", 
 "olivedrab",
 "darkorange",
 "darkcyan",
