@@ -30,6 +30,7 @@ virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virus
 
 ```
 # add bioconda origin
+conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
 
