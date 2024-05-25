@@ -30,8 +30,8 @@ virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virus
 
 ```
 # add bioconda origin
-conda config --add channels conda-forge
 conda config --add channels bioconda
+conda config --add channels conda-forge
 
 # install virusrecom
 conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8
