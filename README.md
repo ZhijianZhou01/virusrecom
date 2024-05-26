@@ -43,6 +43,9 @@ conda install virusrecom
 ## 2.2. or installation without creating separate environment
 conda install bioconda::virusrecom
 
+# or
+conda install virusrecom
+
 # 3. view the help documentation
 virusrecom -h
 ```
