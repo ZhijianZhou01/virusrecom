@@ -40,7 +40,7 @@ conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8
 conda activate virusrecom_env
 conda install virusrecom
 
-## 2.2. or installation without creating separate environment
+## 2.2. or installation without creating separate environment (slow)
 conda install bioconda::virusrecom  # or 'conda install virusrecom'
 
 # 3. view the help documentation
