@@ -35,7 +35,7 @@ conda config --add channels bioconda
 conda config --add channels conda-forge
 
 # 2. install virusrecom
-## 2.1. create a separate environment for virusrecom
+## 2.1. create a separate environment for virusrecom (recommend)
 conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8  
 conda activate virusrecom_env
 conda install virusrecom
