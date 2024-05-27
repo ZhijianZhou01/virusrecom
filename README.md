@@ -43,7 +43,7 @@ conda install virusrecom  # or "conda install bioconda::virusrecom"
 ## (ii) or installation without creating separate environment (slow)
 conda install virusrecom  # or "conda install bioconda::virusrecom"
 
-# (iii) view the help documentation
+# (3) view the help documentation
 virusrecom -h
 ```
 
