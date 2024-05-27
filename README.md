@@ -29,21 +29,21 @@ virusrecom -h
 virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virusrecom), and can be installed using the tool ```conda```.
 
 ```
-# 1. add bioconda origin
+# (1) add bioconda origin
 conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
 
-# 2. install virusrecom
-## 2.1. create a separate environment for virusrecom (recommend)
+# (2) install virusrecom
+## (i) create a separate environment for virusrecom (recommend)
 conda create -n virusrecom_env python=3.7  # python >=3.5 but != 3.8  
 conda activate virusrecom_env
 conda install virusrecom  # or "conda install bioconda::virusrecom"
 
-## 2.2. or installation without creating separate environment (slow)
+## (ii) or installation without creating separate environment (slow)
 conda install virusrecom  # or "conda install bioconda::virusrecom"
 
-# 3. view the help documentation
+# (iii) view the help documentation
 virusrecom -h
 ```
 
