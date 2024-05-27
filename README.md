@@ -26,7 +26,7 @@ virusrecom -h
 ```
 
 ### 1.2. Or conda method
-virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virusrecom), and can be installed using the tool ```conda```.
+virusrecom has been distributed to bioconda (https://anaconda.org/bioconda/virusrecom), and the latest version can be installed using the tool ```conda```.
 
 ```
 # (1) add bioconda origin
