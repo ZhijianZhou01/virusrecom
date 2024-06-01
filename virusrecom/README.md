@@ -1,1 +1,1 @@
-### Note, the source code of latest version 1.1 of virusrecom (virusrecom v1.1) are stored in this folder.
+### Note, the source code of latest version of virusrecom are stored in this folder.
