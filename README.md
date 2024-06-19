@@ -58,7 +58,7 @@ python setup.py install
 virusrecom -h
 ```
 
-### 1.4. Or run the source code directly
+### 1.4. Or directly run the source code
 
 virusrecom can also be run using the source code without installation. First, download this repository, then, install the required python environment of virusrecom:
 
