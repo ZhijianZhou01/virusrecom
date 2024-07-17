@@ -15,6 +15,8 @@ import pandas as pd
 import scipy.stats as stats
 import matplotlib
 
+from multiprocessing import Pool
+
 matplotlib.use("agg")  # avoid the  ModuleNotFoundError: No module named '_tkinter'
 
 import matplotlib.pyplot as plt
@@ -217,8 +219,92 @@ def calEnt_gap(siteData, mode):
 
 
 
+def lineage_wic_run(query_seq,each_lineage,lineage_seq_df,
+                    used_calEnt,query_seq_prefix):
+    """
+    计算每个谱系相对于查询谱系的位点wic
+    :return:
+    """
+
+    sites_wic_dic = {}
+
+    ent_probability= []
+
+    query_seq_count = query_seq.shape[0]
+
+    for (columnName, columnData) in lineage_seq_df.items():
+
+        lineage_site = list(columnData)
+
+        if len(lineage_site) == 1:
+            IC = used_calEnt(columnData, "single")
+
+        else:
+
+            IC = used_calEnt(columnData, "")
+
+        if query_seq_count == 1:
+            query_nt = query_seq[columnName][0]
+            query_nt_ratio = 1
+
+            try:
+
+                query_nt_lineage_ratio = lineage_site.count(query_nt) / \
+                                         columnData.shape[0]
+
+                p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
+
+                ent_probability.append(p_ent)
+
+
+            except:
+
+                print(">>> Error! The lineage '" + each_lineage + "'"
+                      + " is not in sequence data." + "\n")
+
+                sys.exit()
+
+
+        else:
+
+            query_seq_site_list = list(query_seq[columnName])
+
+            query_seq_site_count = len(query_seq_site_list)
+
+            maxpro_nt = max(query_seq_site_list,
+                            key=query_seq_site_list.count)
+
+            query_nt_ratio = query_seq_site_list.count(
+                maxpro_nt) / query_seq_site_count
+
+            try:
+                query_nt_lineage_ratio = lineage_site.count(maxpro_nt) / \
+                                         columnData.shape[0]
+
+                p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
+
+                ent_probability.append(p_ent)
+
+
+            except:
+
+                print(">>> Error! The lineage '" + each_lineage + "'"
+                      + " is not in sequence data." + "\n")
+
+                sys.exit()
+
+    sites_wic_dic[each_lineage] = ent_probability
+
+    print("    " +
+          "The calculation of " + each_lineage + "'s recombination contribution to "
+          + query_seq_prefix + " has been completed!" + "\n")
+
+    return sites_wic_dic
+
+
+
 def wic_calculation(seq_data,lineage_name_list,used_calEnt,
-                    site_dir,query_seq_prefix):
+                    site_dir,query_seq_prefix,thread_num):
 
     site_ic_table = (site_dir + "/"
                      + query_seq_prefix
@@ -229,9 +315,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
                    + "_site_WIC.csv")
 
 
-    query_seq = seq_data[
-        seq_data.index.str.contains(
-            query_seq_prefix) == True]
+    query_seq = seq_data[seq_data.index.str.contains(query_seq_prefix) == True]
 
     query_seq_count = query_seq.shape[0]
 
@@ -242,8 +326,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
 
         sys.exit()
 
-    original_site_list = [int(x) for x in
-                          query_seq.columns.tolist()]
+    original_site_list = [int(x) for x in query_seq.columns.tolist()]
 
     sites_count = len(original_site_list)
 
@@ -258,85 +341,29 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
 
     sites_wic_data["Current_Index"] = current_site_list
 
+    p = Pool(int(thread_num))
+
+    lineage_wic_list = []
 
     for each_lineage in lineage_name_list:
 
+        lineage_seq_df = seq_data[seq_data.index.str.contains(each_lineage) == True]
 
-        lineage_seq_df = seq_data[
-            seq_data.index.str.contains(each_lineage) == True]
+        lineage_result = p.apply_async(lineage_wic_run,
+                               args=(query_seq, each_lineage, lineage_seq_df,
+                                     used_calEnt,query_seq_prefix))
 
-        ent_probability = []
-
-
-        for (columnName, columnData) in lineage_seq_df.items():
-
-            lineage_site = list(columnData)
-
-            if len(lineage_site) == 1:
-                IC = used_calEnt(columnData,"single")
-
-            else:
-
-                IC = used_calEnt(columnData,"")
-
-            if query_seq_count == 1:
-                query_nt = query_seq[columnName][0]
-                query_nt_ratio = 1
-
-                try:
-
-                    query_nt_lineage_ratio = lineage_site.count(query_nt) / \
-                                             columnData.shape[0]
-
-                    p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
-
-                    ent_probability.append(p_ent)
+        lineage_wic_list.append(lineage_result)
 
 
-                except:
+    p.close()
+    p.join()
 
-                    print(">>> Error! The lineage '" + each_lineage + "'"
-                          + " is not in sequence data." + "\n")
+    for each_calculation in lineage_wic_list:
+        lineage_wic = each_calculation.get()  # get()方法获取计算结果
 
-                    sys.exit()
-
-
-            else:
-
-                query_seq_site_list = list(query_seq[columnName])
-
-                query_seq_site_count = len(query_seq_site_list)
-
-                maxpro_nt = max(query_seq_site_list,
-                                key=query_seq_site_list.count)
-
-                query_nt_ratio = query_seq_site_list.count(
-                    maxpro_nt) / query_seq_site_count
-
-
-
-                try:
-                    query_nt_lineage_ratio = lineage_site.count(maxpro_nt) / \
-                                             columnData.shape[0]
-
-                    p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
-
-                    ent_probability.append(p_ent)
-
-
-                except:
-
-                    print(">>> Error! The lineage '" + each_lineage + "'"
-                          + " is not in sequence data." + "\n")
-
-                    sys.exit()
-
-
-        sites_wic_data[each_lineage] = ent_probability
-
-        print("    " +
-            "The calculation of " + each_lineage + "'s recombination contribution to "
-            + query_seq_prefix + " has been completed!" + "\n")
+        for key in lineage_wic:
+            sites_wic_data[key] = lineage_wic[key]
 
     sites_wic_data.to_excel(excel_writer=site_ic_table,
                                     index=False)
@@ -347,11 +374,34 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
 
 
 
+def lineage_mwic_run(lineage_name,slither_window_list,lineage_wic_df):
+
+    each_lineage_setp_pro = []
+
+    step_probability_dic = {}
+
+    for each_window in slither_window_list:
+        start_row = each_window[0]
+
+        end_row = each_window[1]
+
+        step_df = list(lineage_wic_df[start_row:end_row])
+
+        mean_ic_per_win = np.mean(step_df)
+
+        each_lineage_setp_pro.append(mean_ic_per_win)
+
+    step_probability_dic[lineage_name] = each_lineage_setp_pro
+
+    return step_probability_dic
+
+
+
 
 def mwic_calculation(sites_probability_data,lineage_name_list,
                      sites_count,site_map_dic,
                      windows_size,step_size,
-                     output_path):
+                     output_path,thread_num):
 
     step_probability_data = pd.DataFrame()
 
@@ -391,26 +441,30 @@ def mwic_calculation(sites_probability_data,lineage_name_list,
     step_probability_data["Central_position(current)"] = window_center_index
 
 
+    p = Pool(int(thread_num))
+
+    lineage_mwic_list = []
+
+
     for each_lineage in lineage_name_list:
 
-        each_lineage_setp_pro = []
+        lineage_wic_df = sites_probability_data[each_lineage]
 
-        lineage_ic_df = sites_probability_data[
-            each_lineage]
+        mwic_result = p.apply_async(lineage_mwic_run,
+                                       args=(each_lineage,slither_window_list,lineage_wic_df))
 
+        lineage_mwic_list.append(mwic_result)
 
-        for each_window in slither_window_list:
-            start_row = each_window[0]
+    p.close()
+    p.join()
 
-            end_row = each_window[1]
+    for each_calculation in lineage_mwic_list:
+        lineage_mwic = each_calculation.get()  # get()方法获取计算结果
 
-            step_df = list(lineage_ic_df[start_row:end_row])
+        for key in lineage_mwic:
 
-            mean_ic_per_win = np.mean(step_df)
+            step_probability_data[key] = lineage_mwic[key]
 
-            each_lineage_setp_pro.append(mean_ic_per_win)
-
-        step_probability_data[each_lineage] = each_lineage_setp_pro
 
     step_probability_data.to_excel(
         excel_writer=output_path,
