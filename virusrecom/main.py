@@ -37,7 +37,6 @@ from corecp import virus_infor_calculate
 
 
 
-
 example_use = r'''
 ----------------☆ Example of use ☆-----------------
 
@@ -152,9 +151,9 @@ def parameter():
 
     parser.add_argument(
         "-t", dest="thread",
-        help="Number of threads (default: 1) used for MAS.",
+        help="Number of threads (or cores) for calculations, default: 4.",
         type=int,
-        default=1)
+        default=4)
 
     parser.add_argument(
         "-y", dest="y_start",
@@ -217,7 +216,7 @@ def starts():
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.1.5 (2024-04-18)")
+    print("  Version: 1.1.7 (2024-07-17)")
 
     print("  Author: Zhi-Jian Zhou")
 
@@ -267,7 +266,7 @@ def starts():
 
     parameter_dic["breakwins"] = myargs.breakwin  #  Window size used to search for recombination breakpoints
 
-    parameter_dic["thread_num"] = myargs.thread  #  thread of MAS
+    parameter_dic["thread_num"] = myargs.thread  #  thread (core)
 
     parameter_dic["y_start"] = myargs.y_start  #  Y-axis starting point when plotting
 
