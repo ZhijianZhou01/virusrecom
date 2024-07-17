@@ -100,7 +100,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 |-cu CUMULATIVE | Simply using the max cumulative WIC of all sites to identify the major parent. Off by default. If required, specify ‘-cu y.|
 |-b BREAKPOINT | Possible breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.|
 | -bw BREAKWIN | The window size (default: 200) used for breakpoint scan. The step size is fixed at 1. Note: this option only takes effect when ‘-m p -b y’ has been specified.|
-|-t THREAD | Number of threads (default: 1) used for MAS.|
+|-t THREAD | Number of threads (or cores) for calculations, default: 4.|
 |-y Y_START | Starting value (default: 0) of the Y-axis in plot diagram.|
 |-le LEGEND | The location of the legend, the default is adaptive. '-le r' indicates placed on the right.|
 |-owic ONLY_WIC | Only calculate site WIC value. Off by default. If required, please specify ‘-owic y’.|
