@@ -80,7 +80,8 @@ def virus_infor_calculate(parameter_dic,
 
         site_ic_csv_path = wic_calculation(seq_matrix, lineage_name_list,
                                            parameter_dic["calEnt_use"],
-                                           site_dir, query_seq_prefix)
+                                           site_dir, query_seq_prefix,
+                                           parameter_dic["thread_num"])
 
         if parameter_dic["only_wic"].upper() == "Y":
 
@@ -133,7 +134,7 @@ def virus_infor_calculate(parameter_dic,
         lineage_name_list,
         sites_count, site_map_dic,
         windows_size, step_size,
-        mwic_out_table)
+        mwic_out_table,parameter_dic["thread_num"])
 
 
     window_center_original = step_probability_data["Central_position(original)"]
@@ -475,7 +476,4 @@ def virus_infor_calculate(parameter_dic,
                         sites_count, breakwins,
                         site_map_dic,
                         site_dir, query_seq_prefix)
-
-
-
 
