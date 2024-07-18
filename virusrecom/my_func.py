@@ -736,10 +736,46 @@ def mwic_plot(gap_used, lineage_name_list,
 
 
 
+def recombreak_run(lineage, lineage_wic, run_number, breakwins):
+    negative_lg_p_dic = {}
+    negative_lg_p_list = []
+
+
+    for i in range(run_number):
+        start_site = i
+
+        end_site = i + breakwins
+
+        central_pos = int((start_site + end_site) / 2)
+
+        left_region = list(lineage_wic[start_site: central_pos - 1])
+        right_region = list(lineage_wic[central_pos + 1: end_site])
+
+        try:
+
+            zihe_test = stats.mannwhitneyu(left_region, right_region,
+                                           alternative="two-sided")
+            p_value = zihe_test[1]
+            negative_lg_p = - np.log10(p_value)
+            negative_lg_p_list.append(negative_lg_p)
+
+        except:
+            negative_lg_p = 0
+            negative_lg_p_list.append(negative_lg_p)
+
+        finally:
+            pass
+
+    negative_lg_p_dic[lineage] = negative_lg_p_list
+
+    return negative_lg_p_dic
+
+
+
 def recombreak_plot(sites_probability_data,lineage_name_list,
                     sites_count,breakwins,
                     site_map_dic,
-                    site_dir,query_seq_prefix):
+                    site_dir,query_seq_prefix,thread_num):
 
 
     break_p_map = (site_dir + "/"
@@ -758,44 +794,40 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
 
     lineage_count = len(lineage_name_list)
 
+    for k in range(run_number):
+        start_site = k
+
+        end_site = k + breakwins
+
+        central_pos = int((start_site + end_site) / 2)
+        original_site = int(site_map_dic[str(central_pos + 1)])
+
+        central_pos_list.append(original_site)
+
+    breakpoint_data["Original_Index"] = central_pos_list
+
+    p2 = Pool(int(thread_num))
+
+    ca_result_list = []
+
     for lineage in lineage_name_list:
 
-        central_pos_list = []
-        negative_lg_p_list = []
+        lineage_wic = sites_probability_data[lineage]
 
-        for i in range(run_number):
-            start_site = i
+        ca_result = p2.apply_async(recombreak_run,
+                                    args=(lineage, lineage_wic, run_number,breakwins))
 
-            end_site = i + breakwins
+        ca_result_list.append(ca_result)
 
-            central_pos = int((start_site + end_site) / 2)
+    p2.close()
+    p2.join()
 
-            left_region = list(sites_probability_data[lineage][
-                               start_site: central_pos - 1])
-            right_region = list(
-                sites_probability_data[lineage][central_pos + 1: end_site])
 
-            original_site = int(site_map_dic[str(central_pos + 1)])
+    for each_calculation in ca_result_list:
+        lineage_ca = each_calculation.get()  # get()方法获取计算结果
 
-            central_pos_list.append(original_site)
-
-            try:
-
-                zihe_test = stats.mannwhitneyu(left_region, right_region,
-                                               alternative="two-sided")
-                p_value = zihe_test[1]
-                negative_lg_p = - np.log10(p_value)
-                negative_lg_p_list.append(negative_lg_p)
-
-            except:
-                negative_lg_p = 0
-                negative_lg_p_list.append(negative_lg_p)
-
-            finally:
-                pass
-
-        breakpoint_data["Original_Index"] = central_pos_list
-        breakpoint_data[lineage] = negative_lg_p_list
+        for key in lineage_ca:
+            breakpoint_data[key] = lineage_ca[key]
 
     # print(breakpoint_data)
 
@@ -848,4 +880,5 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
     plt.savefig(break_p_map)
 
     plt.clf()
+
 
