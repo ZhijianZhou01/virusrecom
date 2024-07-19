@@ -226,8 +226,6 @@ def lineage_wic_run(query_seq,each_lineage,lineage_seq_df,
     :return:
     """
 
-    sites_wic_dic = {}
-
     ent_probability= []
 
     query_seq_count = query_seq.shape[0]
@@ -293,13 +291,12 @@ def lineage_wic_run(query_seq,each_lineage,lineage_seq_df,
 
                 sys.exit()
 
-    sites_wic_dic[each_lineage] = ent_probability
 
     print("    " +
           "The calculation of " + each_lineage + "'s recombination contribution to "
           + query_seq_prefix + " has been completed!" + "\n")
 
-    return sites_wic_dic
+    return [each_lineage, ent_probability]
 
 
 
@@ -362,8 +359,7 @@ def wic_calculation(seq_data,lineage_name_list,used_calEnt,
     for each_calculation in lineage_wic_list:
         lineage_wic = each_calculation.get()  # get()方法获取计算结果
 
-        for key in lineage_wic:
-            sites_wic_data[key] = lineage_wic[key]
+        sites_wic_data[lineage_wic[0]] = lineage_wic[1]
 
     sites_wic_data.to_excel(excel_writer=site_ic_table,
                                     index=False)
@@ -378,8 +374,6 @@ def lineage_mwic_run(lineage_name,slither_window_list,lineage_wic_df):
 
     each_lineage_setp_pro = []
 
-    step_probability_dic = {}
-
     for each_window in slither_window_list:
         start_row = each_window[0]
 
@@ -391,9 +385,7 @@ def lineage_mwic_run(lineage_name,slither_window_list,lineage_wic_df):
 
         each_lineage_setp_pro.append(mean_ic_per_win)
 
-    step_probability_dic[lineage_name] = each_lineage_setp_pro
-
-    return step_probability_dic
+    return [lineage_name, each_lineage_setp_pro]
 
 
 
@@ -461,9 +453,7 @@ def mwic_calculation(sites_probability_data,lineage_name_list,
     for each_calculation in lineage_mwic_list:
         lineage_mwic = each_calculation.get()  # get()方法获取计算结果
 
-        for key in lineage_mwic:
-
-            step_probability_data[key] = lineage_mwic[key]
+        step_probability_data[lineage_mwic[0]] = lineage_mwic[1]
 
 
     step_probability_data.to_excel(
@@ -735,11 +725,9 @@ def mwic_plot(gap_used, lineage_name_list,
 
 
 
-
 def recombreak_run(lineage, lineage_wic, run_number, breakwins):
-    negative_lg_p_dic = {}
-    negative_lg_p_list = []
 
+    negative_lg_p_list = []
 
     for i in range(run_number):
         start_site = i
@@ -766,9 +754,8 @@ def recombreak_run(lineage, lineage_wic, run_number, breakwins):
         finally:
             pass
 
-    negative_lg_p_dic[lineage] = negative_lg_p_list
 
-    return negative_lg_p_dic
+    return [lineage, negative_lg_p_list]
 
 
 
@@ -825,9 +812,7 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
 
     for each_calculation in ca_result_list:
         lineage_ca = each_calculation.get()  # get()方法获取计算结果
-
-        for key in lineage_ca:
-            breakpoint_data[key] = lineage_ca[key]
+        breakpoint_data[lineage_ca[0]] = lineage_ca[1]
 
     # print(breakpoint_data)
 
@@ -880,5 +865,4 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
     plt.savefig(break_p_map)
 
     plt.clf()
-
 
