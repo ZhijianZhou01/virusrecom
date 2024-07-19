@@ -475,5 +475,5 @@ def virus_infor_calculate(parameter_dic,
         recombreak_plot(sites_probability_data, lineage_name_list,
                         sites_count, breakwins,
                         site_map_dic,
-                        site_dir, query_seq_prefix, parameter_dic["thread_num"])
+                        slide_window_dir, query_seq_prefix, parameter_dic["thread_num"])
 
