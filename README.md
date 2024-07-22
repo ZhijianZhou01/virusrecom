@@ -107,7 +107,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 |-e ENGRAVE | Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).|
 |-en EXPORT_NAME | Export all sequence name of a *.fasta file.|
 |-o OUTDIR | Output directory to store all results.|
-|--block BLOCK_SIZE | Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000.|
+|--block BLOCK_SIZE | Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000 sites.|
 |--no_wic_fig | Do not draw the image of WICs.|
 |--no_mwic_fig | Do not draw the image of mWICs.|
 
