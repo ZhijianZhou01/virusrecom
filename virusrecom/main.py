@@ -13,28 +13,27 @@ Time: 2022/4/17 17:29
 import sys
 import os
 
-app_dir = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
-app_dir = app_dir.replace("\\", "/")
-sys.path.append(app_dir)
+app_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
+app_dir = app_dir.replace("\\", "/")
+
+sys.path.append(app_dir)
 
 import psutil
 
 import numpy as np
 import argparse
 
-import pandas as pd
-
 from datetime import datetime
 
-from my_func import (resolve_file_path,make_dir,
-                     mark_linegaes,export_seqname,
-                     read_seq,calEnt, calEnt_gap)
 
-from sequence_align import SeqAlign
+from my_func import (handle_input_file,make_dir,
+                     calEnt, calEnt_gap,
+                     handle_exceptions,
+                     others_analysis)
+
 
 from corecp import virus_infor_calculate
-
 
 
 example_use = r'''
@@ -104,12 +103,12 @@ def parameter():
         default="")
 
     parser.add_argument("-g", dest="gap",
-                        help="Reserve sites containing gap in subsequent analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.",
+                        help="Reserve sites containing gaps(-) in analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.",
                         type=str,
                         default="")
 
     parser.add_argument("-m", dest="method",
-                        help="Method for scanning. ‘-m p’ means use polymorphic sites only, ‘-m a’ means use all the sites.",
+                        help="Method for site scanning. ‘-m p’ uses polymorphic sites only, ‘-m a’ uses all the sites.",
                         type=str,
                         default="p")
 
@@ -176,7 +175,7 @@ def parameter():
 
     parser.add_argument(
         "-e", dest="engrave",
-        help="Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).",
+        help="Write the file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).",
         default="")
 
     parser.add_argument(
@@ -190,11 +189,21 @@ def parameter():
         type=str,
         default="")
 
+
+    parser.add_argument(
+        "--block",
+        dest="block_size",
+        help="Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000.",
+        type=int,
+        default=40000)
+
+
     parser.add_argument(
         "--no_wic_fig",
         dest="no_wic_figure",
         action="store_true",
         help="Do not draw the image of WICs.")
+
 
     parser.add_argument(
         "--no_mwic_fig",
@@ -202,9 +211,12 @@ def parameter():
         action="store_true",
         help="Do not draw the image of mWICs.")
 
+
     myargs = parser.parse_args(sys.argv[1:])
 
     return myargs
+
+
 
 
 def starts():
@@ -216,7 +228,7 @@ def starts():
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.2.1 (2024-07-19)")
+    print("  Version: 1.3 (2024-07-23)")
 
     print("  Author: Zhi-Jian Zhou")
 
@@ -229,8 +241,6 @@ def starts():
 
     start = datetime.today().now()
 
-    start_memory = calculate_memory()
-
 
     #  parameter
 
@@ -242,15 +252,15 @@ def starts():
 
     parameter_dic["align_tool"] = myargs.align_tool  #  alignment tool used for no-aligned sequence file
 
-    parameter_dic["input_wic"] = myargs.input_wic            # input_wic, if you have
+    parameter_dic["input_wic"] = myargs.input_wic.replace("\\", "/")     # input_wic, if you have
 
     parameter_dic["query_lineage_name"] = myargs.query         #  the name of query lineage
 
     parameter_dic["lineage_file"] = myargs.lineages          # other lineages
 
-    parameter_dic["gaps_use"] = myargs.gap    #  strategy of handling gap
+    parameter_dic["gaps_use"] = myargs.gap.strip().upper()    #  strategy of handling gap
 
-    parameter_dic["method"] = myargs.method   #  Scan method
+    parameter_dic["method"] = myargs.method.strip().upper()   #  Scan method
 
     parameter_dic["windows_size"] = myargs.window    #  window size
 
@@ -262,60 +272,40 @@ def starts():
 
     parameter_dic["cumulative_major"] = myargs.cumulative
 
-    parameter_dic["breakpoints"] =  myargs.breakpoint  #  whether to search for recombination breakpoints
+    parameter_dic["breakpoints"] =  myargs.breakpoint.strip()  #  whether to search for recombination breakpoints
 
     parameter_dic["breakwins"] = myargs.breakwin  #  Window size used to search for recombination breakpoints
 
-    parameter_dic["thread_num"] = myargs.thread  #  thread (core)
+    parameter_dic["thread_num"] = int(myargs.thread)  #  thread
 
     parameter_dic["y_start"] = myargs.y_start  #  Y-axis starting point when plotting
 
     parameter_dic["legend"] = myargs.legend
 
-    parameter_dic["only_wic"] = myargs.only_wic
+    parameter_dic["only_wic"] = myargs.only_wic.strip().upper()
 
     parameter_dic["engrave_name"] = myargs.engrave
 
     parameter_dic["export_name"] = myargs.export_name
 
-    parameter_dic["out_dir"] = myargs.outdir  # output directory
+    parameter_dic["out_dir"] = myargs.outdir.replace("\\", "/")  # output directory
 
     parameter_dic["no_wic_figure"] = myargs.no_wic_figure
 
     parameter_dic["no_mwic_figure"] = myargs.no_mwic_figure
-    
 
-    out_dir = parameter_dic["out_dir"].replace("\\", "/")
-
-    if out_dir == "":
-        print(
-            ">>> Error！Please specify an output directory by '-o' options." + "\n")
-
-        sys.exit()
-
-
-    make_dir(out_dir)
-
-
-
-    if parameter_dic["engrave_name"] != "":
-
-        mark_linegaes(parameter_dic["engrave_name"],
-                      parameter_dic["out_dir"])
-
-        sys.exit()
-
-    elif parameter_dic["export_name"] !="":
-        export_seqname(parameter_dic["export_name"],
-                       parameter_dic["out_dir"])
-
-        sys.exit()
+    parameter_dic["block_size"] = int(myargs.block_size)
 
 
     print(myargs)
+
     print("\n")
-   
-    with open(parameter_dic["out_dir"] + "/input-parameter.txt",
+
+
+    make_dir(parameter_dic["out_dir"])
+
+
+    with open(parameter_dic["out_dir"] + "/" + "input-parameter.txt",
               "w", encoding="utf-8") as input_para:
 
         input_para.write(
@@ -325,249 +315,94 @@ def starts():
         for key in list(parameter_dic.keys()):
             input_para.write(key + "\t" + str(parameter_dic[key]) + "\n")
 
+    # update dic
 
-    if (parameter_dic["unaligned_seq"] == ""
-          and parameter_dic["aligned_seq"] == ""
-          and parameter_dic["input_wic"] == ""):
+    if parameter_dic["gaps_use"].upper() == "N":
 
-        print(">>> Error！There is no input file." + "\n")
-
-        sys.exit()
-
-
-    elif parameter_dic["query_lineage_name"] == "":
-        print(">>> Error！Please specify the query lineage by '-q' options." + "\n")
-
-        sys.exit()
-
-
-    elif parameter_dic["gaps_use"] == "":
-        print(
-            ">>> Error！Please specify the value of '-g' options." + "\n")
-
-        sys.exit()
-
-
-
-    run_record = out_dir + "/" + "run_record"
-
-    make_dir(run_record)
-
-    seq_alignment_file = ""
-
-
-
-
-    if parameter_dic["aligned_seq"] != "":
-
-        seq_alignment_file = parameter_dic["aligned_seq"].replace("\\", "/")
-
-
-    elif parameter_dic["unaligned_seq"] != "":
-
-        if parameter_dic["align_tool"] !="":
-
-            input_seq_dir, input_prefix = resolve_file_path(parameter_dic["unaligned_seq"])
-
-            seq_alignment_file = (run_record + "/" + input_prefix
-                                  + "_" + parameter_dic["align_tool"]
-                                  + ".fasta")
-
-
-            SeqAlign(parameter_dic["align_tool"],
-                     parameter_dic["thread_num"],
-                     parameter_dic["unaligned_seq"],
-                     seq_alignment_file)
-
-            if os.path.exists(seq_alignment_file):
-                print(">>> Sequence alignment has been completed!" + "\n")
-
-            else:
-
-                print(">>> Error！Multiple sequence alignments did not succeed." + "\n")
-
-                sys.exit()
-
-
-        else:
-            print(">>> Error！Please specify a tool used for sequnece alignment." + "\n")
-
-            sys.exit()
-
-
-    elif parameter_dic["input_wic"] != "":
-
-        out_dir = parameter_dic["out_dir"]
-
-        query_prefix = parameter_dic["query_lineage_name"]
-
-        virus_infor_calculate(parameter_dic,
-                              pd.DataFrame(),
-                              query_prefix,
-                              [],
-                              out_dir)
-
-        duration = datetime.today().now() - start
-
-        end_memory = calculate_memory()
-
-        used_memory = end_memory - start_memory
-
-        print("\n")
-
-        print(">>> " + f"Occupied {used_memory}MB memory in total." + "\n")
-
-        print(">>> " + "Take " + str(duration) + " seconds in total." + "\n")
-
-        sys.exit()
-
+        parameter_dic["calEnt_use"] = calEnt
+        parameter_dic["max_mic"] = 2
 
     else:
+        parameter_dic["calEnt_use"] = calEnt_gap
+
+        parameter_dic["max_mic"] = np.log2(5)
+
+
+    others = others_analysis(parameter_dic)
+
+    if others:
         sys.exit()
 
 
-    lineage_mark_list = []
+    exceptions_label = handle_exceptions(parameter_dic)
+
+    if exceptions_label:
+        sys.exit()
+
 
     query_prefix = parameter_dic["query_lineage_name"]
 
 
-    with open(parameter_dic["lineage_file"]) as lineage_file:
-        for line in lineage_file:
-            line = line.strip()
-            if line != "":
-                lineage_mark_list.append(line)
+    if parameter_dic["input_wic"] != "":
 
-
-
-    print(">>> " + "VirusRecom is importing sequence set, please wait patiently..." + "\n")
-
-    seq_pd = read_seq(seq_alignment_file)
-
-
-
-    seq_pd_clean = seq_pd
-
-    parameter_dic["calEnt_use"] = calEnt_gap
-
-
-    if parameter_dic["gaps_use"].upper() == "N":
-
-        print(">>> " + "VirusRecom is removing sites (columns) containing gap (-)..." + "\n")
-
-        all_site_label = list(seq_pd.columns)
-
-        seq_pd_clean = seq_pd[~seq_pd.isin(["-"])].dropna(axis=1)
-
-
-        parameter_dic["calEnt_use"] = calEnt
-
-
-        record_gap_path = (run_record + "/"
-                           + "Record_of_deleted_gap_sites"
-                           + ".txt")
-
-        seq_pd_clean_site = list(seq_pd_clean.columns)
-
-        with open(record_gap_path, "w",encoding="utf-8") as record_gap_file:
-
-            record_gap_file.write("These sites with gap (-) in the file of "
-                                  + seq_alignment_file + "\n")
-
-            for each_site in all_site_label:
-                if each_site not in seq_pd_clean_site:
-                    record_gap_file.write("Site " + each_site + "\n")
-
-
-        print(">>> " + "All sites containing gap have been cleared." + "\n")
-
-    else:
-        pass
-
-
-
-    if parameter_dic["method"].upper() == "P":
-
-        print(">>> " + "VirusRecom is extracting polymorphic sites..." + "\n")
-
-        seq_pd_clean_site_old = list(seq_pd_clean)
-        # print(seq_pd_clean_site_old)
-
-        seq_pd_clean = seq_pd_clean.loc[:, (seq_pd_clean != seq_pd_clean.iloc[0]).any()]
-
-        seq_pd_clean_site_new = list(seq_pd_clean)
-
-
-        record_same_sites_path = (run_record + "/"
-                                  + "Record_of_same_sites_in_aligned_sequence"
-                                  + ".txt")
-
-
-        with open(record_same_sites_path, "w", encoding="utf8") as same_sites_file:
-            same_sites_file.write("These same sites(no variation) in the file of "
-                                  + seq_alignment_file + "\n")
-
-
-            for each_site in seq_pd_clean_site_old:
-                if each_site not in seq_pd_clean_site_new:
-                    same_sites_file.write("Site " + each_site + "\n")
-
-    else:
-        pass
-
-
-
-    analysis_site = np.size(seq_pd_clean,1)
-
-    print(">>> " + "A total of " + str(analysis_site)
-
-          + " sites will be included in the next analysis." + "\n")
-
-    print(">>> " + "VirusRecom starts calculating weighted information content from each lineage..."
-        + "\n")
-
-
-    if query_prefix.upper() == "AUTO":
-
-        for each_lineage in lineage_mark_list:
-            query_lineage_run = each_lineage
-
-            new_lineage_name_list = []
-
-            for lineage in lineage_mark_list:
-                if lineage != query_lineage_run:
-                    new_lineage_name_list.append(lineage)
-
-            sub_outdir = out_dir + "/Results/" + query_lineage_run
-
-
-            virus_infor_calculate(parameter_dic,
-                                  seq_pd_clean,
-                                  query_lineage_run,
-                                  new_lineage_name_list,
-                                  sub_outdir)
-
-
-    else:
-
-        sub_outdir = out_dir
-
-        virus_infor_calculate(parameter_dic,
-                              seq_pd_clean,
+        virus_infor_calculate("",
                               query_prefix,
-                              lineage_mark_list,
-                              sub_outdir)
+                              [],
+                              parameter_dic,
+                              parameter_dic["out_dir"])
+
+
+    else:
+
+        seq_alignment_file = handle_input_file(parameter_dic)
+
+        lineage_mark_list = []
+
+        with open(parameter_dic["lineage_file"]) as lineage_file:
+            for line in lineage_file:
+                line = line.strip()
+                if line != "":
+                    lineage_mark_list.append(line)
+
+
+        if query_prefix.upper() != "AUTO":
+
+            out_dir = parameter_dic["out_dir"]
+
+            virus_infor_calculate(seq_alignment_file,
+                                  query_prefix,
+                                  lineage_mark_list,
+                                  parameter_dic,
+                                  out_dir)
+
+
+        elif query_prefix.upper() == "AUTO":
+
+            for each_lineage in lineage_mark_list:
+                query_lineage_run = each_lineage
+
+                new_lineage_name_list = []
+
+                for lineage in lineage_mark_list:
+                    if lineage != query_lineage_run:
+                        new_lineage_name_list.append(lineage)
+
+                sub_outdir = parameter_dic["out_dir"] + "/Results/" + query_lineage_run
+
+                make_dir(sub_outdir)
+
+                virus_infor_calculate(seq_alignment_file,
+                                      query_lineage_run,
+                                      new_lineage_name_list,
+                                      parameter_dic,
+                                      sub_outdir)
 
 
 
     duration = datetime.today().now() - start
 
-    end_memory = calculate_memory()
-
-    used_memory = end_memory - start_memory
-
-    print(">>> " + f"Occupied {used_memory}MB memory in total" + "\n")
-
     print(">>> " + "Take " + str(duration) + " seconds in total." + "\n")
+
 
     sys.exit()
 
