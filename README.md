@@ -91,8 +91,8 @@ virusrecom is a command-line-interface program, users can get help documentation
 |-iwic INPUT_WIC | Using the already obtained WIC values of reference lineages directly by a *.csv input-file.|
 |-q QUERY | Name of query lineage (usually potential recombinant), such as ‘-q xxxx’. Besides, ‘-q auto’ can scan all lineages as potential recombinant in turn.|
 |-l LINEAGES | Path of a text-file containing multiple lineage marks.|
-|-g GAP | Reserve sites containing gap in subsequent analyses? ‘-g y’means to reserve, and ‘-g n’ means to delete.|
-|-m METHOD | Method for scanning. ‘-m p’ means use polymorphic sites only, ‘-m a’ means use all the sites.|
+|-g GAP | Reserve sites containing gaps(-) in analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.|
+|-m METHOD | Method for site scanning. ‘-m p’ uses polymorphic sites only, ‘-m a’ uses all the sites.|
 |-w WINDOW | Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.|
 |-s STEP | Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.|
 |-mr MAX_REGION | The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.|
@@ -106,7 +106,8 @@ virusrecom is a command-line-interface program, users can get help documentation
 |-owic ONLY_WIC | Only calculate site WIC value. Off by default. If required, please specify ‘-owic y’.|
 |-e ENGRAVE | Engraves file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).|
 |-en EXPORT_NAME | Export all sequence name of a *.fasta file.|
-|-o | Output directory to store all results.|
+|-o OUTDIR | Output directory to store all results.|
+|--block BLOCK_SIZE | Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000.|
 |--no_wic_fig | Do not draw the image of WICs.|
 |--no_mwic_fig | Do not draw the image of mWICs.|
 
