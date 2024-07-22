@@ -14,8 +14,8 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 import matplotlib
-
 from multiprocessing import Pool
+from sequence_align import SeqAlign
 
 matplotlib.use("agg")  # avoid the  ModuleNotFoundError: No module named '_tkinter'
 
@@ -24,23 +24,118 @@ import matplotlib.pyplot as plt
 from plt_corlor_list import plt_corlor
 
 
+
+def handle_exceptions(parameter_dic):
+
+
+    if parameter_dic["out_dir"].strip() == "":
+        print(
+            ">>> Error！Please specify an output directory by '-o' options." + "\n")
+
+        return True
+
+
+    elif (parameter_dic["unaligned_seq"] == ""
+          and parameter_dic["aligned_seq"] == ""
+          and parameter_dic["input_wic"] == ""):
+
+        print(">>> Error！There is no input file." + "\n")
+
+        return True
+
+
+    elif parameter_dic["query_lineage_name"] == "":
+        print(">>> Error！Please specify the query lineage by '-q' options." + "\n")
+
+        return True
+
+
+    elif parameter_dic["gaps_use"] == "":
+        print(
+            ">>> Error！Please specify the value of '-g' options." + "\n")
+
+        return True
+
+
+
+
+def handle_input_file(parameter_dic):
+
+    if parameter_dic["aligned_seq"] != "":
+
+        seq_alignment_file = parameter_dic["aligned_seq"].replace("\\", "/")
+
+        return seq_alignment_file
+
+
+    elif parameter_dic["unaligned_seq"] != "":
+
+        if parameter_dic["align_tool"] != "":
+
+            align_record = parameter_dic["out_dir"] + "/" + "align_record"
+
+            make_dir(align_record)
+
+            input_seq_dir, input_prefix = resolve_file_path(parameter_dic["unaligned_seq"])
+
+            seq_alignment_file = (align_record + "/" + input_prefix
+                                  + "_" + parameter_dic["align_tool"]
+                                  + ".fasta")
+
+            SeqAlign(parameter_dic["align_tool"],
+                     parameter_dic["thread_num"],
+                     parameter_dic["unaligned_seq"],
+                     seq_alignment_file)
+
+            file_size = os.path.getsize(seq_alignment_file)
+
+            if os.path.exists(seq_alignment_file) and file_size > 0:
+
+                file_size = os.path.getsize(seq_alignment_file)
+
+                if file_size > 0:
+
+                    print(">>> Sequence alignment has been completed!" + "\n")
+
+                    return seq_alignment_file
+
+
+            else:
+
+                print(">>> Error！Multiple sequence alignments did not succeed." + "\n")
+
+                sys.exit()
+
+
+        else:
+            print(">>> Error！Please specify a tool used for sequence alignment, "
+                  "such as '-at mafft', or '-at muscle', or '-at clustalo'." + "\n")
+
+            sys.exit()
+
+
+
+    else:
+        sys.exit()
+
+
+
 def get_all_path(open_dir_path):
 
     rootdir = open_dir_path
 
     path_list = []
 
-    list = os.listdir(rootdir)
+    lists = os.listdir(rootdir)
 
-    for i in range(0, len(list)):
-        com_path = os.path.join(rootdir, list[i])
-        com_path = com_path.replace('\\', '/')
-        #print(com_path)
+    for i in range(0, len(lists)):
+        com_path = os.path.join(rootdir, lists[i])
+        com_path = com_path.replace("\\", "/")
+        # print(com_path)
 
         if os.path.isfile(com_path):
             path_list.append(com_path)
-        if os.path.isdir(com_path):
-            path_list.extend(get_all_path(com_path))
+
 
     return path_list
 
@@ -51,7 +146,7 @@ def make_dir(input_dir):
     :param input_dir: directory which need to create
     :return:
     """
-    if os.path.isdir(input_dir) == False:
+    if not os.path.isdir(input_dir):  #  = False
         os.makedirs(input_dir)
 
 
@@ -67,7 +162,7 @@ def resolve_file_path(file_path):
 
     out_prefix = inputfile_name.replace(file_farmat,"").rstrip(".")
 
-    return (input_data_dir,out_prefix)
+    return input_data_dir, out_prefix
 
 
 
@@ -100,7 +195,7 @@ def mark_linegaes(lineage_file_dir, outdir):
 
 
 
-def export_seqname(seq_file,outdir):
+def export_seqname(seq_file, outdir):
 
     print(">>> VirusRecom is running..." + "\n")
 
@@ -124,54 +219,109 @@ def export_seqname(seq_file,outdir):
               + "\n")
 
 
+def others_analysis(parameter_dic):
+
+    if parameter_dic["engrave_name"] != "":
+
+        mark_linegaes(parameter_dic["engrave_name"],
+                      parameter_dic["out_dir"])
+
+        return True
+
+    elif parameter_dic["export_name"] != "":
+        export_seqname(parameter_dic["export_name"],
+                       parameter_dic["out_dir"])
+
+        return True
+
+    else:
+        return False
 
 
-def read_seq(file_path):
+# def read_seq(file_path):
+#
+#     seq_tab = []
+#
+#     with open(file_path, "r", encoding="utf-8") as gen_file_input:
+#
+#         gen_file_list = gen_file_input.read().split(">")
+#
+#         for n in range(1, int(len(gen_file_list))):
+#             seq = gen_file_list[n].strip()
+#             st = []
+#             seq_name = seq.split("\n")[0]
+#             # print(seq_name)
+#
+#             seq_contain = seq.replace("\n", "").replace(seq_name, "").upper()
+#
+#             st.append(seq_name)
+#
+#
+#             st += list(seq_contain.strip())
+#
+#             seq_tab.append(st)
+#
+#
+#         seq_sites_list = []
+#         seq_sites_list.append("SeqName")
+#
+#         seq_length = len(seq_tab[0]) -1
+#
+#         for x in range(seq_length):
+#             seq_sites_list.append(str(x + 1))
+#
+#         seq_pands = pd.DataFrame(seq_tab,columns=seq_sites_list).set_index("SeqName")
+#
+#
+#         return seq_pands
 
-    seq_tab = []
-
-    # max_length = 0
-    with open(file_path, "r", encoding="utf-8") as gen_file_input:
-
-        gen_file_list = gen_file_input.read().split(">")
-
-        for n in range(1, int(len(gen_file_list))):
-            seq = gen_file_list[n].strip()
-            st = []
-            seq_name = seq.split("\n")[0]
-            # print(seq_name)
-
-            seq_contain = seq.replace("\n", "").replace(seq_name, "").upper()
-
-            st.append(seq_name)
-
-            # if len(seq_contain) >= max_length:
-            #     max_length = len(seq_contain)
-
-            # for k in range(len(seq_contain)):
-            #     st.append(seq_contain[k: k + 1])
-
-            st += list(seq_contain.strip())
-
-            seq_tab.append(st)
 
 
-        seq_sites_list = []
-        seq_sites_list.append("SeqName")
+def read_seq(input_file_path):
 
-        seq_length = len(seq_tab[0]) -1
+    with open(input_file_path, "r",encoding="utf-8") as gen_file:
 
-        for x in range(seq_length):
-            seq_sites_list.append(str(x + 1))
+        seq_tab = []
 
-        seq_pands = pd.DataFrame(seq_tab,columns=seq_sites_list).set_index("SeqName")
+        seq_dic = {}
 
+        seq_name_list = []
+
+        seq_name = ""
+
+        for line in gen_file:
+            line = line.strip()
+
+            if line.startswith(">"):
+                seq_name = line.strip(">")
+                seq_name_list.append(seq_name)
+                seq_dic[seq_name] = []
+
+            elif line != "":
+                seq_dic[seq_name].append(line)
+
+
+        for each_seqname in seq_name_list:
+
+            seq = "".join(seq_dic[each_seqname]).upper()
+
+            seq_tab.append([each_seqname] + list(seq))
+
+        seq_sites_list = ["SeqName"]
+
+        seq_length = len(seq_tab[0]) - 1
+
+        for k in range(seq_length):
+            seq_sites_list.append(str(k + 1))
+
+        seq_pands = pd.DataFrame(seq_tab, columns=seq_sites_list).set_index("SeqName")
 
         return seq_pands
 
 
 
-def calEnt(siteData,mode):
+
+def calEnt(siteData, mode):
 
     # print(siteData)
 
@@ -219,160 +369,12 @@ def calEnt_gap(siteData, mode):
 
 
 
-def lineage_wic_run(query_seq,each_lineage,lineage_seq_df,
-                    used_calEnt,query_seq_prefix):
-    """
-    计算每个谱系相对于查询谱系的位点wic
-    :return:
-    """
-
-    ent_probability= []
-
-    query_seq_count = query_seq.shape[0]
-
-    for (columnName, columnData) in lineage_seq_df.items():
-
-        lineage_site = list(columnData)
-
-        if len(lineage_site) == 1:
-            IC = used_calEnt(columnData, "single")
-
-        else:
-
-            IC = used_calEnt(columnData, "")
-
-        if query_seq_count == 1:
-            query_nt = query_seq[columnName][0]
-            query_nt_ratio = 1
-
-            try:
-
-                query_nt_lineage_ratio = lineage_site.count(query_nt) / \
-                                         columnData.shape[0]
-
-                p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
-
-                ent_probability.append(p_ent)
-
-
-            except:
-
-                print(">>> Error! The lineage '" + each_lineage + "'"
-                      + " is not in sequence data." + "\n")
-
-                sys.exit()
-
-
-        else:
-
-            query_seq_site_list = list(query_seq[columnName])
-
-            query_seq_site_count = len(query_seq_site_list)
-
-            maxpro_nt = max(query_seq_site_list,
-                            key=query_seq_site_list.count)
-
-            query_nt_ratio = query_seq_site_list.count(
-                maxpro_nt) / query_seq_site_count
-
-            try:
-                query_nt_lineage_ratio = lineage_site.count(maxpro_nt) / \
-                                         columnData.shape[0]
-
-                p_ent = query_nt_lineage_ratio * IC * query_nt_ratio
-
-                ent_probability.append(p_ent)
-
-
-            except:
-
-                print(">>> Error! The lineage '" + each_lineage + "'"
-                      + " is not in sequence data." + "\n")
-
-                sys.exit()
-
-
-    print("    " +
-          "The calculation of " + each_lineage + "'s recombination contribution to "
-          + query_seq_prefix + " has been completed!" + "\n")
-
-    return [each_lineage, ent_probability]
-
-
-
-def wic_calculation(seq_data,lineage_name_list,used_calEnt,
-                    site_dir,query_seq_prefix,thread_num):
-
-    site_ic_table = (site_dir + "/"
-                     + query_seq_prefix
-                     + "_site_WIC_from_lineages.xlsx")
-
-    site_ic_csv = (site_dir + "/"
-                   + query_seq_prefix
-                   + "_site_WIC.csv")
-
-
-    query_seq = seq_data[seq_data.index.str.contains(query_seq_prefix) == True]
-
-    query_seq_count = query_seq.shape[0]
-
-    if query_seq_count == 0:
-
-        print(">>> Error! The query lineage '" + query_seq_prefix + "'"
-                          + " is not in sequence data." + "\n")
-
-        sys.exit()
-
-    original_site_list = [int(x) for x in query_seq.columns.tolist()]
-
-    sites_count = len(original_site_list)
-
-    current_site_list = [i + 1 for i in range(sites_count)]
-
-    columns_name_list = ["Original_Index", "Current_Index"] + lineage_name_list
-
-    sites_wic_data = pd.DataFrame(columns=columns_name_list,
-                                          index=current_site_list)
-
-    sites_wic_data["Original_Index"] = original_site_list
-
-    sites_wic_data["Current_Index"] = current_site_list
-
-    p = Pool(int(thread_num))
-
-    lineage_wic_list = []
-
-    for each_lineage in lineage_name_list:
-
-        lineage_seq_df = seq_data[seq_data.index.str.contains(each_lineage) == True]
-
-        lineage_result = p.apply_async(lineage_wic_run,
-                               args=(query_seq, each_lineage, lineage_seq_df,
-                                     used_calEnt,query_seq_prefix))
-
-        lineage_wic_list.append(lineage_result)
-
-
-    p.close()
-    p.join()
-
-    for each_calculation in lineage_wic_list:
-        lineage_wic = each_calculation.get()  # get()方法获取计算结果
-
-        sites_wic_data[lineage_wic[0]] = lineage_wic[1]
-
-    sites_wic_data.to_excel(excel_writer=site_ic_table,
-                                    index=False)
-
-    sites_wic_data.to_csv(site_ic_csv, index=False, sep=",")
-
-    return site_ic_csv
-
-
-
-def lineage_mwic_run(lineage_name,slither_window_list,lineage_wic_df):
+def lineage_mwic_run(lineage_name,
+                     slither_window_list,
+                     lineage_wic_df):
 
     each_lineage_setp_pro = []
+
 
     for each_window in slither_window_list:
         start_row = each_window[0]
@@ -385,12 +387,14 @@ def lineage_mwic_run(lineage_name,slither_window_list,lineage_wic_df):
 
         each_lineage_setp_pro.append(mean_ic_per_win)
 
-    return [lineage_name, each_lineage_setp_pro]
+
+    return [lineage_name,each_lineage_setp_pro]
 
 
 
 
-def mwic_calculation(sites_probability_data,lineage_name_list,
+def mwic_calculation(sites_probability_data,
+                     lineage_name_list,
                      sites_count,site_map_dic,
                      windows_size,step_size,
                      output_path,thread_num):
@@ -418,7 +422,6 @@ def mwic_calculation(sites_probability_data,lineage_name_list,
         center_site = center_index + 1
 
         window_center_index.append(center_site)
-
 
         _original_site = int(site_map_dic[str(center_site)])
 
@@ -465,9 +468,13 @@ def mwic_calculation(sites_probability_data,lineage_name_list,
 
 
 
-def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
+def recomsplicing(sites_probability_data,
+                  sites_count,
+                  lineage_name_list,
                   recombination_frag,
-                  step_size,max_mic,max_recom_fragment,recom_percentage):
+                  step_size,max_mic,
+                  max_recom_fragment,
+                  recom_percentage):
 
     recom_region_dic = {}
 
@@ -489,7 +496,6 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
                 flage_label = False
 
                 breakpoint_judgment = []
-
 
                 for i in range(cursor_site - 1, frag_count):
 
@@ -515,7 +521,6 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
                                 max_lineage_ic = lineage_ic
 
                                 # print(max_lineage_ic)
-
 
                     if (lineage_Ri_wic > max_lineage_ic
                             and lineage_Ri_wic / (
@@ -547,6 +552,7 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
                     else:
 
                         max_Ri = breakpoint_judgment[-1]
+
                         max_Ri_sites = max_Ri[2] - max_Ri[1] + 1
 
                         if max_Ri_sites <= max_recom_fragment:
@@ -566,9 +572,7 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
                                     detected_area.append([local_max_Ri[1],
                                                           local_max_Ri[2]])
 
-                                    last_breakpoint = \
-                                        breakpoint_judgment[n - 1][
-                                            0]
+                                    last_breakpoint = breakpoint_judgment[n - 1][0]
 
                                     if last_breakpoint == cursor_site:
                                         cursor_site = cursor_site + 1
@@ -585,9 +589,8 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
             recom_region_dic[each_lineage] = detected_area
 
 
-
     for i in list(recom_region_dic.keys()):
-        if recom_region_dic[i] == []:
+        if not recom_region_dic[i]:  #  == []
             del recom_region_dic[i]
 
 
@@ -596,7 +599,12 @@ def recomsplicing(sites_probability_data,sites_count,lineage_name_list,
 
 
 
-def wic_plot(lineage_name,site_list,input_data,query_lineage_name,output_path):
+def wic_plot(lineage_name,
+             site_list,
+             input_data,
+             query_lineage_name,
+             output_path):
+
 
     lineage_count = len(lineage_name)
 
@@ -638,10 +646,12 @@ def wic_plot(lineage_name,site_list,input_data,query_lineage_name,output_path):
     plt.xlabel("Site in alignment", family="Arial")
     plt.savefig(output_path)
     plt.clf()
+    plt.close()
 
 
 
-def mwic_plot(gap_used, lineage_name_list,
+def mwic_plot(gap_used,
+              lineage_name_list,
               window_center_original,
               step_probability_data,
               query_seq_prefix,
@@ -675,6 +685,7 @@ def mwic_plot(gap_used, lineage_name_list,
         finally:
             pass
 
+
     legend_font_size = 8
 
     if len(lineage_name_list) >= 15:
@@ -687,7 +698,8 @@ def mwic_plot(gap_used, lineage_name_list,
     legend_font = {"family": "Arial",
              "weight": "normal",
              "size": legend_font_size}
-    
+
+
     if legend_location.upper() == "R":
 
         num1 = 1.05
@@ -723,11 +735,16 @@ def mwic_plot(gap_used, lineage_name_list,
 
     plt.clf()
 
+    plt.close()
 
 
-def recombreak_run(lineage, lineage_wic, run_number, breakwins):
+
+
+def recombreak_run(lineage,lineage_wic,
+                   run_number,breakwins):
 
     negative_lg_p_list = []
+
 
     for i in range(run_number):
         start_site = i
@@ -755,14 +772,19 @@ def recombreak_run(lineage, lineage_wic, run_number, breakwins):
             pass
 
 
-    return [lineage, negative_lg_p_list]
+
+    return [lineage,negative_lg_p_list]
 
 
 
-def recombreak_plot(sites_probability_data,lineage_name_list,
-                    sites_count,breakwins,
+def recombreak_plot(sites_probability_data,
+                    lineage_name_list,
+                    sites_count,
+                    breakwins,
                     site_map_dic,
-                    site_dir,query_seq_prefix,thread_num):
+                    site_dir,
+                    query_seq_prefix,
+                    thread_num):
 
 
     break_p_map = (site_dir + "/"
@@ -787,6 +809,7 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
         end_site = k + breakwins
 
         central_pos = int((start_site + end_site) / 2)
+
         original_site = int(site_map_dic[str(central_pos + 1)])
 
         central_pos_list.append(original_site)
@@ -802,7 +825,8 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
         lineage_wic = sites_probability_data[lineage]
 
         ca_result = p2.apply_async(recombreak_run,
-                                    args=(lineage, lineage_wic, run_number,breakwins))
+                                    args=(lineage, lineage_wic,
+                                          run_number,breakwins))
 
         ca_result_list.append(ca_result)
 
@@ -811,7 +835,8 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
 
 
     for each_calculation in ca_result_list:
-        lineage_ca = each_calculation.get()  # get()方法获取计算结果
+        lineage_ca = each_calculation.get()
+
         breakpoint_data[lineage_ca[0]] = lineage_ca[1]
 
     # print(breakpoint_data)
@@ -819,6 +844,8 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
     breakpoint_data.to_excel(
         excel_writer=break_p_data,
         index=False)
+
+
 
     fig_high2 = int(lineage_count * 2)
 
@@ -865,4 +892,6 @@ def recombreak_plot(sites_probability_data,lineage_name_list,
     plt.savefig(break_p_map)
 
     plt.clf()
+
+    plt.close()
 
