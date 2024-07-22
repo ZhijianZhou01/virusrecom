@@ -10,403 +10,482 @@ Time: 2022/4/17 17:29
 
 """
 
-import sys
-import os
+import pandas as pd
+import scipy.stats as stats
 
-app_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+from my_func import (make_dir, mwic_calculation,
+                     recomsplicing, wic_plot,
+                     mwic_plot,recombreak_plot)
 
-app_dir = app_dir.replace("\\", "/")
+from wic_engine import wic_compute_engine
 
-sys.path.append(app_dir)
 
-import psutil
 
-import numpy as np
-import argparse
+def virus_infor_calculate(seq_file_path,
+                          query_seq_prefix,
+                          lineage_list,
+                          parameter_dic,
+                          sub_outdir):
 
-from datetime import datetime
+    is_use_gap = parameter_dic["gaps_use"]
 
+    max_mic = parameter_dic["max_mic"]
 
-from my_func import (handle_input_file,make_dir,
-                     calEnt, calEnt_gap,
-                     handle_exceptions,
-                     others_analysis)
-
-
-from corecp import virus_infor_calculate
+    windows_size = parameter_dic["windows_size"]
 
-
-example_use = r'''
-----------------☆ Example of use ☆-----------------
+    step_size = parameter_dic["step_size"]
 
-  (1) If the input sequence-data has been aligned:
-      virusrecom -a alignment.fasta -q query_name -l lineage_name_list.txt -g n -m p -w 100 -s 20 -o outdir
-      
-  (2) If the input sequence-data was not aligned: 
-      virusrecom -ua unalignment.fasta -at mafft -q query_name -l lineage_name_list.txt -g n -m p -w 100 -s 20 -t 2 -o outdir
-      
-  (3) If you have a *csv file with site’s WIC value:
-      virusrecom -iwic *csv -g n (or -g y) -q query_name -w 100 -s 20 -o outdir
-  
-  Tip: the input-file and output-directory is recommended absolute path.
-  
-  Above is just a conceptual example, detailed usage in website: https://github.com/ZhijianZhou01/virusrecom
-  
-----------------------☆  End  ☆---------------------
-
-'''
-
-
-def calculate_memory():
-    pid = os.getpid()
-    p = psutil.Process(pid)
-    info = p.memory_full_info()
-    memory = info.uss / 1024 / 1024
-    return memory
-
-
-def parameter():
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        prog="virusrecom",
-        description="",
-        epilog=example_use)
-
-    parser.add_argument(
-        "-a", dest="alignment",
-        help="Aligned sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
-        default="")
-
-    parser.add_argument(
-        "-ua", dest="unalignment",
-        help="Unaligned (non-alignment) sequence file (*.fasta). Note, each sequence name requires containing lineage mark.",
-        default="")
-
-    parser.add_argument(
-        "-at", dest="align_tool",
-        help="Program used for multiple sequence alignments (MSA). Supporting mafft, muscle and clustalo, such as ‘-at mafft’.",
-        default="")
-
-    parser.add_argument(
-        "-iwic", dest="input_wic",
-        help="Using the already obtained WIC values of reference lineages directly by a *.csv input-file.",
-        default="")
-
-    parser.add_argument(
-        "-q", dest="query",
-        help="Name of query lineage (usually potential recombinant), such as ‘-q xxxx’. Besides, ‘-q auto’ can scan all lineages as potential recombinant in turn.",
-        default="")
-
-    parser.add_argument(
-        "-l", dest="lineages",
-        help="Path of a text-file containing multiple lineage marks.",
-        default="")
-
-    parser.add_argument("-g", dest="gap",
-                        help="Reserve sites containing gaps(-) in analyses? ‘-g y’ means to reserve, and ‘-g n’ means to delete.",
-                        type=str,
-                        default="")
-
-    parser.add_argument("-m", dest="method",
-                        help="Method for site scanning. ‘-m p’ uses polymorphic sites only, ‘-m a’ uses all the sites.",
-                        type=str,
-                        default="p")
-
-    parser.add_argument("-w", dest="window",
-                        help="Number of nucleotides sites per sliding window. Note: if the ‘-m p’ has been used, -w refers to the number of polymorphic sites per windows.",
-                        type=int,
-                        default=100)
-
-    parser.add_argument("-s", dest="step",
-                        help="Step size of the sliding window. Note: if the ‘-m p’ has been used, -s refers to the number of polymorphic sites per jump.",
-                        type=int,
-                        default=20)
+    max_recom_fragment = parameter_dic["max_recom_fragment"]
 
-    # max_recom_fragment
-    parser.add_argument("-mr", dest="max_region",
-                        help="The maximum allowed recombination region. Note: if the ‘-m p’ method has been used, it refers the maximum number of polymorphic sites contained in a recombinant region.",
-                        type=int,
-                        default=1000)
+    recom_percentage = parameter_dic["recom_percentage"]
 
-    parser.add_argument("-cp", dest="percentage",
-                        help="The cutoff threshold of proportion (cp, default: 0.9) used for searching recombination regions when mWIC/EIC >= cp, the maximum value of cp is 1.",
-                        type=float,
-                        default=0.9)
+    cumulative_major = parameter_dic["cumulative_major"]
 
-    parser.add_argument("-cu", dest="cumulative",
-                        help="Simply using the max cumulative WIC of all sites to identify the major parent. Off by default. If required, specify ‘-cu y’.",
-                        type=str,
-                        default="n")
+    y_start = parameter_dic["y_start"]
 
-    parser.add_argument("-b", dest="breakpoint",
-                        help="Possible breakpoint scan of recombination. ‘-b y’ means yes, ‘-b n’ means no. Note: this option only takes effect when ‘-m p’ has been specified.",
-                        type=str,
-                        default="n")
+    legend_location = parameter_dic["legend"]
 
-    parser.add_argument("-bw", dest="breakwin",
-                        help="The window size (default: 200) used for breakpoint scan, and step size is fixed at 1.",
-                        type=int,
-                        default=200)
+    site_dir = sub_outdir + "/" + "WICs_of_sites"
 
-    parser.add_argument(
-        "-t", dest="thread",
-        help="Number of threads (or cores) for calculations, default: 4.",
-        type=int,
-        default=4)
+    slide_window_dir = sub_outdir + "/" + "WICs_of_slide_window"
 
-    parser.add_argument(
-        "-y", dest="y_start",
-        help="Starting value (default: 0) of the Y-axis in plot diagram.",
-        type=float,
-        default=0.0)
+    make_dir(site_dir)
 
-    parser.add_argument(
-        "-le", dest="legend",
-        help="The location of the legend, the default is adaptive. '-le r' indicates placed on the right.",
-        default="auto")
 
-    # upper right
 
-    parser.add_argument(
-        "-owic", dest="only_wic",
-        help="Only calculate site WIC value. Off by default. If required, please specify ‘-owic y’.",
-        type=str,
-        default="n")
+    site_ic_csv_path = parameter_dic["input_wic"]
 
-    parser.add_argument(
-        "-e", dest="engrave",
-        help="Write the file name to sequence names in batches. By specifying a directory containing one or multiple sequence files (*.fasta).",
-        default="")
+    if site_ic_csv_path == "":
 
-    parser.add_argument(
-        "-en", dest="export_name",
-        help="Export all sequence name of a *.fasta file.",
-        default="")
+        print(">>> Treat " + query_seq_prefix + " as a potential recombination lineage..." + "\n")
 
-    parser.add_argument(
-        "-o", dest="outdir",
-        help="Output directory to store all results.",
-        type=str,
-        default="")
+        print(">>> " + "VirusRecom starts calculating weighted information content from each lineage..." + "\n")
 
+        site_ic_csv_path = wic_compute_engine(seq_file_path,
+                                              query_seq_prefix,
+                                              lineage_list,
+                                              parameter_dic,
+                                              site_dir)
 
-    parser.add_argument(
-        "--block",
-        dest="block_size",
-        help="Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000.",
-        type=int,
-        default=40000)
 
+        if parameter_dic["only_wic"].upper() == "Y":
 
-    parser.add_argument(
-        "--no_wic_fig",
-        dest="no_wic_figure",
-        action="store_true",
-        help="Do not draw the image of WICs.")
+            print(">>> Finished, the output file is "
+                  + "'" + site_ic_csv_path + "'"
+                  + "\n")
 
+            return
 
-    parser.add_argument(
-        "--no_mwic_fig",
-        dest="no_mwic_figure",
-        action="store_true",
-        help="Do not draw the image of mWICs.")
-
-
-    myargs = parser.parse_args(sys.argv[1:])
-
-    return myargs
-
-
-
-
-def starts():
-
-    print("\n" + "-------------------------------------------------")
-
-    print("  Name: Virus Recombination (VirusRecom)")
-
-    print(
-        "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
-
-    print("  Version: 1.3 (2024-07-23)")
-
-    print("  Author: Zhi-Jian Zhou")
-
-    print("  Citation: Brief Bioinform. 2023 Jan 19;24(1)")
-
-    print("-------------------------------------------------" + "\n")
-
-
-    myargs = parameter()
-
-    start = datetime.today().now()
-
-
-    #  parameter
-
-    parameter_dic = {}
-
-    parameter_dic["aligned_seq"] = myargs.alignment  # path of the aligned sequence file
-
-    parameter_dic["unaligned_seq"] = myargs.unalignment   # path of the unaligned sequence file
-
-    parameter_dic["align_tool"] = myargs.align_tool  #  alignment tool used for no-aligned sequence file
-
-    parameter_dic["input_wic"] = myargs.input_wic.replace("\\", "/")     # input_wic, if you have
-
-    parameter_dic["query_lineage_name"] = myargs.query         #  the name of query lineage
-
-    parameter_dic["lineage_file"] = myargs.lineages          # other lineages
-
-    parameter_dic["gaps_use"] = myargs.gap.strip().upper()    #  strategy of handling gap
-
-    parameter_dic["method"] = myargs.method.strip().upper()   #  Scan method
-
-    parameter_dic["windows_size"] = myargs.window    #  window size
-
-    parameter_dic["step_size"] = myargs.step     #  step size
-
-    parameter_dic["max_recom_fragment"] = myargs.max_region  #  maximum recombination region
-
-    parameter_dic["recom_percentage"] = myargs.percentage  #  the specific cutoff threshold of proportion
-
-    parameter_dic["cumulative_major"] = myargs.cumulative
-
-    parameter_dic["breakpoints"] =  myargs.breakpoint.strip()  #  whether to search for recombination breakpoints
-
-    parameter_dic["breakwins"] = myargs.breakwin  #  Window size used to search for recombination breakpoints
-
-    parameter_dic["thread_num"] = int(myargs.thread)  #  thread
-
-    parameter_dic["y_start"] = myargs.y_start  #  Y-axis starting point when plotting
-
-    parameter_dic["legend"] = myargs.legend
-
-    parameter_dic["only_wic"] = myargs.only_wic.strip().upper()
-
-    parameter_dic["engrave_name"] = myargs.engrave
-
-    parameter_dic["export_name"] = myargs.export_name
-
-    parameter_dic["out_dir"] = myargs.outdir.replace("\\", "/")  # output directory
-
-    parameter_dic["no_wic_figure"] = myargs.no_wic_figure
-
-    parameter_dic["no_mwic_figure"] = myargs.no_mwic_figure
-
-    parameter_dic["block_size"] = int(myargs.block_size)
-
-
-    print(myargs)
-
-    print("\n")
-
-
-    make_dir(parameter_dic["out_dir"])
-
-
-    with open(parameter_dic["out_dir"] + "/" + "input-parameter.txt",
-              "w", encoding="utf-8") as input_para:
-
-        input_para.write(
-            "the used parameter of virusrecom in command-line interface."
-            + "\n" * 2)
-
-        for key in list(parameter_dic.keys()):
-            input_para.write(key + "\t" + str(parameter_dic[key]) + "\n")
-
-    # update dic
-
-    if parameter_dic["gaps_use"].upper() == "N":
-
-        parameter_dic["calEnt_use"] = calEnt
-        parameter_dic["max_mic"] = 2
+        else:
+            pass
 
     else:
-        parameter_dic["calEnt_use"] = calEnt_gap
-
-        parameter_dic["max_mic"] = np.log2(5)
+        pass
 
 
-    others = others_analysis(parameter_dic)
 
-    if others:
-        sys.exit()
+    sites_probability_data = pd.read_csv(site_ic_csv_path,
+                                         sep=",",
+                                         header=0)
+
+    lineage_name_list = list(sites_probability_data.columns[2:])
+
+    # print(lineage_name_list)
+
+    current_site_list = sites_probability_data["Current_Index"]
+
+    original_site_list = sites_probability_data["Original_Index"]
+
+    sites_count = len(current_site_list)
+
+    site_map_dic = {}
+
+    for n in range(len(current_site_list)):
+        original_site_index = str(original_site_list[n])
+
+        current_site_index = str(current_site_list[n])
+
+        site_map_dic[current_site_index] = original_site_index
 
 
-    exceptions_label = handle_exceptions(parameter_dic)
 
-    if exceptions_label:
-        sys.exit()
+    if not parameter_dic["no_wic_figure"]:
+
+        site_ic_fig = (site_dir + "/"
+                       + query_seq_prefix
+                       + "_site_WIC_from_lineages.pdf")
+
+        wic_plot(lineage_name_list, original_site_list,
+                 sites_probability_data, query_seq_prefix, site_ic_fig)
 
 
-    query_prefix = parameter_dic["query_lineage_name"]
+    make_dir(slide_window_dir)
+
+    mwic_out_table = (slide_window_dir + "/"
+                      + query_seq_prefix
+                      + "_mWIC_from_lineages.xlsx")
+
+    window_ic_fig = (slide_window_dir + "/"
+                     + query_seq_prefix
+                     + "_mWIC_from_lineages.pdf")
+
+    print(">>> " + "VirusRecom starts scanning using sliding window ..." + "\n")
 
 
-    if parameter_dic["input_wic"] != "":
+    step_probability_data, slither_window_list = mwic_calculation(
+        sites_probability_data,
+        lineage_name_list,
+        sites_count, site_map_dic,
+        windows_size, step_size,
+        mwic_out_table,
+        parameter_dic["thread_num"])
 
-        virus_infor_calculate("",
-                              query_prefix,
-                              [],
-                              parameter_dic,
-                              parameter_dic["out_dir"])
 
+    window_center_original = step_probability_data["Central_position(original)"]
+
+
+    if not parameter_dic["no_mwic_figure"]:
+
+        mwic_plot(is_use_gap,
+                  lineage_name_list,
+                  window_center_original,
+                  step_probability_data,
+                  query_seq_prefix,
+                  window_ic_fig,
+                  y_start,
+                  legend_location)
+
+
+    recombination_frag = {}
+
+
+    for each_lineage in lineage_name_list:
+
+        if not recombination_frag.__contains__(each_lineage):
+            recombination_frag[each_lineage] = []
+
+        potential_frag_list = []
+
+        linegae_data_list = list(step_probability_data[
+                                     each_lineage])
+
+        for n in range(len(linegae_data_list)):
+
+            line_ic_all = list(step_probability_data.iloc[n,2:])
+
+            linegae_mwic = linegae_data_list[n]
+
+            if (linegae_mwic == max(line_ic_all)
+                    and linegae_mwic / max_mic >= recom_percentage):
+
+                windows_center = slither_window_list[n][2]
+
+                potential_frag_list.append(windows_center)
+
+        recombination_frag[each_lineage] = potential_frag_list
+
+    # print(recombination_frag)
+
+
+    recom_region_dic = recomsplicing(sites_probability_data,
+                                     sites_count,
+                                     lineage_name_list,
+                                     recombination_frag,
+                                     step_size, max_mic,
+                                     max_recom_fragment,
+                                     recom_percentage)
+
+
+    parents_region = {}
+
+    for each_lineage in recom_region_dic:
+        region_list = recom_region_dic[each_lineage]
+
+        parents_region[each_lineage] = []
+
+        range_list = []
+
+        for each_region in region_list:
+            each_region_s = each_region[0] + 1
+            each_region_n = each_region[1] + 1
+
+            region_range = int(site_map_dic[str(each_region_n)]) - int(
+                site_map_dic[str(each_region_s)])
+
+            range_list.append(region_range)
+
+        parents_region[each_lineage].append(sum(range_list))
+
+    # print(parents_region)
+
+    major_parent = ""
+
+
+    try:
+
+        major_parent = max(parents_region, key=parents_region.get)
+
+    except:
+        print("    " + "No significant recombination events were found in "
+              + query_seq_prefix + "\n")
+
+        print("    " +
+            "Note: Please check whether it is a false negative caused by a higher cp value given!"
+              + "\n")
+
+        identify_records_path = (sub_outdir + "/"
+                             + "Possible_recombination_event"
+                             + "_detailed.txt")
+
+        with open(identify_records_path, "w",
+                  encoding="utf-8") as identify_report_file:
+
+            identify_report_file.write(
+                "No significant recombination events were found in "
+
+                + query_seq_prefix + "\n"
+                                     "Please check whether it is a false negative caused by a higher cp value given!")
+
+        final_result_path = (sub_outdir + "/"
+                                + "Possible_recombination_event"
+                                + "_conciseness.txt")
+
+        with open(final_result_path, "w",
+                  encoding="utf-8") as final_result_file:
+
+            final_result_file.write(
+                "No significant recombination event were found in "
+                + query_seq_prefix + "\n"
+                + "Please check whether it is a false negative caused by a higher cp value given!")
+
+        return
+
+    finally:
+        pass
+
+
+
+    major_parent_ic = sum(list(sites_probability_data[major_parent]))
+
+    mean_major_parent = major_parent_ic / sites_count
+
+    if cumulative_major.upper() == "Y":
+
+        accumulation_ic_list = []
+
+        for lineage in lineage_name_list:
+            accumulation_ic_list.append([lineage, sum(
+                list(sites_probability_data[lineage])) / sites_count])
+
+        hit_list_sort = sorted(accumulation_ic_list,
+                               key=lambda x: x[1])
+
+        max_ic_lineage = hit_list_sort[-1][0]
+
+        if max_ic_lineage != major_parent:
+            major_parent = max_ic_lineage
+
+
+        major_parent_ic = sum(list(sites_probability_data[major_parent]))
+        mean_major_parent = major_parent_ic / sites_count
 
     else:
+        pass
 
-        seq_alignment_file = handle_input_file(parameter_dic)
-
-        lineage_mark_list = []
-
-        with open(parameter_dic["lineage_file"]) as lineage_file:
-            for line in lineage_file:
-                line = line.strip()
-                if line != "":
-                    lineage_mark_list.append(line)
+    other_parental_markers = False
 
 
-        if query_prefix.upper() != "AUTO":
+    recombination_dic = {}
 
-            out_dir = parameter_dic["out_dir"]
+    significant_recombination = {}
 
-            virus_infor_calculate(seq_alignment_file,
-                                  query_prefix,
-                                  lineage_mark_list,
-                                  parameter_dic,
-                                  out_dir)
+    for each_lineage in recom_region_dic:
+
+        if each_lineage != major_parent:
+
+            recombination_dic[each_lineage] = []
+            significant_recombination[each_lineage] = []
+
+            recom_region_list = recom_region_dic[each_lineage]
+
+            for each_region in recom_region_list:
+                each_region_start = each_region[0]
+                each_region_end = each_region[1]
+
+                this_lineage_ic_count = list(
+                    sites_probability_data[each_lineage][
+                    each_region_start:each_region_end])
+
+                major_parent_ic_count = list(
+                    sites_probability_data[major_parent][
+                    each_region_start:each_region_end])
+
+                region_mwic = sum(this_lineage_ic_count) / (
+                        each_region_end - each_region_start + 1)
+
+                left_start_site_original = site_map_dic[
+                    str(each_region_start + 1)]
+
+                right_end_site_original = site_map_dic[
+                    str(min(each_region_end + 1, sites_count))]
+
+                try:
+
+                    zihe_test = stats.mannwhitneyu(this_lineage_ic_count,
+                                                   major_parent_ic_count,
+                                                   alternative="two-sided")
+
+                    p_value = zihe_test[1]
+
+                    recombination_dic[each_lineage].append([
+                        left_start_site_original + " to " +
+                        right_end_site_original + "(mWIC: " + str(
+                            region_mwic) + ")", "p_value: " + str(p_value)])
+
+                    if p_value < 0.05:
+                        other_parental_markers = True
+
+                        significant_recombination[each_lineage].append([
+                            left_start_site_original + " to " +
+                            right_end_site_original + "(mWIC: " + str(
+                                region_mwic) + ")", "p_value: " + str(p_value)])
 
 
-        elif query_prefix.upper() == "AUTO":
+                except:
 
-            for each_lineage in lineage_mark_list:
-                query_lineage_run = each_lineage
+                    recombination_dic[each_lineage].append([
+                        left_start_site_original + " to " +
+                        right_end_site_original, "p_value: 1"])
 
-                new_lineage_name_list = []
-
-                for lineage in lineage_mark_list:
-                    if lineage != query_lineage_run:
-                        new_lineage_name_list.append(lineage)
-
-                sub_outdir = parameter_dic["out_dir"] + "/Results/" + query_lineage_run
-
-                make_dir(sub_outdir)
-
-                virus_infor_calculate(seq_alignment_file,
-                                      query_lineage_run,
-                                      new_lineage_name_list,
-                                      parameter_dic,
-                                      sub_outdir)
+                finally:
+                    pass
 
 
 
-    duration = datetime.today().now() - start
+    for i in list(significant_recombination.keys()):
+        if not significant_recombination[i]:  #  == []
+            del significant_recombination[i]
 
-    print(">>> " + "Take " + str(duration) + " seconds in total." + "\n")
+    if other_parental_markers:  #  == True
+
+        print("\n" + "    "
+              + "Possible major parent: " + major_parent
+              + " (global mWIC: " + str(mean_major_parent) + ")" + "\n")
+
+        print("    " + "Other possible parents and recombination region (map at the alignment): " + "\n")
+
+        for each_lineage in significant_recombination:
+            print("    " + each_lineage, significant_recombination[each_lineage])
+            print("\n")
+
+    else:
+        print("    " + "No significant recombination events were found in "
+              + query_seq_prefix + "\n")
 
 
-    sys.exit()
+    # print(recombination_dic)
+
+    run_record = sub_outdir + "/" + "run_record"
+
+    make_dir(run_record)
+
+    identify_records_path = (run_record + "/" + "identify_logs_detailed.txt")
+
+    with open(identify_records_path, "w", encoding="utf-8") as identify_report_file:
+
+        if not other_parental_markers:
+            identify_report_file.write(
+                "No significant recombination events were found in "
+
+                + query_seq_prefix + "\n" * 2
+                + "The most similar lineage: "
+                + major_parent
+                + "(global mWIC: " + str(mean_major_parent) + ")"
+                + "\n" * 2
+                + "The similar other lineage and not significant recombination regions (p>0.05):"
+                + "\n")
+
+
+        else:
+
+            identify_report_file.write("Possible major parent: "
+                                    + major_parent
+                                    + "(global mWIC: "
+                                    + str(mean_major_parent)
+                                    + ")"
+                                    + "\n" * 2
+                                    + "Possible other parents and recombination regions:"
+                                    + "\n")
+
+        for key in recombination_dic:
+            event_list = recombination_dic[key]
+
+            identify_report_file.write(key + "\t")
+
+            for each_event in event_list:
+                identify_report_file.write(", ".join(each_event) + "\t")
+
+            identify_report_file.write("\n")
+
+        identify_report_file.write(
+            "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
+                   "p-value less than 0.05 indicates a significant difference.")
 
 
 
-if __name__ == "__main__":
-    starts()
+    final_result_path = (sub_outdir + "/"
+                            + "Possible_recombination_event_conciseness.txt")
+
+    with open(final_result_path, "w", encoding="utf-8") as final_result_file:
+
+        if not other_parental_markers:  #  == False
+            final_result_file.write(
+                "No significant recombination events were found in "
+                + query_seq_prefix)
+
+            final_result_file.write(
+                "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
+                       "p-value less than 0.05 indicates a significant difference.")
+
+
+        else:
+            final_result_file.write("Possible major parent: "
+                                  + major_parent
+                                  + "(global mWIC: " + str(
+                mean_major_parent) + ")"
+                                  + "\n" * 2
+                                  + "Other possible parents and significant recombination regions (p<0.05):"
+                                  + "\n")
+
+            for key in significant_recombination:
+                event_list = significant_recombination[key]
+
+                final_result_file.write(key + "\t")
+
+                for each_envent in event_list:
+                    final_result_file.write(", ".join(each_envent) + "\t")
+
+                final_result_file.write("\n")
+
+            final_result_file.write(
+                "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
+                       "p-value less than 0.05 indicates a significant difference.")
+
+
+    if parameter_dic["method"].upper() == "P" and parameter_dic["breakpoints"].upper() == "Y":
+        print("\n" + "    "
+              + "VirusRecom is running the algorithm of search for "
+                     "recombination breakpoint..."
+              + "\n")
+
+        breakwins = parameter_dic["breakwins"]
+
+        recombreak_plot(sites_probability_data,
+                        lineage_name_list,
+                        sites_count,
+                        breakwins,
+                        site_map_dic,
+                        slide_window_dir,
+                        query_seq_prefix,
+                        parameter_dic["thread_num"])
+
