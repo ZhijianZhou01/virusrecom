@@ -9,49 +9,27 @@ Copyright：Copyright (c) Zhi-Jian Zhou
 Time: 2022/4/17 17:29
 
 """
-import numpy as np
-import pandas as pd
 
+import pandas as pd
 import scipy.stats as stats
 
-from my_func import (make_dir, wic_calculation, mwic_calculation,
-                     recomsplicing, wic_plot, mwic_plot, recombreak_plot)
+from my_func import (make_dir, mwic_calculation,
+                     recomsplicing, wic_plot,
+                     mwic_plot,recombreak_plot)
+
+from wic_engine import wic_compute_engine
 
 
 
-
-def virus_infor_calculate(parameter_dic,
-                          seq_matrix,
+def virus_infor_calculate(seq_file_path,
                           query_seq_prefix,
-                          lineage_name_list,
+                          lineage_list,
+                          parameter_dic,
                           sub_outdir):
-
-
-    site_dir = sub_outdir + "/" + "WICs_of_sites"
-
-    slide_window_dir = sub_outdir + "/" + "WICs_of_slide_window"
-
-    site_ic_fig = (site_dir + "/"
-                   + query_seq_prefix
-                   + "_site_WIC_from_lineages.pdf")
-
-    mwic_out_table = (slide_window_dir + "/"
-                      + query_seq_prefix
-                      + "_mWIC_from_lineages.xlsx")
-
-    window_ic_fig = (slide_window_dir + "/"
-                     + query_seq_prefix
-                     + "_mWIC_from_lineages.pdf")
-
-
 
     is_use_gap = parameter_dic["gaps_use"]
 
-    max_mic = 2
-
-    if is_use_gap.upper() == "Y":
-        max_mic = np.log2(5)
-
+    max_mic = parameter_dic["max_mic"]
 
     windows_size = parameter_dic["windows_size"]
 
@@ -67,21 +45,28 @@ def virus_infor_calculate(parameter_dic,
 
     legend_location = parameter_dic["legend"]
 
+    site_dir = sub_outdir + "/" + "WICs_of_sites"
 
+    slide_window_dir = sub_outdir + "/" + "WICs_of_slide_window"
 
     make_dir(site_dir)
+
+
 
     site_ic_csv_path = parameter_dic["input_wic"]
 
     if site_ic_csv_path == "":
 
-        print(">>> Treat " + query_seq_prefix
-            + " as a potential recombination lineage..." + "\n")
+        print(">>> Treat " + query_seq_prefix + " as a potential recombination lineage..." + "\n")
 
-        site_ic_csv_path = wic_calculation(seq_matrix, lineage_name_list,
-                                           parameter_dic["calEnt_use"],
-                                           site_dir, query_seq_prefix,
-                                           parameter_dic["thread_num"])
+        print(">>> " + "VirusRecom starts calculating weighted information content from each lineage..." + "\n")
+
+        site_ic_csv_path = wic_compute_engine(seq_file_path,
+                                              query_seq_prefix,
+                                              lineage_list,
+                                              parameter_dic,
+                                              site_dir)
+
 
         if parameter_dic["only_wic"].upper() == "Y":
 
@@ -98,7 +83,9 @@ def virus_infor_calculate(parameter_dic,
         pass
 
 
-    sites_probability_data = pd.read_csv(site_ic_csv_path, sep=",",
+
+    sites_probability_data = pd.read_csv(site_ic_csv_path,
+                                         sep=",",
                                          header=0)
 
     lineage_name_list = list(sites_probability_data.columns[2:])
@@ -120,37 +107,59 @@ def virus_infor_calculate(parameter_dic,
 
         site_map_dic[current_site_index] = original_site_index
 
-    if parameter_dic["no_wic_figure"] != True:
+
+
+    if not parameter_dic["no_wic_figure"]:
+
+        site_ic_fig = (site_dir + "/"
+                       + query_seq_prefix
+                       + "_site_WIC_from_lineages.pdf")
+
         wic_plot(lineage_name_list, original_site_list,
                  sites_probability_data, query_seq_prefix, site_ic_fig)
 
 
-    print("    " + "VirusRecom starts scanning using sliding window ..." + "\n")
-
     make_dir(slide_window_dir)
+
+    mwic_out_table = (slide_window_dir + "/"
+                      + query_seq_prefix
+                      + "_mWIC_from_lineages.xlsx")
+
+    window_ic_fig = (slide_window_dir + "/"
+                     + query_seq_prefix
+                     + "_mWIC_from_lineages.pdf")
+
+    print(">>> " + "VirusRecom starts scanning using sliding window ..." + "\n")
+
 
     step_probability_data, slither_window_list = mwic_calculation(
         sites_probability_data,
         lineage_name_list,
         sites_count, site_map_dic,
         windows_size, step_size,
-        mwic_out_table,parameter_dic["thread_num"])
+        mwic_out_table,
+        parameter_dic["thread_num"])
 
 
     window_center_original = step_probability_data["Central_position(original)"]
 
-    if parameter_dic["no_mwic_figure"] != True:
-        mwic_plot(is_use_gap,lineage_name_list, window_center_original,
-                  step_probability_data, query_seq_prefix, window_ic_fig,
-                  y_start, legend_location)
 
+    if not parameter_dic["no_mwic_figure"]:
+
+        mwic_plot(is_use_gap,
+                  lineage_name_list,
+                  window_center_original,
+                  step_probability_data,
+                  query_seq_prefix,
+                  window_ic_fig,
+                  y_start,
+                  legend_location)
 
 
     recombination_frag = {}
 
 
     for each_lineage in lineage_name_list:
-
 
         if not recombination_frag.__contains__(each_lineage):
             recombination_frag[each_lineage] = []
@@ -162,8 +171,7 @@ def virus_infor_calculate(parameter_dic,
 
         for n in range(len(linegae_data_list)):
 
-            line_ic_all = list(step_probability_data.iloc[n,
-                               2:])
+            line_ic_all = list(step_probability_data.iloc[n,2:])
 
             linegae_mwic = linegae_data_list[n]
 
@@ -178,8 +186,10 @@ def virus_infor_calculate(parameter_dic,
 
     # print(recombination_frag)
 
+
     recom_region_dic = recomsplicing(sites_probability_data,
-                                     sites_count, lineage_name_list,
+                                     sites_count,
+                                     lineage_name_list,
                                      recombination_frag,
                                      step_size, max_mic,
                                      max_recom_fragment,
@@ -211,7 +221,6 @@ def virus_infor_calculate(parameter_dic,
     major_parent = ""
 
 
-
     try:
 
         major_parent = max(parents_region, key=parents_region.get)
@@ -224,27 +233,27 @@ def virus_infor_calculate(parameter_dic,
             "Note: Please check whether it is a false negative caused by a higher cp value given!"
               + "\n")
 
-        recom_report_path = (sub_outdir + "/"
+        identify_records_path = (sub_outdir + "/"
                              + "Possible_recombination_event"
                              + "_detailed.txt")
 
-        with open(recom_report_path, "w",
-                  encoding="utf-8") as recom_report_file:
+        with open(identify_records_path, "w",
+                  encoding="utf-8") as identify_report_file:
 
-            recom_report_file.write(
+            identify_report_file.write(
                 "No significant recombination events were found in "
 
                 + query_seq_prefix + "\n"
                                      "Please check whether it is a false negative caused by a higher cp value given!")
 
-        recom_report_jc_path = (sub_outdir + "/"
+        final_result_path = (sub_outdir + "/"
                                 + "Possible_recombination_event"
                                 + "_conciseness.txt")
 
-        with open(recom_report_jc_path, "w",
-                  encoding="utf-8") as recom_report_jc:
+        with open(final_result_path, "w",
+                  encoding="utf-8") as final_result_file:
 
-            recom_report_jc.write(
+            final_result_file.write(
                 "No significant recombination event were found in "
                 + query_seq_prefix + "\n"
                 + "Please check whether it is a false negative caused by a higher cp value given!")
@@ -253,6 +262,7 @@ def virus_infor_calculate(parameter_dic,
 
     finally:
         pass
+
 
 
     major_parent_ic = sum(list(sites_probability_data[major_parent]))
@@ -285,9 +295,8 @@ def virus_infor_calculate(parameter_dic,
     other_parental_markers = False
 
 
-
-
     recombination_dic = {}
+
     significant_recombination = {}
 
     for each_lineage in recom_region_dic:
@@ -353,12 +362,11 @@ def virus_infor_calculate(parameter_dic,
 
 
 
-
     for i in list(significant_recombination.keys()):
-        if significant_recombination[i] == []:
+        if not significant_recombination[i]:  #  == []
             del significant_recombination[i]
 
-    if other_parental_markers == True:
+    if other_parental_markers:  #  == True
 
         print("\n" + "    "
               + "Possible major parent: " + major_parent
@@ -377,14 +385,16 @@ def virus_infor_calculate(parameter_dic,
 
     # print(recombination_dic)
 
-    recom_report_path = (sub_outdir + "/"
-                         + "Possible_recombination_event"
-                         + "_detailed.txt")
+    run_record = sub_outdir + "/" + "run_record"
 
-    with open(recom_report_path, "w", encoding="utf-8") as recom_report_file:
+    make_dir(run_record)
 
-        if other_parental_markers == False:
-            recom_report_file.write(
+    identify_records_path = (run_record + "/" + "identify_logs_detailed.txt")
+
+    with open(identify_records_path, "w", encoding="utf-8") as identify_report_file:
+
+        if not other_parental_markers:
+            identify_report_file.write(
                 "No significant recombination events were found in "
 
                 + query_seq_prefix + "\n" * 2
@@ -398,7 +408,7 @@ def virus_infor_calculate(parameter_dic,
 
         else:
 
-            recom_report_file.write("Possible major parent: "
+            identify_report_file.write("Possible major parent: "
                                     + major_parent
                                     + "(global mWIC: "
                                     + str(mean_major_parent)
@@ -410,36 +420,36 @@ def virus_infor_calculate(parameter_dic,
         for key in recombination_dic:
             event_list = recombination_dic[key]
 
-            recom_report_file.write(key + "\t")
+            identify_report_file.write(key + "\t")
 
-            for each_envent in event_list:
-                recom_report_file.write(", ".join(each_envent) + "\t")
+            for each_event in event_list:
+                identify_report_file.write(", ".join(each_event) + "\t")
 
-            recom_report_file.write("\n")
+            identify_report_file.write("\n")
 
-        recom_report_file.write(
+        identify_report_file.write(
             "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
                    "p-value less than 0.05 indicates a significant difference.")
 
 
-    recom_report_jc_path = (sub_outdir + "/"
-                            + "Possible_recombination_event"
-                            + "_conciseness.txt")
 
-    with open(recom_report_jc_path, "w", encoding="utf-8") as recom_report_jc:
+    final_result_path = (sub_outdir + "/"
+                            + "Possible_recombination_event_conciseness.txt")
 
-        if other_parental_markers == False:
-            recom_report_jc.write(
+    with open(final_result_path, "w", encoding="utf-8") as final_result_file:
+
+        if not other_parental_markers:  #  == False
+            final_result_file.write(
                 "No significant recombination events were found in "
                 + query_seq_prefix)
 
-            recom_report_jc.write(
+            final_result_file.write(
                 "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
                        "p-value less than 0.05 indicates a significant difference.")
 
 
         else:
-            recom_report_jc.write("Possible major parent: "
+            final_result_file.write("Possible major parent: "
                                   + major_parent
                                   + "(global mWIC: " + str(
                 mean_major_parent) + ")"
@@ -450,21 +460,19 @@ def virus_infor_calculate(parameter_dic,
             for key in significant_recombination:
                 event_list = significant_recombination[key]
 
-                recom_report_jc.write(key + "\t")
+                final_result_file.write(key + "\t")
 
                 for each_envent in event_list:
-                    recom_report_jc.write(", ".join(each_envent) + "\t")
+                    final_result_file.write(", ".join(each_envent) + "\t")
 
-                recom_report_jc.write("\n")
+                final_result_file.write("\n")
 
-            recom_report_jc.write(
+            final_result_file.write(
                 "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
                        "p-value less than 0.05 indicates a significant difference.")
 
 
-
-    if parameter_dic["method"].upper() == "P" and parameter_dic[
-        "breakpoints"].upper() == "Y":
+    if parameter_dic["method"].upper() == "P" and parameter_dic["breakpoints"].upper() == "Y":
         print("\n" + "    "
               + "VirusRecom is running the algorithm of search for "
                      "recombination breakpoint..."
@@ -472,8 +480,12 @@ def virus_infor_calculate(parameter_dic,
 
         breakwins = parameter_dic["breakwins"]
 
-        recombreak_plot(sites_probability_data, lineage_name_list,
-                        sites_count, breakwins,
+        recombreak_plot(sites_probability_data,
+                        lineage_name_list,
+                        sites_count,
+                        breakwins,
                         site_map_dic,
-                        slide_window_dir, query_seq_prefix, parameter_dic["thread_num"])
+                        slide_window_dir,
+                        query_seq_prefix,
+                        parameter_dic["thread_num"])
 
