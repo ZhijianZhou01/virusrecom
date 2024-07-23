@@ -46,11 +46,19 @@ def virus_infor_calculate(seq_file_path,
     legend_location = parameter_dic["legend"]
 
     site_dir = sub_outdir + "/" + "WICs_of_sites"
-
     slide_window_dir = sub_outdir + "/" + "WICs_of_slide_window"
+    run_record = sub_outdir + "/" + "run_record"
 
+    make_dir(run_record)
     make_dir(site_dir)
+    make_dir(slide_window_dir)
 
+
+    identify_records_path = (run_record + "/"
+                             + "identify_logs_detailed.txt")
+
+    final_result_path = (sub_outdir + "/"
+                         + "Possible_recombination_event_conciseness.txt")
 
 
     site_ic_csv_path = parameter_dic["input_wic"]
@@ -59,7 +67,7 @@ def virus_infor_calculate(seq_file_path,
 
         print(">>> Treat " + query_seq_prefix + " as a potential recombination lineage..." + "\n")
 
-        print(">>> " + "VirusRecom starts calculating weighted information content from each lineage..." + "\n")
+        print(">>> " + "VirusRecom starts calculating the weighted information content from each lineage..." + "\n")
 
         site_ic_csv_path = wic_compute_engine(seq_file_path,
                                               query_seq_prefix,
@@ -118,8 +126,6 @@ def virus_infor_calculate(seq_file_path,
         wic_plot(lineage_name_list, original_site_list,
                  sites_probability_data, query_seq_prefix, site_ic_fig)
 
-
-    make_dir(slide_window_dir)
 
     mwic_out_table = (slide_window_dir + "/"
                       + query_seq_prefix
@@ -233,9 +239,6 @@ def virus_infor_calculate(seq_file_path,
             "Note: Please check whether it is a false negative caused by a higher cp value given!"
               + "\n")
 
-        identify_records_path = (sub_outdir + "/"
-                             + "Possible_recombination_event"
-                             + "_detailed.txt")
 
         with open(identify_records_path, "w",
                   encoding="utf-8") as identify_report_file:
@@ -243,12 +246,9 @@ def virus_infor_calculate(seq_file_path,
             identify_report_file.write(
                 "No significant recombination events were found in "
 
-                + query_seq_prefix + "\n"
+                + query_seq_prefix + "\n"+
                                      "Please check whether it is a false negative caused by a higher cp value given!")
 
-        final_result_path = (sub_outdir + "/"
-                                + "Possible_recombination_event"
-                                + "_conciseness.txt")
 
         with open(final_result_path, "w",
                   encoding="utf-8") as final_result_file:
@@ -385,11 +385,6 @@ def virus_infor_calculate(seq_file_path,
 
     # print(recombination_dic)
 
-    run_record = sub_outdir + "/" + "run_record"
-
-    make_dir(run_record)
-
-    identify_records_path = (run_record + "/" + "identify_logs_detailed.txt")
 
     with open(identify_records_path, "w", encoding="utf-8") as identify_report_file:
 
@@ -433,15 +428,12 @@ def virus_infor_calculate(seq_file_path,
 
 
 
-    final_result_path = (sub_outdir + "/"
-                            + "Possible_recombination_event_conciseness.txt")
-
     with open(final_result_path, "w", encoding="utf-8") as final_result_file:
 
         if not other_parental_markers:  #  == False
             final_result_file.write(
                 "No significant recombination events were found in "
-                + query_seq_prefix)
+                + query_seq_prefix + "\n")
 
             final_result_file.write(
                 "\n" + "Significance test of recombinant regions using Mann-Whitney-U test with two-tailed probabilities, "
