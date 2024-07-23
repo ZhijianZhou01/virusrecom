@@ -7,7 +7,7 @@ with open("README.md", "r",encoding="utf-8") as fh:
 
 setuptools.setup(
   name="virusrecom",
-  version="1.3.1",
+  version="1.3.2",
   author="Zhi-Jian Zhou",
   author_email="zjzhou@hnu.edu.cn",
   description="An information-theory-based method for recombination detection of viral lineages.",
