@@ -228,7 +228,7 @@ def starts():
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.3 (2024-07-23)")
+    print("  Version: 1.3.2 (2024-07-23)")
 
     print("  Author: Zhi-Jian Zhou")
 
