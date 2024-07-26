@@ -459,9 +459,11 @@ def mwic_calculation(sites_probability_data,
         step_probability_data[lineage_mwic[0]] = lineage_mwic[1]
 
 
-    step_probability_data.to_excel(
-        excel_writer=output_path,
-        index=False)
+    # step_probability_data.to_excel(
+    #     excel_writer=output_path,
+    #     index=False)
+
+    step_probability_data.to_csv(output_path, index=False, sep=",")
 
     return step_probability_data,slither_window_list
 
@@ -894,4 +896,5 @@ def recombreak_plot(sites_probability_data,
     plt.clf()
 
     plt.close()
+
 
