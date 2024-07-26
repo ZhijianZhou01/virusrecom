@@ -193,7 +193,7 @@ def parameter():
     parser.add_argument(
         "--block",
         dest="block_size",
-        help="Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000.",
+        help="Specifies the maximum number of sites per sub-block, different sub-blocks in sequence file will be sequentially loaded to calculate WIC. Default: 40000 sites.",
         type=int,
         default=40000)
 
@@ -228,7 +228,7 @@ def starts():
     print(
         "  Description: Detecting recombination of viral lineages (or subtypes) using information theory.")
 
-    print("  Version: 1.3.2 (2024-07-23)")
+    print("  Version: 1.3.5 (2024-07-26)")
 
     print("  Author: Zhi-Jian Zhou")
 
@@ -410,3 +410,4 @@ def starts():
 
 if __name__ == "__main__":
     starts()
+
