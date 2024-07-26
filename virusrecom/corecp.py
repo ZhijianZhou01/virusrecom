@@ -63,18 +63,18 @@ def virus_infor_calculate(seq_file_path,
 
     site_ic_csv_path = parameter_dic["input_wic"]
 
+
     if site_ic_csv_path == "":
 
         print(">>> Treat " + query_seq_prefix + " as a potential recombination lineage..." + "\n")
 
         print(">>> " + "VirusRecom starts calculating the weighted information content from each lineage..." + "\n")
 
-        site_ic_csv_path = wic_compute_engine(seq_file_path,
+        sites_probability_data = wic_compute_engine(seq_file_path,
                                               query_seq_prefix,
                                               lineage_list,
                                               parameter_dic,
                                               site_dir)
-
 
         if parameter_dic["only_wic"].upper() == "Y":
 
@@ -84,17 +84,18 @@ def virus_infor_calculate(seq_file_path,
 
             return
 
+
         else:
             pass
 
+
     else:
-        pass
 
-
-
-    sites_probability_data = pd.read_csv(site_ic_csv_path,
+        sites_probability_data = pd.read_csv(site_ic_csv_path,
                                          sep=",",
                                          header=0)
+
+    # print(sites_probability_data)
 
     lineage_name_list = list(sites_probability_data.columns[2:])
 
@@ -116,7 +117,6 @@ def virus_infor_calculate(seq_file_path,
         site_map_dic[current_site_index] = original_site_index
 
 
-
     if not parameter_dic["no_wic_figure"]:
 
         site_ic_fig = (site_dir + "/"
@@ -129,7 +129,7 @@ def virus_infor_calculate(seq_file_path,
 
     mwic_out_table = (slide_window_dir + "/"
                       + query_seq_prefix
-                      + "_mWIC_from_lineages.xlsx")
+                      + "_mWIC_from_lineages.csv")
 
     window_ic_fig = (slide_window_dir + "/"
                      + query_seq_prefix
