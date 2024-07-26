@@ -260,8 +260,10 @@ def wic_calculation(seq_data,
 
     columns_name_list = ["Original_Index", "Current_Index"] + lineage_name_list
 
-    sites_wic_data = pd.DataFrame(columns=columns_name_list,
-                                  index=current_site_list)
+    # sites_wic_data = pd.DataFrame(columns=columns_name_list,
+    #                               index=current_site_list)
+
+    sites_wic_data = pd.DataFrame(columns=columns_name_list)
 
     sites_wic_data["Original_Index"] = original_site_list
 
@@ -367,19 +369,20 @@ def wic_compute_engine(seq_file_path,
 
     sites_probability_data = sites_wic_pd_list[0]
 
+
     for cookies_num in range(1,len(sites_wic_pd_list)):
         sites_probability_data = pd.concat([sites_probability_data,sites_wic_pd_list[cookies_num]],
                                            ignore_index= True)
 
 
-    site_ic_table = (site_dir + "/"
-                     + query_seq_prefix
-                     + "_site_WIC_from_lineages.xlsx")
+#    site_ic_table = (site_dir + "/"
+#                     + query_seq_prefix
+#                     + "_site_WIC_from_lineages.xlsx")
 
     site_ic_csv = (site_dir + "/"+ query_seq_prefix + "_site_WIC.csv")
 
-    sites_probability_data.to_excel(excel_writer=site_ic_table,
-                            index=False)
+    # sites_probability_data.to_excel(excel_writer=site_ic_table,
+    #                         index=False)
 
     sites_probability_data.to_csv(site_ic_csv, index=False, sep=",")
 
@@ -391,11 +394,5 @@ def wic_compute_engine(seq_file_path,
     #
     # print(">>> " + f"Occupied {used_memory}MB memory in the calculations of sites' WIC." + "\n")
 
-    return site_ic_csv
-
-
-
-
-
-
+    return sites_probability_data
 
