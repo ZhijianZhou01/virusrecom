@@ -270,7 +270,7 @@ virusrecom -e input_directory -o outdir
 Therefore, if the file-name of fasta file is a lineage name, the lineage name can be written into the sequence name in batches.
 
 ### 4.4. How to change the color scheme in an image?
-If you own programming skills, you can directly modify the order of the colors in the ```plt_corlor_list.py``` file. If not, you can use output matrix provided by VirusRecom, and they are usually suffixed with ```.xlsx```. 
+If you own programming skills, you can directly modify the order of the colors in the ```plt_corlor_list.py``` file. If not, you can use output matrix provided by VirusRecom, and they are usually suffixed with `.xlsx` or `.csv`. 
 
 ## 5. Citation
 Zhou ZJ, Yang CH, Ye SB, Yu XW, Qiu Y, Ge XY. VirusRecom: an information-theory-based method for recombination detection of viral lineages and its application on SARS-CoV-2. <i>Brief Bioinform</i>. 2023 Jan 19;24(1):bbac513. [doi: 10.1093/bib/bbac513](https://academic.oup.com/bib/article-abstract/24/1/bbac513/6886420). PMID: 36567622.
