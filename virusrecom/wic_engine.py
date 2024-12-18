@@ -35,7 +35,7 @@ def gap_processing(seq_df,gaps_use):
 
         old_site_label = list(seq_df.columns)
 
-        seq_pd_clean = seq_df[~seq_df.isin(["-"])].dropna(axis=1)  # 去除含有gap的列（位点)
+        seq_pd_clean = seq_df[~seq_df.isin(["-"])].dropna(axis=1,how='any')  # 去除含有gap的列（位点)
 
         new_site_label = list(seq_pd_clean.columns)
 
