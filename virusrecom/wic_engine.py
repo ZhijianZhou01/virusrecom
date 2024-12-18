@@ -327,6 +327,9 @@ def wic_compute_engine(seq_file_path,
 
         seq_pd,read_mark = piecewise_read(seq_file_path, block_size, data_blocks)
 
+        # Data Preprocessing: Remove positions (columns) that consist entirely of “-” to adapt to scenarios where subsets are extracted from large alignment files for analysis in the pipeline.
+        seq_pd = seq_pd.loc[:, ~(seq_pd == '-').all()]
+
         seq_pd_clean,gap_record = gap_processing(seq_pd, parameter_dic["gaps_use"])
 
         gap_site_list.append(gap_record)
