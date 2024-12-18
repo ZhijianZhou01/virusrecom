@@ -80,7 +80,7 @@ virusrecom is a command-line-interface program, users can get help documentation
 
 <b>Tip: since version 1.1, virusrecom optimizes the parameters of input-file, which is slightly different from virusrecom v1.0.</b>
 
-<b>The simple help documentation of virusrecom v1.1.3 is as follows.</b>
+<b>The simple help documentation of virusrecom v1.3.5 is as follows.</b>
 
 | Parameter | Description |
 | --- | --- |
