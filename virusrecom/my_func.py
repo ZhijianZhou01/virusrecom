@@ -480,6 +480,7 @@ def recomsplicing(sites_probability_data,
 
     recom_region_dic = {}
 
+
     for each_lineage in recombination_frag:
         lineage_frag_list = recombination_frag[each_lineage]
 
@@ -489,7 +490,7 @@ def recomsplicing(sites_probability_data,
             # print(frag_count)
 
             cursor_site = 1
-            cursor_center = lineage_frag_list[cursor_site - 1]
+            cursor_center = lineage_frag_list[cursor_site - 1] 
 
             detected_area = []
 
@@ -504,9 +505,10 @@ def recomsplicing(sites_probability_data,
                     region_left = max(0, int(
                         cursor_center - step_size / 2))
                     region_right = min(sites_count, int(
-                        lineage_frag_list[i] + step_size / 2))
+                        lineage_frag_list[i] + step_size / 2)) 
 
-                    region_sites_count = region_right - region_left + 1
+                    region_sites_count = region_right - region_left + 1 
+
 
                     lineage_Ri_wic = sum(list(
                         sites_probability_data[each_lineage][
@@ -525,59 +527,66 @@ def recomsplicing(sites_probability_data,
                                 # print(max_lineage_ic)
 
                     if (lineage_Ri_wic > max_lineage_ic
-                            and lineage_Ri_wic / (
-                                    region_sites_count * max_mic) >= recom_percentage):
+                            and lineage_Ri_wic / (region_sites_count * max_mic) >= recom_percentage):
                         breakpoint_judgment.append([i + 1, region_left,
-                                                    region_right,
-                                                    "True"])
+                                                    region_right,"True"]) 
 
                         flage_label = True
 
+                # print(breakpoint_judgment)
+                
                 if cursor_site == frag_count:
                     break
 
                 if flage_label == False:
 
-                    cursor_site = cursor_site + 1
+                    cursor_site = cursor_site + 1 
 
                     cursor_center = lineage_frag_list[cursor_site - 1]
 
-                else:
+                else: 
 
                     first_each_region = breakpoint_judgment[0]
                     first_ri = first_each_region[2] - first_each_region[1] + 1
 
                     if first_ri > max_recom_fragment:
-                        cursor_site = cursor_site + 1
+                        cursor_site = cursor_site + 1 
                         cursor_center = lineage_frag_list[cursor_site - 1]
 
-                    else:
+                    else:  
 
-                        max_Ri = breakpoint_judgment[-1]
+                        max_Ri = breakpoint_judgment[-1] 
+                        max_Ri_sites = max_Ri[2] - max_Ri[1] + 1 
 
-                        max_Ri_sites = max_Ri[2] - max_Ri[1] + 1
-
-                        if max_Ri_sites <= max_recom_fragment:
+                        if max_Ri_sites <= max_recom_fragment: 
                             detected_area.append([max_Ri[1], max_Ri[2]])
 
-                            break
+                            # break
 
-                        else:
+                            if breakpoint_judgment[-1][0] >= frag_count:
+
+                                break 
+
+                            else: 
+                                cursor_site = breakpoint_judgment[-1][0] + 1
+                                cursor_center = lineage_frag_list[cursor_site - 1]
+
+                        else: 
 
                             for n in range(len(breakpoint_judgment)):
                                 each_region = breakpoint_judgment[n]
-                                ri = each_region[2] - each_region[
-                                    1] + 1
+                                ri = each_region[2] - each_region[1] + 1 
 
                                 if ri > max_recom_fragment:
                                     local_max_Ri = breakpoint_judgment[n - 1]
                                     detected_area.append([local_max_Ri[1],
                                                           local_max_Ri[2]])
 
-                                    last_breakpoint = breakpoint_judgment[n - 1][0]
+                                    last_breakpoint = \
+                                        breakpoint_judgment[n - 1][0] 
 
                                     if last_breakpoint == cursor_site:
-                                        cursor_site = cursor_site + 1
+                                        cursor_site = cursor_site + 1 
                                         cursor_center = lineage_frag_list[
                                             cursor_site - 1]
 
@@ -586,18 +595,17 @@ def recomsplicing(sites_probability_data,
                                         cursor_center = lineage_frag_list[
                                             cursor_site - 1]
 
-                                    break
+                                    break  
 
             recom_region_dic[each_lineage] = detected_area
 
 
     for i in list(recom_region_dic.keys()):
-        if not recom_region_dic[i]:  #  == []
+        if not recom_region_dic[i]:
             del recom_region_dic[i]
 
 
     return recom_region_dic
-
 
 
 
