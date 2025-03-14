@@ -1,0 +1,1 @@
+virusrecom -a MERS-CoV.fasta -l lineage.txt -q AUTO -g n -m p -cu y -w 100 -s 20 -cp 0.75 -mr 200 -o out
