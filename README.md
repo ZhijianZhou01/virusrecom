@@ -9,7 +9,6 @@
 ![](https://img.shields.io/github/stars/ZhijianZhou01/virusrecom)
 
 
-
 ## 1. Download and install
 
 VirusRecom is developed based on ```Python 3```, and you can get and install the VirusRecom in a variety of ways.
