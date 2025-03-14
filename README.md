@@ -244,13 +244,18 @@ The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and 
 
 
 ## 4. Common questions
-### 4.1. Default values of parameter 
+### 4.1. Data preparation
+Different software has different requirements for the input data. It involves the scope of the software’s application and its handling of input data. For different viruses, the definition of lineages varies significantly. VirusRecom was initially designed for studying SARS-CoV-2 and uses information content to estimate recombination. It is recommended that the divergence within a lineage should not be too large, as low information content may sometimes easily lead to inaccurate estimate. Since other viruses do not have as fine-grained lineage classifications as SARS-CoV-2, it is necessary to remove sequences with excessive divergence within lineages before using VirusRecom. For some lineages with high internal divergence, may not be appropriate to estimate in lineages manner in VirusRecom, and phylogenetic methods or non-lineage-based approaches might be more appropriate.
+
+Additionally, regardless of the method used to identify recombination events, it is recommended to plot a similarity dot plot for confirmation. This allows for the visualization of the approximate location of recombination breakpoints and the sequence similarity within the recombination region. Similarity dot plots can be generated using software like VirusRecom or Simplot.
+
+### 4.2. Default values of parameter 
 For the value of a parameter, if not specified, the software uses the default value. 
 However, the default value is not suitable for all data. In addition to window size (```-w```) and step size (```-s```) of sliding window, values of ```-cp``` and ```-mr``` also require users to adjust based on the data. 
 
 When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. <b>What is more, users should try different values in multiple runs, which will effectively reduce false positives and false negatives.</b>
 
-### 4.2. How to set the appropriate window size and step size?
+### 4.3. How to set the appropriate window size and step size?
 For the <b>recombination analysis using polymorphic sites</b> (```-m p``` in virusrecom), the following is recommended based on our limited experience,
 
 | Number of polymorphic sites in alignment | window size | step size |
@@ -260,7 +265,7 @@ For the <b>recombination analysis using polymorphic sites</b> (```-m p``` in vir
 
 <b>Note, too large window size can't be used for the alignment with too few polymorphic sites.</b>
 
-### 4.3. How to mark lineage in sequence name?
+### 4.4. How to mark lineage in sequence name?
 Typically, this is part of the data preparation. In virusrecom v1.1, users can easily get it done via ```-e``` parameter. The ```-e``` parameter can engrave file-name to sequence names in batches. The example is as follows:
 ```
 virusrecom -e input_directory -o outdir
@@ -269,7 +274,7 @@ virusrecom -e input_directory -o outdir
 
 Therefore, if the file-name of fasta file is a lineage name, the lineage name can be written into the sequence name in batches.
 
-### 4.4. How to change the color scheme in an image?
+### 4.5. How to change the color scheme in an image?
 If you own programming skills, you can directly modify the order of the colors in the ```plt_corlor_list.py``` file. If not, you can use output matrix provided by VirusRecom, and they are usually suffixed with `.xlsx` or `.csv`. 
 
 ## 5. Citation
