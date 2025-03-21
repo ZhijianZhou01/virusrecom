@@ -246,8 +246,6 @@ The possible major parent of HNU1-1 is HKU17-USA and minor parent is HKU12, and 
 ### 4.1. Data preparation
 Different software has different application scenarios and requirements for input data. VirusRecom was initially designed to study the recombination of the prevalent SARS-CoV-2, and detect viral recombination among highly similar lineages. However, the definition of lineages varies greatly among different viruses. For non-novel prevalent viruses or those without fine-grained lineage classifications like SARS-CoV-2, divergence within a lineage can be substantial. Thus, lineages could be further divided prior to analysis. Alternatively, input data can be optimized by selecting a subset to represent the lineage. For VirusRecom analysis, it is recommended that the divergence within a lineage not be too large, as low-information-content data may sometimes lead to inaccurate estimates. For some lineages with high internal divergence, may not be appropriate to estimate in lineages manner in VirusRecom, and non-lineage-based approaches or phylogenetic methods might be more appropriate.
 
-Additionally, regardless of the method used to identify recombination events, it is recommended to plot a similarity dot plot for confirmation. This allows for the visualization of the approximate location of recombination breakpoints and the sequence similarity within the recombination region. Similarity dot plots can be generated using software like VirusRecom, Simplot or RDP.
-
 ### 4.2. Default values of parameter 
 For the value of a parameter, if not specified, the software uses the default value. 
 However, the default value is not suitable for all data. In addition to window size (```-w```) and step size (```-s```) of sliding window, values of ```-cp``` and ```-mr``` also require users to adjust based on the data. 
@@ -262,7 +260,7 @@ For the <b>recombination analysis using polymorphic sites</b> (```-m p``` in vir
 |polymorphic sites <= 2000 | 4% ~ 6% of all polymorphic sites | 10% ~ 20% of the window size |
 |polymorphic sites > 2000 | >= 100 | 10% ~ 20% of the window size |
 
- <b>Note, </b> the above configuration does not mean that it will apply to all data. Besides, it is not recommended to apply too large windows to the alignment with too few polymorphic sites.
+ <b>Note, </b> the above configuration does not mean that it will apply to all data. Besides, it is not recommended to apply too large windows to the alignment with too few polymorphic sites. 
 
 ### 4.4. How to mark lineage in sequence name?
 Typically, this is part of the data preparation. In virusrecom v1.1, users can easily get it done via ```-e``` parameter. The ```-e``` parameter can engrave file-name to sequence names in batches. The example is as follows:
