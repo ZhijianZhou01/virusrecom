@@ -252,17 +252,7 @@ However, the default value is not suitable for all data. In addition to window s
 
 When VirusRecom runs, the value of each parameter is printed printed on the screen and you can check them. <b>What is more, users should try different values in multiple runs, which will effectively reduce false positives and false negatives.</b>
 
-### 4.3. How to set the appropriate window size and step size?
-For the <b>recombination analysis using polymorphic sites</b> (```-m p``` in virusrecom), the following is recommended based on our limited experience,
-
-| Number of polymorphic sites in alignment | window size | step size |
-| --- | --- | --- |
-|polymorphic sites <= 2000 | 4% ~ 6% of all polymorphic sites | 10% ~ 20% of the window size |
-|polymorphic sites > 2000 | >= 100 | 10% ~ 20% of the window size |
-
- <b>Note, </b> the above configuration does not mean that it will apply to all data. Besides, it is not recommended to apply too large windows to the alignment with too few polymorphic sites. 
-
-### 4.4. How to mark lineage in sequence name?
+### 4.3. How to mark lineage in sequence name?
 Typically, this is part of the data preparation. In virusrecom v1.1, users can easily get it done via ```-e``` parameter. The ```-e``` parameter can engrave file-name to sequence names in batches. The example is as follows:
 ```
 virusrecom -e input_directory -o outdir
@@ -271,7 +261,7 @@ virusrecom -e input_directory -o outdir
 
 Therefore, if the file-name of fasta file is a lineage name, the lineage name can be written into the sequence name in batches.
 
-### 4.5. How to change the color scheme in an image?
+### 4.4. How to change the color scheme in an image?
 If you own programming skills, you can directly modify the order of the colors in the ```plt_corlor_list.py``` file. If not, you can use output matrix provided by VirusRecom, and they are usually suffixed with `.xlsx` or `.csv`. 
 
 ## 5. Citation
