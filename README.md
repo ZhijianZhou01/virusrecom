@@ -117,12 +117,12 @@ For more information about the algorithm of virusrecom, please refer to [the pub
 ## 3. Example of usage
 The sequences data for test in the documentation was stored at https://github.com/ZhijianZhou01/virusrecom/tree/main/example. 
 
-<b>Note, the ```recombination_test_data.zip``` in directory ```example``` is used for virusrecom v1.0, not virusrecom v1.1+</b>.
+<b>Note, the ```recombination_test_data_v1.0.zip``` in directory ```example``` is used for virusrecom v1.0, not virusrecom v1.1+</b>.
 
-In this demonstration, the test data is from the the ```recombination_test_data_v1.1.zip``` provided in the directory ```example```. 
+In this demonstration, the test data is from the the ```recombination_test_data_v1.1_v1.3.zip``` provided in the directory ```example```. 
 
 ### 3.1. Aligned input-sequences
-If the input sequence-data has been aligned, and it should be loaded via the ```-a``` parameter. Multiple sequence alignments (MSA) can be pre-completed by many programs, this is not introduced. Now, let's focus on the directory ```aligned_input_sequences``` in the file ```recombination_test_data_v1.1.zip```. 
+If the input sequence-data has been aligned, and it should be loaded via the ```-a``` parameter. Multiple sequence alignments (MSA) can be pre-completed by many programs, this is not introduced. Now, let's focus on the directory ```aligned_input_sequences``` in the file ```recombination_test_data_v1.1_v1.3.zip```. 
 
 (1) An aligned sequence-file named ```alignment_lineages_data.fasta```, which including multiple sequences from the query lineage and other reference lineages. 
     
@@ -215,7 +215,7 @@ In VirusRecom, the reference lineage is allowed to contain only one single seque
 
 Of noted, for recombination analysis without lineage data, the additional feature is only recommended for non-highly similar sequences and the user can use it to draw an identity point map.
 
-The test data is in directory ```non_lineage_data``` of the file ```recombination_test_data_v1.1.zip```. 
+The test data is in directory ```non_lineage_data``` of the file ```recombination_test_data_v1.1_v1.3.zip```. 
 
 The Delta-CoV HNU1-1 is a known recombinant from SpCoV HKU17-USA and ThCoV HKU12, and the break points were identified at genome positions nt 21017 and 25056, which is jointly identified and confirmed by RDP3 and Simplot by [Wang et al., 2022](https://onlinelibrary.wiley.com/doi/10.1111/tbed.14029). 
 
